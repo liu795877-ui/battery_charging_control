@@ -48,9 +48,10 @@ def simulate_cccv(
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     """运行一个 C-rate 的 CC–CV 基线，并只保留到目标 SOC 的轨迹。
 
-    先以恒定 C-rate 充电（CC），电压达到 4.2 V 后转为恒压（CV），直到电流
-    降至设定截止倍率。完整实验通常会越过 80% SOC，因此所有可行工况都在
-    第一次达到 80% 时统一截断，才能公平比较 10%→80% 所需时间。
+    先以恒定 C-rate 充电（CC），电压达到 4.2 V 后转为恒压（CV）。任一阶段
+    达到目标 SOC 都立即终止；CV 阶段还保留电流截止条件作为保护。这样不会
+    为比较 10%→80% 而继续求解目标之后的状态，也可避免后续数值失败导致
+    已经算出的有效 CV 轨迹被整段丢弃。
     """
     pybamm.set_logging_level("ERROR")
     model, parameters = build_chen2020_model(config)
@@ -59,13 +60,36 @@ def simulate_cccv(
     period = config.control.control_interval_s
     # 这两行依次定义 CC 阶段和 CV 阶段。period 是结果采样间隔，也与第一版
     # 控制周期保持一致，但它不是数值求解器内部的固定积分步长。
-    experiment = pybamm.Experiment(
-        [
-            f"Charge at {c_rate:g} C until {voltage:g} V",
-            f"Hold at {voltage:g} V until {cutoff:g} C",
-        ],
-        period=f"{period:g} seconds",
+    # 项目的 SOC 是由累计容量计算的。充电时 PyBaMM 的放电容量为负，因此
+    # “目标容量差 + 放电容量”会从正数逐渐降到 0，正好可作为终止事件。
+    target_charge_ah = (
+        config.battery.target_soc - config.battery.initial_soc
+    ) * config.battery.nominal_capacity_ah
+
+    def target_soc_event(variables: dict[str, pybamm.Symbol]) -> pybamm.Symbol:
+        return target_charge_ah + variables["Discharge capacity [A.h]"]
+
+    target_termination = pybamm.step.CustomTermination(
+        "Target SOC reached", target_soc_event
     )
+
+    # 为两个阶段都添加目标 SOC 终止条件。2 小时只是防止异常情况下无限运行，
+    # 正常工况会更早由电压、目标 SOC 或 CV 电流截止事件终止。
+    cc_step = pybamm.step.c_rate(
+        -c_rate,
+        duration="2 hours",
+        termination=[f"{voltage:g} V", target_termination],
+        period=period,
+        description=f"Charge at {c_rate:g}C until voltage or target SOC",
+    )
+    cv_step = pybamm.step.voltage(
+        voltage,
+        duration="2 hours",
+        termination=[f"{cutoff:g} C", target_termination],
+        period=period,
+        description=f"Hold at {voltage:g}V until target SOC or current cutoff",
+    )
+    experiment = pybamm.Experiment([cc_step, cv_step])
     simulation = pybamm.Simulation(
         model,
         parameter_values=parameters,
@@ -83,6 +107,18 @@ def simulate_cccv(
     # 完整性检查用于发现导出或符号转换错误；约束超限则单独记入指标，
     # 因为“温度超限”是有意义的仿真结果，不等于程序运行失败。
     checks = check_trajectory(frame)
+    termination = str(solution.termination)
+    target_event_hit = "Target SOC reached" in termination
+    cutoff_event_hit = "C-rate cut-off" in termination
+    if target_event_hit:
+        simulation_status = "target_soc_reached"
+    elif cutoff_event_hit:
+        simulation_status = "cv_cutoff_before_target_soc"
+    else:
+        # 例如求解器只返回上一完整步骤时，终止原因可能仍显示为 CC 电压事件。
+        # 单独标记它，避免把数值中断误写成“电池物理上无法达到目标”。
+        simulation_status = "unexpected_or_partial_termination"
+
     metrics: dict[str, Any] = {
         "c_rate": float(c_rate),
         "reached_target_soc": reached_target,
@@ -106,7 +142,9 @@ def simulate_cccv(
             frame["charge_current_a"].max()
             > config.constraints.maximum_current_a + 1.0e-6
         ),
-        "solution_termination": str(solution.termination),
+        "simulation_status": simulation_status,
+        "solution_termination": termination,
+        "returned_cycle_count": len(solution.cycles),
         "trajectory_checks": checks,
         "configuration": {
             "battery": asdict(config.battery),
