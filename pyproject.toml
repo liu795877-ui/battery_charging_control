@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "battery-fast-charge-control"
-version = "0.1.0"
-description = "Phase-one simulation scaffold for constrained fast charging with Chen2020"
+version = "0.2.0"
+description = "Constrained battery fast-charging simulation with Chen2020, reduced models, MPC and ANN"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
@@ -13,6 +13,7 @@ dependencies = [
   "matplotlib>=3.10",
   "pandas>=2.2",
   "pyyaml>=6.0",
+  "scipy>=1.15",
 ]
 
 [project.optional-dependencies]
@@ -27,6 +28,7 @@ ann = [
 
 [project.scripts]
 battery-phase1 = "battery_fast_charge.cli:main"
+battery-phase2 = "battery_fast_charge.phase2_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

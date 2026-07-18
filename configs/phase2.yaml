@@ -1,0 +1,50 @@
+study:
+  name: chen2020_phase2_reduced_model
+  random_seed: 42
+
+battery:
+  parameter_set: Chen2020
+  model: DFN
+  thermal_model: lumped
+  nominal_capacity_ah: 5.0
+  initial_temperature_c: 25.0
+  ambient_temperature_c: 25.0
+
+experiment:
+  # 所有轨迹每 5 s 输出一次，与未来 MPC 控制周期一致。
+  sample_period_s: 5.0
+  ocv_soc_points: [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80]
+  pulse_soc_points: [0.10, 0.20, 0.30, 0.40, 0.50, 0.60]
+  pulse_c_rates: [0.5, 1.0, 2.0]
+  pulse_duration_s: 30.0
+  rest_before_s: 60.0
+  rest_after_s: 300.0
+
+  # 热模型训练轨迹：多档电流＋冷却阶段，为热时间常数提供激励。
+  thermal_training_initial_soc: 0.10
+  thermal_training_profile:
+    - {mode: charge, c_rate: 1.0, duration_s: 600.0}
+    - {mode: rest, c_rate: 0.0, duration_s: 300.0}
+    - {mode: charge, c_rate: 1.5, duration_s: 600.0}
+    - {mode: rest, c_rate: 0.0, duration_s: 900.0}
+    - {mode: charge, c_rate: 0.5, duration_s: 600.0}
+    - {mode: rest, c_rate: 0.0, duration_s: 1200.0}
+
+  # 独立验证轨迹不参与参数拟合。
+  validation_initial_soc: 0.15
+  validation_profile:
+    - {mode: charge, c_rate: 0.5, duration_s: 300.0}
+    - {mode: rest, c_rate: 0.0, duration_s: 120.0}
+    - {mode: charge, c_rate: 2.0, duration_s: 300.0}
+    - {mode: rest, c_rate: 0.0, duration_s: 300.0}
+    - {mode: charge, c_rate: 1.0, duration_s: 420.0}
+    - {mode: rest, c_rate: 0.0, duration_s: 600.0}
+
+identification:
+  # DFN只有一个平均温度，因此固定核心热容量比例，避免不可辨识的自由参数过多。
+  core_heat_capacity_fraction: 0.80
+  maximum_function_evaluations: 300
+
+success_criteria:
+  validation_voltage_rmse_mv: 50.0
+  validation_average_temperature_rmse_c: 1.5
