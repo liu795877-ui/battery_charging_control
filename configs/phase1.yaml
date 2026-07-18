@@ -1,0 +1,36 @@
+study:
+  # 实验名称用于区分后续不同阶段；随机种子保证将来的数据划分可复现。
+  name: chen2020_phase1_baseline
+  random_seed: 42
+
+battery:
+  # Chen2020 是 PyBaMM 内置的公开 5 Ah 电芯参数集。
+  parameter_set: Chen2020
+  # DFN 为高保真电化学模型；lumped 为单一平均温度的集总热模型。
+  model: DFN
+  thermal_model: lumped
+  nominal_capacity_ah: 5.0
+  # SOC 用 0~1 表示：0.10 即 10%，0.80 即 80%。
+  initial_soc: 0.10
+  target_soc: 0.80
+  # 当前只做 25 °C 单温度验证。
+  initial_temperature_c: 25.0
+  ambient_temperature_c: 25.0
+
+constraints:
+  # 研究性控制约束：V、A、°C，以及每个控制周期允许的最大电流变化量 A。
+  maximum_voltage_v: 4.20
+  maximum_current_a: 10.0
+  maximum_temperature_c: 35.0
+  maximum_current_change_a_per_control_step: 2.0
+
+control:
+  # 每 5 s 更新一次控制量；预测 60 步等于向前预测 300 s。
+  control_interval_s: 5.0
+  prediction_horizon_steps: 60
+
+baseline:
+  # 先扫描三种传统 CC–CV 充电倍率，作为后续 MPC 的公平对照。
+  c_rates: [1.0, 1.5, 2.0]
+  # CV 阶段在电流下降到 0.5C 时结束。
+  cv_cutoff_c_rate: 0.5

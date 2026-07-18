@@ -1,0 +1,44 @@
+{
+  "c_rate": 1.5,
+  "reached_target_soc": true,
+  "target_soc": 0.8,
+  "final_soc": 0.8000865835847234,
+  "charge_time_s": 1863.5330280404442,
+  "charge_time_min": 31.05888380067407,
+  "maximum_voltage_v": 4.200000000000014,
+  "maximum_temperature_c": 46.50323553728185,
+  "maximum_charge_current_a": 7.500648285523174,
+  "voltage_limit_exceeded": false,
+  "temperature_limit_exceeded": true,
+  "current_limit_exceeded": false,
+  "solution_termination": "event: C-rate cut-off [experiment]",
+  "trajectory_checks": {
+    "nonempty": true,
+    "finite": true,
+    "time_monotonic": true,
+    "soc_nondecreasing": true,
+    "charge_current_nonnegative": true
+  },
+  "configuration": {
+    "battery": {
+      "parameter_set": "Chen2020",
+      "model": "DFN",
+      "thermal_model": "lumped",
+      "nominal_capacity_ah": 5.0,
+      "initial_soc": 0.1,
+      "target_soc": 0.8,
+      "initial_temperature_c": 25.0,
+      "ambient_temperature_c": 25.0
+    },
+    "constraints": {
+      "maximum_voltage_v": 4.2,
+      "maximum_current_a": 10.0,
+      "maximum_temperature_c": 35.0,
+      "maximum_current_change_a_per_control_step": 2.0
+    },
+    "control": {
+      "control_interval_s": 5.0,
+      "prediction_horizon_steps": 60
+    }
+  }
+}

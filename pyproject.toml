@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "battery-fast-charge-control"
+version = "0.1.0"
+description = "Phase-one simulation scaffold for constrained fast charging with Chen2020"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "pybamm==26.6.2.0",
+  "matplotlib>=3.10",
+  "pandas>=2.2",
+  "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "jupyterlab>=4.4",
+  "nbclient>=0.10",
+  "pytest>=8.3",
+]
+ann = [
+  "torch>=2.7",
+]
+
+[project.scripts]
+battery-phase1 = "battery_fast_charge.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"

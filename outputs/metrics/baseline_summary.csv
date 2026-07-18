@@ -1,0 +1,4 @@
+c_rate,reached_target_soc,target_soc,final_soc,charge_time_s,charge_time_min,maximum_voltage_v,maximum_temperature_c,maximum_charge_current_a,voltage_limit_exceeded,temperature_limit_exceeded,current_limit_exceeded,solution_termination,check_nonempty,check_finite,check_time_monotonic,check_soc_nondecreasing,check_charge_current_nonnegative
+1.0,True,0.8,0.8004427417586799,2570.8849702403104,42.84808283733851,4.200000000000002,37.50536112497332,5.000203584635629,False,True,False,event: C-rate cut-off [experiment],True,True,True,True,True
+1.5,True,0.8,0.8000865835847234,1863.5330280404442,31.05888380067407,4.200000000000014,46.50323553728185,7.500648285523174,False,True,False,event: C-rate cut-off [experiment],True,True,True,True,True
+2.0,False,0.8,0.5267479868732403,,,4.200000000000005,53.268841592617264,10.0,False,True,False,event: Voltage > 4.2 [V] [experiment],True,True,True,True,True
