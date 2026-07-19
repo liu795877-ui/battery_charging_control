@@ -76,3 +76,24 @@ jupyter-lab notebooks\02_reduced_model_identification.ipynb
 ## 当前边界
 
 第二阶段双节点热模型只用 Chen2020 集总平均温度进行约束辨识；核心和表面温度是潜在状态，尚未得到独立空间温度数据验证。MPC 和 ANN 将在后续阶段逐步加入。当前的 35 ℃是研究性控制上限，不代表制造商绝对安全极限。
+
+# 第三阶段 A
+
+第三阶段使用第二阶段已经验证的2RC＋平均热模型建立约束MPC教师，并把每次控制动作逐步施加到Chen2020 DFN虚拟电池。MPC内部以4.14 V和33.5 ℃收紧约束，为DFN的4.20 V和35 ℃边界预留模型误差余量。
+
+建议按以下顺序阅读：
+
+1. `docs/phase3_mpc.md`：控制状态、目标函数、约束收紧和验证边界；
+2. `configs/phase3.yaml`：第一版数值设置；
+3. `notebooks/03_mpc_teacher_validation.ipynb`：结果图、基线对比和验收判断；
+4. `src/battery_fast_charge/mpc.py`：降阶预测和在线优化；
+5. `closed_loop.py` 与 `phase3_runner.py`：DFN闭环和结果落盘。
+
+运行第三阶段：
+
+```powershell
+python -m battery_fast_charge.phase3_cli --config configs\phase3.yaml --project-root .
+jupyter-lab notebooks\03_mpc_teacher_validation.ipynb
+```
+
+主要输出为 `data/phase3/`、`outputs/metrics/phase3_*`、`outputs/figures/phase3_mpc_closed_loop.png` 和 `outputs/phase3_report.md`。

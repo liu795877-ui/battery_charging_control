@@ -29,6 +29,7 @@ ann = [
 [project.scripts]
 battery-phase1 = "battery_fast_charge.cli:main"
 battery-phase2 = "battery_fast_charge.phase2_cli:main"
+battery-phase3 = "battery_fast_charge.phase3_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

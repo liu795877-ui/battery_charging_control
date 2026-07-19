@@ -1,0 +1,55 @@
+study:
+  name: chen2020_phase3_mpc_teacher
+  random_seed: 42
+
+battery:
+  parameter_set: Chen2020
+  model: DFN
+  thermal_model: lumped
+  nominal_capacity_ah: 5.0
+  initial_soc: 0.10
+  target_soc: 0.80
+  initial_temperature_c: 25.0
+  ambient_temperature_c: 25.0
+
+artifacts:
+  # 第三阶段不重新辨识参数，而是固定使用第二阶段已经验证并落盘的结果。
+  identified_parameters: outputs/metrics/phase2_identified_parameters.json
+  validation_metrics: outputs/metrics/phase2_validation_metrics.json
+  ocv_curve: data/phase2/ocv_curve.csv
+
+constraints:
+  # physical_* 是在 Chen2020 DFN 虚拟电池上最终检查的真实仿真边界。
+  physical_maximum_voltage_v: 4.20
+  physical_maximum_temperature_c: 35.0
+  maximum_current_a: 10.0
+  maximum_current_change_a_per_step: 2.0
+
+  # MPC 内部主动收紧约束，吸收第二阶段观察到的模型误差。
+  voltage_uncertainty_margin_v: 0.06
+  temperature_uncertainty_margin_c: 1.5
+
+control:
+  control_interval_s: 5.0
+  prediction_horizon_steps: 60
+  # 每 5 个预测步共用一个决策变量：DFN 每 5 s 反馈一次，MPC 通常每 25 s
+  # 重算一次；启动升流阶段若命中变化率上限，则保持每 5 s 重算。
+  control_block_steps: 5
+  maximum_simulation_time_s: 3600.0
+
+objective:
+  # 对整个预测区间的 SOC 缺口计费，使“越早提高 SOC”越有利。
+  soc_tracking_weight: 1.0
+  terminal_soc_weight: 20.0
+  # 很小的电流变化惩罚只用于减少数值抖动，不能压过快速充电目标。
+  current_change_weight: 0.0001
+
+optimizer:
+  maximum_iterations: 100
+  function_tolerance: 1.0e-7
+  constraint_tolerance: 1.0e-5
+
+validation:
+  target_soc_tolerance: 5.0e-4
+  physical_constraint_tolerance: 1.0e-3
+  minimum_optimizer_success_fraction: 0.95
