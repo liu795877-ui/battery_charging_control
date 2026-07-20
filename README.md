@@ -97,3 +97,26 @@ jupyter-lab notebooks\03_mpc_teacher_validation.ipynb
 ```
 
 主要输出为 `data/phase3/`、`outputs/metrics/phase3_*`、`outputs/figures/phase3_mpc_closed_loop.png` 和 `outputs/phase3_report.md`。
+
+# 第三阶段 B
+
+第三阶段 B 不训练 DNN，而是先建立可审计的 MPC 教师数据协议。状态只从 12 条受约束、动力学可达的探索轨迹中抽取；样本按 SOC 分层，并按整条轨迹划分训练、验证和测试集，防止相邻状态泄漏。全部 MPC 求解尝试保存在审计表中，只有优化成功、预测可行且未使用回退动作的标签进入教师数据集。
+
+建议按以下顺序阅读：
+
+1. `docs/phase3b_teacher_data.md`：状态来源、标签规则、数据划分和验收闸门；
+2. `configs/phase3b.yaml`：探索策略、采样数量和质量阈值；
+3. `notebooks/04_mpc_teacher_dataset.ipynb`：数据覆盖、公平基线和进入 DNN 训练的判断；
+4. `src/battery_fast_charge/teacher_data.py`：可达轨迹、分层采样和 MPC 批量标注；
+5. `filtered_baseline.py` 与 `phase3b_runner.py`：同约束基线和全流程组织。
+
+运行第三阶段 B：
+
+```powershell
+python -m battery_fast_charge.phase3b_cli --config configs\phase3b.yaml --project-root .
+jupyter-lab notebooks\04_mpc_teacher_dataset.ipynb
+```
+
+正式结果包含 168 个已接受教师标签，按 112/28/28 个样本和 8/2/2 条整轨迹划分为训练/验证/测试集。数据质量闸门通过，可以开始第一版 DNN 实验；但当前约束 MPC 的 DFN 充电时间为 53.58 min，同约束过滤 1C 基线为 53.33 min，因此尚不能声称 MPC 缩短了充电时间。
+
+主要输出为 `data/phase3b/`、`outputs/metrics/phase3b_*`、`outputs/figures/phase3b_*` 和 `outputs/phase3b_report.md`。
