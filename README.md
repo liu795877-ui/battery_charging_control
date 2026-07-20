@@ -151,3 +151,18 @@ jupyter-lab notebooks\06_thermal_budget_mpc.ipynb
 在Chen2020、25 ℃、10%→80% SOC和同一组物理约束下，混合教师用52.67 min完成充电，比过滤1C的53.33 min缩短1.25%；最高电压4.1425 V、最高平均温度33.5024 ℃、MPC回退0次。阶段门槛通过，可以进入主动数据聚合，但这不是全局最优性或真实BMS安全性的证明。
 
 建议先读 `docs/phase4b_teacher.md`，再看 `notebooks/06_thermal_budget_mpc.ipynb`。主要输出位于 `data/phase4b/`、`outputs/metrics/phase4b_*`、`outputs/figures/phase4b_*` 和 `outputs/phase4b_report.md`。
+
+# 第四阶段 B-2
+
+阶段4B-2使用主动数据聚合重新训练ANN。原168个可达状态全部由4B-1混合教师重标，并加入旧ANN周围12条可达轨迹、一次降阶在策略DAgger轨迹和一次DFN在策略DAgger轨迹。验证和测试轨迹全程冻结。
+
+最终网络为 `5-16-16-1`，共385个参数；两轮在策略训练状态权重为3，但数据文件仍只保存486个唯一接受标签。运行：
+
+```powershell
+python -m battery_fast_charge.phase4b2_cli --config configs\phase4b2.yaml --project-root .
+jupyter-lab notebooks\07_active_data_aggregation.ipynb
+```
+
+正式Chen2020 DFN结果为52.75 min，实质安全过滤介入1.58%，平均修正0.0166 A；最高电压4.1426 V、最高平均温度33.5024 ℃。相对混合教师仅慢5 s，相对ANN v1缩短2.92 min。阶段闸门通过，可以进入鲁棒性验证，但裸ANN仍不允许部署。
+
+建议先读 `docs/phase4b2_active_learning.md`，再看 `notebooks/07_active_data_aggregation.ipynb`。主要输出位于 `data/phase4b2/`、`outputs/models/phase4b2_tiny_ann.npz`、`outputs/metrics/phase4b2_*`、`outputs/figures/phase4b2_*` 和 `outputs/phase4b2_report.md`。

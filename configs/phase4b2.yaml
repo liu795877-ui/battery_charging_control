@@ -1,0 +1,73 @@
+study:
+  name: chen2020_phase4b2_active_data_aggregation
+  random_seed: 42
+
+source_phase3_config: configs/phase3.yaml
+source_phase4a_config: configs/phase4a.yaml
+source_phase4b_config: configs/phase4b.yaml
+legacy_teacher_dataset: data/phase3b/teacher_dataset.csv
+seed_ann_model: outputs/models/phase4a_tiny_ann.npz
+
+active_data:
+  soc_bin_edges: [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80]
+  samples_per_middle_soc_bin_per_trajectory: 2
+  samples_per_edge_soc_bin_per_trajectory: 4
+  train_trajectory_count: 8
+  validation_trajectory_count: 2
+  test_trajectory_count: 2
+  # 所有策略都以旧ANN为中心，只改变其请求电流；一步过滤器保证状态可达。
+  rollouts:
+    - {name: nominal, kind: constant_offset, offset_a: 0.0}
+    - {name: bias_down_0p5, kind: constant_offset, offset_a: -0.5}
+    - {name: bias_up_0p5, kind: constant_offset, offset_a: 0.5}
+    - {name: bias_down_1p0, kind: constant_offset, offset_a: -1.0}
+    - {name: bias_up_1p0, kind: constant_offset, offset_a: 1.0}
+    - {name: sine_slow, kind: sine_offset, amplitude_a: 0.75, period_s: 600.0, phase_rad: 0.0}
+    - {name: sine_slow_shifted, kind: sine_offset, amplitude_a: 0.75, period_s: 600.0, phase_rad: 1.5707963268}
+    - {name: sine_fast, kind: sine_offset, amplitude_a: 0.5, period_s: 240.0, phase_rad: 0.0}
+    - {name: pulse_0p75, kind: pulse_offset, amplitude_a: 0.75, period_s: 300.0}
+    - {name: pulse_0p5, kind: pulse_offset, amplitude_a: 0.5, period_s: 180.0}
+    - {name: random_blocks_1, kind: random_block_offset, amplitude_a: 0.75, block_steps: 18, seed: 707}
+    - {name: random_blocks_2, kind: random_block_offset, amplitude_a: 0.75, block_steps: 30, seed: 808}
+
+active_constraint_tolerances:
+  voltage_v: 0.01
+  temperature_c: 0.10
+  current_a: 0.05
+  current_change_a: 0.05
+
+dagger_refinement:
+  # 第一轮网络会产生新的闭环分布；沿其名义轨迹加密采样并只加入训练集，
+  # 验证和测试轨迹保持冻结，避免用闭环结果污染选模与最终评价。
+  enabled: true
+  samples_per_soc_bin: 8
+  split: train
+
+dfn_refinement:
+  # 降阶在策略轨迹与DFN反馈仍有偏差；再从一条安全包装的DFN名义轨迹
+  # 提取控制器实际看到的状态。该轨迹同样只加入训练集。
+  enabled: true
+  samples_per_soc_bin: 8
+  split: train
+
+final_network:
+  # 容量扫描后固定为385参数；中间两轮采集器仍沿用阶段4A的129参数网络。
+  hidden_layer_sizes: [16, 16]
+  regularization_candidates: [0.0001, 0.001, 0.01]
+  initialization_seeds: [11, 33, 55]
+  maximum_iterations: 10000
+  convergence_tolerance: 1.0e-8
+  # 两轮在策略状态只在训练损失中加权，不复制数据行，也不改变验证/测试集。
+  on_policy_training_weight: 3.0
+
+success_criteria:
+  minimum_accepted_label_count: 300
+  minimum_teacher_acceptance_fraction: 0.95
+  maximum_test_mae_a: 0.35
+  maximum_test_rmse_a: 0.50
+  material_intervention_threshold_a: 0.10
+  maximum_material_intervention_fraction: 0.05
+  maximum_mean_filter_correction_a: 0.05
+  maximum_dfn_time_gap_fraction_from_hybrid_teacher: 0.03
+  require_improvement_over_phase4a: true
+  minimum_inference_speedup_over_hybrid_mpc: 100.0

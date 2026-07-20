@@ -68,6 +68,7 @@ def _initial_record(
         "charge_current_a": 0.0,
         "ann_unclipped_current_a": np.nan,
         "ann_requested_current_a": np.nan,
+        "safety_filtered_current_a": 0.0,
         "safety_filter_intervened": False,
         "safety_override": False,
         "target_current_cap_active": False,
@@ -95,6 +96,7 @@ def _control_record(
         "charge_current_a": applied_current_a,
         "ann_unclipped_current_a": decision["unclipped_current_a"],
         "ann_requested_current_a": decision["requested_current_a"],
+        "safety_filtered_current_a": decision["filtered_current_a"],
         "safety_filter_intervened": decision["filter_intervened"],
         "safety_override": decision["safety_override"],
         "target_current_cap_active": target_cap_active,
@@ -188,11 +190,28 @@ def simulate_ann_dfn_closed_loop(
 
 
 def ann_closed_loop_metrics(
-    frame: pd.DataFrame, phase3: PhaseThreeConfig
+    frame: pd.DataFrame,
+    phase3: PhaseThreeConfig,
+    material_intervention_threshold_a: float = 0.1,
 ) -> dict[str, Any]:
-    """计算终端、物理约束、安全层介入和ANN推理时间指标。"""
+    """计算终端、物理约束以及安全层介入频率和幅度。
+
+    二元介入标记会把毫安级数值修正和超过1 A的实质修正同等计数，容易
+    误导主动学习判断。因此同时报告绝对修正量及超过研究阈值的比例。
+    """
     tolerance = phase3.validation.physical_constraint_tolerance
     control_rows = frame.iloc[1:]
+    if "safety_filtered_current_a" in control_rows:
+        correction = (
+            control_rows["ann_requested_current_a"]
+            - control_rows["safety_filtered_current_a"]
+        ).abs()
+    else:
+        # 兼容阶段4A已保存的旧CSV；最后一步目标电量封顶可能被计入该近似量。
+        correction = (
+            control_rows["ann_requested_current_a"]
+            - control_rows["charge_current_a"]
+        ).abs()
     current_change = frame["charge_current_a"].diff().abs().fillna(0.0)
     reached = bool(
         frame["soc"].iloc[-1]
@@ -228,6 +247,18 @@ def ann_closed_loop_metrics(
         ),
         "safety_filter_intervention_fraction": float(
             control_rows["safety_filter_intervened"].mean()
+        ),
+        "mean_safety_filter_correction_a": float(correction.mean()),
+        "p95_safety_filter_correction_a": float(correction.quantile(0.95)),
+        "maximum_safety_filter_correction_a": float(correction.max()),
+        "material_intervention_threshold_a": float(
+            material_intervention_threshold_a
+        ),
+        "material_safety_filter_intervention_count": int(
+            (correction > material_intervention_threshold_a).sum()
+        ),
+        "material_safety_filter_intervention_fraction": float(
+            (correction > material_intervention_threshold_a).mean()
         ),
         "safety_override_count": int(control_rows["safety_override"].sum()),
         "target_current_cap_count": int(

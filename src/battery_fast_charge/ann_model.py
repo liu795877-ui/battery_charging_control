@@ -118,9 +118,14 @@ def _regression_metrics(target: np.ndarray, prediction: np.ndarray) -> dict[str,
 
 
 def train_tiny_ann(
-    dataset: pd.DataFrame, config: PhaseFourAConfig
+    dataset: pd.DataFrame,
+    config: PhaseFourAConfig,
+    sample_weight_column: str | None = None,
 ) -> tuple[TinyANN, pd.DataFrame, pd.DataFrame, dict[str, Any]]:
-    """只用训练轨迹拟合标准化和权重，用验证轨迹选择超参数。"""
+    """只用训练轨迹拟合标准化和权重，用验证轨迹选择超参数。
+
+    可选样本权重只作用于训练集；验证和测试指标始终逐唯一状态等权计算。
+    """
     from sklearn.linear_model import Ridge
     from sklearn.neural_network import MLPRegressor
     from sklearn.preprocessing import StandardScaler
@@ -139,14 +144,30 @@ def train_tiny_ann(
         raise ValueError("检测到同一轨迹跨越多个数据集合，禁止训练以避免数据泄漏。")
     if "teacher_accepted" in dataset and not dataset["teacher_accepted"].astype(bool).all():
         raise ValueError("教师数据包含未通过阶段3B接受规则的标签。")
+    if sample_weight_column is not None:
+        if sample_weight_column not in dataset:
+            raise ValueError(f"教师数据缺少样本权重列：{sample_weight_column}")
+        if not np.isfinite(dataset[sample_weight_column]).all() or (
+            dataset[sample_weight_column] <= 0.0
+        ).any():
+            raise ValueError("训练样本权重必须是有限正数。")
     train = dataset[dataset["split"] == "train"]
     validation = dataset[dataset["split"] == "validation"]
     test = dataset[dataset["split"] == "test"]
     if any(frame.empty for frame in (train, validation, test)):
         raise ValueError("训练、验证和测试数据都必须非空。")
 
-    feature_scaler = StandardScaler().fit(train[list(config.features)])
-    target_scaler = StandardScaler().fit(train[[config.target]])
+    train_weight = (
+        train[sample_weight_column].to_numpy(dtype=float)
+        if sample_weight_column is not None
+        else None
+    )
+    feature_scaler = StandardScaler().fit(
+        train[list(config.features)], sample_weight=train_weight
+    )
+    target_scaler = StandardScaler().fit(
+        train[[config.target]], sample_weight=train_weight
+    )
     x_train = feature_scaler.transform(train[list(config.features)])
     y_train = target_scaler.transform(train[[config.target]]).reshape(-1)
     x_validation = feature_scaler.transform(validation[list(config.features)])
@@ -165,7 +186,7 @@ def train_tiny_ann(
                 tol=config.network.convergence_tolerance,
                 random_state=seed,
             )
-            estimator.fit(x_train, y_train)
+            estimator.fit(x_train, y_train, sample_weight=train_weight)
             validation_prediction = (
                 estimator.predict(x_validation) * float(target_scaler.scale_[0])
                 + float(target_scaler.mean_[0])
@@ -230,7 +251,9 @@ def train_tiny_ann(
     # 线性岭回归是最小基线：若它已经更好，就没有使用ANN的证据。
     linear_candidates = []
     for alpha in config.network.regularization_candidates:
-        ridge = Ridge(alpha=alpha).fit(x_train, y_train)
+        ridge = Ridge(alpha=alpha).fit(
+            x_train, y_train, sample_weight=train_weight
+        )
         prediction = (
             ridge.predict(x_validation) * float(target_scaler.scale_[0])
             + float(target_scaler.mean_[0])
@@ -251,6 +274,13 @@ def train_tiny_ann(
             selected_row["regularization_alpha"]
         ),
         "selected_initialization_seed": int(selected_seed),
+        "selected_optimization_iterations": int(
+            selected_row["optimization_iterations"]
+        ),
+        "selected_optimizer_converged": bool(
+            selected_row["optimization_iterations"]
+            < config.network.maximum_iterations
+        ),
         "split_metrics": split_metrics,
         "test_temperature_active_metrics": _regression_metrics(
             temperature_active[config.target].to_numpy(dtype=float),
@@ -265,6 +295,12 @@ def train_tiny_ann(
             "test_metrics": _regression_metrics(
                 test[config.target].to_numpy(dtype=float), linear_test_prediction
             ),
+        },
+        "training_weight": {
+            "column": sample_weight_column,
+            "minimum": float(np.min(train_weight)) if train_weight is not None else 1.0,
+            "maximum": float(np.max(train_weight)) if train_weight is not None else 1.0,
+            "sum": float(np.sum(train_weight)) if train_weight is not None else float(len(train)),
         },
     }
     return model, pd.DataFrame(selection_records), predictions, metrics
