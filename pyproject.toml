@@ -23,7 +23,7 @@ dev = [
   "pytest>=8.3",
 ]
 ann = [
-  "torch>=2.7",
+  "scikit-learn>=1.7",
 ]
 
 [project.scripts]
@@ -31,6 +31,7 @@ battery-phase1 = "battery_fast_charge.cli:main"
 battery-phase2 = "battery_fast_charge.phase2_cli:main"
 battery-phase3 = "battery_fast_charge.phase3_cli:main"
 battery-phase3b = "battery_fast_charge.phase3b_cli:main"
+battery-phase4a = "battery_fast_charge.phase4_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

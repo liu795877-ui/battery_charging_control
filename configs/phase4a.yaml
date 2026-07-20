@@ -1,0 +1,36 @@
+study:
+  name: chen2020_phase4a_tiny_ann_imitation
+  random_seed: 42
+
+source_phase3_config: configs/phase3.yaml
+teacher_dataset: data/phase3b/teacher_dataset.csv
+
+features:
+  - state_soc
+  - state_polarization_fast_v
+  - state_polarization_slow_v
+  - state_average_temperature_c
+  - state_previous_current_a
+target: teacher_current_a
+
+network:
+  # 5-8-8-1 共129个可训练参数；样本很少，因此不使用大型网络。
+  hidden_layer_sizes: [8, 8]
+  activation: tanh
+  solver: lbfgs
+  regularization_candidates: [0.0001, 0.001, 0.01, 0.1, 1.0]
+  initialization_seeds: [11, 22, 33, 44, 55]
+  maximum_iterations: 5000
+  convergence_tolerance: 1.0e-8
+
+closed_loop:
+  maximum_simulation_time_s: 3600.0
+  use_safety_filter: true
+
+success_criteria:
+  # 0.5 A约为10 A满量程的5%，也小于每周期2 A变化限制的四分之一。
+  maximum_test_mae_a: 0.5
+  maximum_test_rmse_a: 0.75
+  maximum_active_temperature_mae_a: 0.5
+  maximum_dfn_time_gap_fraction: 0.05
+  minimum_inference_speedup_over_mpc: 100.0

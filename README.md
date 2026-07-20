@@ -120,3 +120,19 @@ jupyter-lab notebooks\04_mpc_teacher_dataset.ipynb
 正式结果包含 168 个已接受教师标签，按 112/28/28 个样本和 8/2/2 条整轨迹划分为训练/验证/测试集。数据质量闸门通过，可以开始第一版 DNN 实验；但当前约束 MPC 的 DFN 充电时间为 53.58 min，同约束过滤 1C 基线为 53.33 min，因此尚不能声称 MPC 缩短了充电时间。
 
 主要输出为 `data/phase3b/`、`outputs/metrics/phase3b_*`、`outputs/figures/phase3b_*` 和 `outputs/phase3b_report.md`。
+
+# 第四阶段 A
+
+第四阶段A使用阶段3B的整轨迹数据训练一个 `5-8-8-1` 小型ANN，逼近MPC第一步电流。标准化只拟合训练集，验证集用于选择L2正则化和初始化，测试集只做最终评价。模型导出为只依赖NumPy的非可执行NPZ权重。
+
+运行训练和闭环验证：
+
+```powershell
+python -m pip install -e ".[ann]"
+python -m battery_fast_charge.phase4_cli --config configs\phase4a.yaml --project-root .
+jupyter-lab notebooks\05_tiny_ann_imitation.ipynb
+```
+
+第一版测试MAE为0.0195 A、RMSE为0.0691 A。ANN加安全过滤器在Chen2020 DFN上用55.67 min完成10%到80% SOC，满足4.20 V、35 ℃、10 A和每5 s最大2 A变化限制；平均推理约0.10 ms。但安全过滤器介入约50.3%的控制周期，且ANN比MPC和过滤1C更慢，因此当前结果只证明低计算量模仿流程可行，不能称为裸ANN安全或更快的控制器。
+
+主要输出为 `data/phase4a/`、`outputs/models/phase4a_tiny_ann.npz`、`outputs/metrics/phase4a_*`、`outputs/figures/phase4a_*`、`notebooks/05_tiny_ann_imitation.ipynb` 和 `outputs/phase4a_report.md`。
