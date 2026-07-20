@@ -166,3 +166,16 @@ jupyter-lab notebooks\07_active_data_aggregation.ipynb
 正式Chen2020 DFN结果为52.75 min，实质安全过滤介入1.58%，平均修正0.0166 A；最高电压4.1426 V、最高平均温度33.5024 ℃。相对混合教师仅慢5 s，相对ANN v1缩短2.92 min。阶段闸门通过，可以进入鲁棒性验证，但裸ANN仍不允许部署。
 
 建议先读 `docs/phase4b2_active_learning.md`，再看 `notebooks/07_active_data_aggregation.ipynb`。主要输出位于 `data/phase4b2/`、`outputs/models/phase4b2_tiny_ann.npz`、`outputs/metrics/phase4b2_*`、`outputs/figures/phase4b2_*` 和 `outputs/phase4b2_report.md`。
+
+# 第五阶段 A
+
+阶段 5A 冻结 ANN v2 和安全过滤器，使用 69 个有界降阶压力场景以及 15、25、30 ℃ 三个 Chen2020 DFN 锚点进行鲁棒性验证。运行：
+
+```powershell
+python -m battery_fast_charge.phase5a_cli --config configs\phase5a.yaml --project-root .
+jupyter-lab notebooks\08_robustness_validation.ipynb
+```
+
+本阶段未通过：降阶完成率为 68.12%，物理安全率为 65.22%；15 ℃ 和 25 ℃ DFN 安全完成，但 30 ℃ 在 60 min 时只达到 61.22% SOC，且安全层实质介入 91.39% 的控制步。当前结果表明 ANN v2 只在名义温度附近得到验证，不能直接进入 BMS。下一步应在高温和参数不利区域扩展教师数据并训练 ANN v3，而不是降低物理门槛。
+
+建议先读 `docs/phase5a_robustness.md`，再看 `notebooks/08_robustness_validation.ipynb`。主要输出位于 `data/phase5a/`、`outputs/metrics/phase5a_metrics.json`、`outputs/figures/phase5a_*` 和 `outputs/phase5a_report.md`。

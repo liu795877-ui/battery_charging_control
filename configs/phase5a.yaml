@@ -1,0 +1,43 @@
+study:
+  name: chen2020_phase5a_robustness_validation
+  random_seed: 20260720
+
+source_phase3_config: configs/phase3.yaml
+source_phase4a_config: configs/phase4a.yaml
+ann_model: outputs/models/phase4b2_tiny_ann.npz
+phase4b2_metrics: outputs/metrics/phase4b2_metrics.json
+
+reduced_stress_test:
+  # 这些是有界研究扰动，不代表已经得到真实制造分布。
+  random_scenario_count: 64
+  initial_soc_range: [0.10, 0.30]
+  ambient_temperature_c_range: [15.0, 30.0]
+  capacity_multiplier_range: [0.90, 1.10]
+  resistance_multiplier_range: [0.80, 1.20]
+  time_constant_multiplier_range: [0.80, 1.20]
+  heat_capacity_multiplier_range: [0.85, 1.15]
+  thermal_resistance_multiplier_range: [0.80, 1.20]
+  heat_gain_multiplier_range: [0.90, 1.10]
+  soc_bias_range: [-0.005, 0.005]
+  soc_noise_standard_deviation: 0.002
+  temperature_bias_c_range: [-0.50, 0.50]
+  temperature_noise_standard_deviation_c: 0.20
+  polarization_bias_v_range: [-0.005, 0.005]
+  polarization_noise_standard_deviation_v: 0.002
+  terminal_true_soc_tolerance: 0.015
+  maximum_simulation_time_s: 3600.0
+
+dfn_temperature_anchors:
+  temperatures_c: [15.0, 25.0, 30.0]
+  initial_soc: 0.10
+  maximum_simulation_time_s: 3600.0
+
+success_criteria:
+  minimum_reduced_completion_fraction: 0.95
+  minimum_reduced_physical_safety_fraction: 1.00
+  maximum_reduced_charge_time_min: 60.0
+  maximum_reduced_material_intervention_fraction: 0.20
+  require_all_dfn_anchors_complete: true
+  require_all_dfn_anchors_physically_safe: true
+  maximum_dfn_anchor_charge_time_min: 60.0
+  maximum_dfn_material_intervention_fraction: 0.20
