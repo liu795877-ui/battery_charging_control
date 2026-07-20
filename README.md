@@ -136,3 +136,18 @@ jupyter-lab notebooks\05_tiny_ann_imitation.ipynb
 第一版测试MAE为0.0195 A、RMSE为0.0691 A。ANN加安全过滤器在Chen2020 DFN上用55.67 min完成10%到80% SOC，满足4.20 V、35 ℃、10 A和每5 s最大2 A变化限制；平均推理约0.10 ms。但安全过滤器介入约50.3%的控制周期，且ANN比MPC和过滤1C更慢，因此当前结果只证明低计算量模仿流程可行，不能称为裸ANN安全或更快的控制器。
 
 主要输出为 `data/phase4a/`、`outputs/models/phase4a_tiny_ann.npz`、`outputs/metrics/phase4a_*`、`outputs/figures/phase4a_*`、`notebooks/05_tiny_ann_imitation.ipynb` 和 `outputs/phase4a_report.md`。
+
+# 第四阶段 B-1
+
+第四阶段B-1先改进教师，再继续扩充ANN数据。新教师由启动参考调节器、低SOC热预算MPC和终端一步可行参考调节器组成；预测到达80% SOC后停止施加有效电流，以表达“到达目标即结束”。
+
+运行正式验证：
+
+```powershell
+python -m battery_fast_charge.phase4b_cli --config configs\phase4b.yaml --project-root .
+jupyter-lab notebooks\06_thermal_budget_mpc.ipynb
+```
+
+在Chen2020、25 ℃、10%→80% SOC和同一组物理约束下，混合教师用52.67 min完成充电，比过滤1C的53.33 min缩短1.25%；最高电压4.1425 V、最高平均温度33.5024 ℃、MPC回退0次。阶段门槛通过，可以进入主动数据聚合，但这不是全局最优性或真实BMS安全性的证明。
+
+建议先读 `docs/phase4b_teacher.md`，再看 `notebooks/06_thermal_budget_mpc.ipynb`。主要输出位于 `data/phase4b/`、`outputs/metrics/phase4b_*`、`outputs/figures/phase4b_*` 和 `outputs/phase4b_report.md`。

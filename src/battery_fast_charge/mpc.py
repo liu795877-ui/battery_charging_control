@@ -220,6 +220,12 @@ class ConstrainedMPC:
             self.config.control.control_block_steps,
         )[: self.config.control.prediction_horizon_steps]
 
+    def _predict(
+        self, state: ReducedState, expanded_currents_a: np.ndarray
+    ) -> dict[str, np.ndarray]:
+        """预测候选电流；子类可覆盖终端处理而复用同一求解器。"""
+        return self.model.predict(state, expanded_currents_a)
+
     def _initial_guess(self, state: ReducedState) -> np.ndarray:
         """使用上次解热启动；首次求解则按允许的变化率逐块升流。"""
         maximum = self.config.constraints.maximum_current_a
@@ -256,6 +262,32 @@ class ConstrainedMPC:
                 constraints.maximum_current_change_a_per_step - current_differences,
                 constraints.maximum_current_change_a_per_step + current_differences,
             ]
+        )
+
+    def _objective_value(
+        self,
+        state: ReducedState,
+        block_currents_a: np.ndarray,
+        prediction: dict[str, np.ndarray],
+    ) -> float:
+        """计算基础SOC推进、终端SOC和电流平滑代价。
+
+        单独保留该方法，使后续教师可以增加有物理含义的终端/参考代价，
+        而不复制求解器、约束和回退逻辑。
+        """
+        config = self.config
+        maximum_current = config.constraints.maximum_current_a
+        soc_gap = np.maximum(
+            config.battery.target_soc - prediction["soc"], 0.0
+        )
+        current_differences = np.diff(
+            np.concatenate([[state.previous_current_a], block_currents_a])
+        )
+        return float(
+            config.objective.soc_tracking_weight * np.mean(soc_gap)
+            + config.objective.terminal_soc_weight * soc_gap[-1] ** 2
+            + config.objective.current_change_weight
+            * np.mean((current_differences / maximum_current) ** 2)
         )
 
     def _safe_one_step_current(self, state: ReducedState) -> float:
@@ -296,7 +328,7 @@ class ConstrainedMPC:
             values = np.asarray(block_currents_a, dtype=float)
             if cache_x is None or not np.array_equal(values, cache_x):
                 cache_x = values.copy()
-                cache_prediction = self.model.predict(
+                cache_prediction = self._predict(
                     state, self._expand_blocks(values)
                 )
             assert cache_prediction is not None
@@ -304,17 +336,10 @@ class ConstrainedMPC:
 
         def objective(block_currents_a: np.ndarray) -> float:
             prediction = evaluate(block_currents_a)
-            soc_gap = np.maximum(
-                config.battery.target_soc - prediction["soc"], 0.0
-            )
-            current_differences = np.diff(
-                np.concatenate([[state.previous_current_a], block_currents_a])
-            )
-            return float(
-                config.objective.soc_tracking_weight * np.mean(soc_gap)
-                + config.objective.terminal_soc_weight * soc_gap[-1] ** 2
-                + config.objective.current_change_weight
-                * np.mean((current_differences / maximum_current) ** 2)
+            return self._objective_value(
+                state,
+                np.asarray(block_currents_a, dtype=float),
+                prediction,
             )
 
         def inequality(block_currents_a: np.ndarray) -> np.ndarray:
@@ -338,7 +363,7 @@ class ConstrainedMPC:
         )
         solve_time_s = perf_counter() - start
         block_currents = np.asarray(result.x, dtype=float)
-        prediction = self.model.predict(state, self._expand_blocks(block_currents))
+        prediction = self._predict(state, self._expand_blocks(block_currents))
         margins = self._constraint_margins(state, block_currents, prediction)
         minimum_margin = float(np.min(margins))
         feasible = minimum_margin >= -config.optimizer.constraint_tolerance

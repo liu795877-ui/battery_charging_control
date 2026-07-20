@@ -1,0 +1,199 @@
+{
+  "configuration": {
+    "study_name": "chen2020_phase4b_thermal_budget_mpc",
+    "random_seed": 42,
+    "source_phase3_config": "configs/phase3.yaml",
+    "thermal_budget_reference": {
+      "peak_current_a": 8.0,
+      "sustainable_current_a": 5.0,
+      "switch_soc": 0.1766666667,
+      "switch_average_temperature_c": 30.5,
+      "reference_release_soc": 0.2,
+      "reference_tracking_weight": 1000.0,
+      "reoptimize_every_control_step": true
+    },
+    "diagnostic_sweep": {
+      "peak_currents_a": [
+        7.0,
+        8.0,
+        9.0
+      ],
+      "switch_times_min": [
+        2.0,
+        3.0,
+        4.0,
+        5.0
+      ],
+      "sustainable_currents_a": [
+        4.5,
+        5.0
+      ]
+    },
+    "success_criteria": {
+      "minimum_improvement_fraction_over_filtered_1c": 0.01,
+      "minimum_optimizer_success_fraction": 0.95,
+      "require_zero_fallbacks": true
+    }
+  },
+  "diagnostic_sweep_best": {
+    "peak_current_a": 7.0,
+    "switch_time_min": 5.0,
+    "sustainable_current_a": 5.0,
+    "source": "reduced_model",
+    "reached_target_soc": true,
+    "final_soc": 0.7995134612525823,
+    "charge_time_min": 52.083333333333336,
+    "maximum_voltage_v": 4.14001,
+    "maximum_temperature_c": 33.50001,
+    "maximum_current_a": 7.0,
+    "maximum_current_change_a": 2.0,
+    "safety_override_count": 0,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "current_change_limit_exceeded": false,
+    "success": true
+  },
+  "hybrid_reduced_closed_loop": {
+    "source": "reduced_model",
+    "reached_target_soc": true,
+    "final_soc": 0.7997171808556218,
+    "charge_time_min": 52.083333333333336,
+    "maximum_voltage_v": 4.140009999999981,
+    "maximum_temperature_c": 33.50001,
+    "maximum_current_a": 8.126906749398541,
+    "maximum_current_change_a": 2.0,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "current_change_limit_exceeded": false,
+    "mpc_step_count": 43,
+    "startup_governor_step_count": 11,
+    "terminal_governor_step_count": 571,
+    "optimizer_success_fraction": 1.0,
+    "prediction_feasible_fraction": 1.0,
+    "fallback_count": 0,
+    "reference_governor_safety_override_count": 0,
+    "mean_mpc_solve_time_ms": 469.6988325582044,
+    "maximum_mpc_solve_time_ms": 1471.996999998737,
+    "success": true
+  },
+  "hybrid_dfn_closed_loop": {
+    "source": "chen2020_dfn",
+    "reached_target_soc": true,
+    "final_soc": 0.7997417087332402,
+    "charge_time_min": 52.666666666666664,
+    "maximum_voltage_v": 4.1424724954036005,
+    "maximum_temperature_c": 33.50240692752163,
+    "maximum_current_a": 8.358952568209334,
+    "maximum_current_change_a": 2.000000000000001,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "current_change_limit_exceeded": false,
+    "mpc_step_count": 39,
+    "startup_governor_step_count": 15,
+    "terminal_governor_step_count": 578,
+    "optimizer_success_fraction": 0.9743589743589743,
+    "prediction_feasible_fraction": 1.0,
+    "fallback_count": 0,
+    "reference_governor_safety_override_count": 0,
+    "mean_mpc_solve_time_ms": 1013.4551358975073,
+    "maximum_mpc_solve_time_ms": 4554.491900000357,
+    "success": true
+  },
+  "original_mpc_reference": {
+    "source": "chen2020_dfn",
+    "reached_target_soc": true,
+    "final_soc": 0.799527237164507,
+    "charge_time_s": 3215.0,
+    "charge_time_min": 53.583333333333336,
+    "maximum_voltage_v": 4.142485355073057,
+    "maximum_temperature_c": 33.5166559880991,
+    "maximum_current_a": 9.832550962985978,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "optimizer_success_fraction": 1.0,
+    "prediction_feasible_fraction": 1.0,
+    "optimization_count": 132,
+    "fallback_count": 0,
+    "mean_mpc_solve_time_ms": 589.0127181817276,
+    "maximum_mpc_solve_time_ms": 1820.7879000001412,
+    "configuration": {
+      "study_name": "chen2020_phase3_mpc_teacher",
+      "random_seed": 42,
+      "battery": {
+        "parameter_set": "Chen2020",
+        "model": "DFN",
+        "thermal_model": "lumped",
+        "nominal_capacity_ah": 5.0,
+        "initial_soc": 0.1,
+        "target_soc": 0.8,
+        "initial_temperature_c": 25.0,
+        "ambient_temperature_c": 25.0
+      },
+      "artifacts": {
+        "identified_parameters": "outputs/metrics/phase2_identified_parameters.json",
+        "validation_metrics": "outputs/metrics/phase2_validation_metrics.json",
+        "ocv_curve": "data/phase2/ocv_curve.csv"
+      },
+      "constraints": {
+        "physical_maximum_voltage_v": 4.2,
+        "physical_maximum_temperature_c": 35.0,
+        "maximum_current_a": 10.0,
+        "maximum_current_change_a_per_step": 2.0,
+        "voltage_uncertainty_margin_v": 0.06,
+        "temperature_uncertainty_margin_c": 1.5
+      },
+      "control": {
+        "control_interval_s": 5.0,
+        "prediction_horizon_steps": 60,
+        "control_block_steps": 5,
+        "maximum_simulation_time_s": 3600.0
+      },
+      "objective": {
+        "soc_tracking_weight": 1.0,
+        "terminal_soc_weight": 20.0,
+        "current_change_weight": 0.0001
+      },
+      "optimizer": {
+        "maximum_iterations": 100,
+        "function_tolerance": 1e-07,
+        "constraint_tolerance": 1e-05
+      },
+      "validation": {
+        "target_soc_tolerance": 0.0005,
+        "physical_constraint_tolerance": 0.001,
+        "minimum_optimizer_success_fraction": 0.95
+      }
+    },
+    "success": true
+  },
+  "filtered_1c_reference": {
+    "source": "chen2020_dfn",
+    "reached_target_soc": true,
+    "final_soc": 0.7998928140293783,
+    "charge_time_min": 53.333333333333336,
+    "maximum_voltage_v": 4.142489736809485,
+    "maximum_temperature_c": 33.50239895144665,
+    "maximum_current_a": 5.0,
+    "maximum_current_change_a": 2.0,
+    "safety_override_count": 0,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "current_change_limit_exceeded": false,
+    "success": true
+  },
+  "improvement_fraction_over_filtered_1c": 0.012500000000000087,
+  "checks": {
+    "reduced_closed_loop": true,
+    "dfn_closed_loop": true,
+    "minimum_time_improvement": true,
+    "zero_mpc_fallbacks": true,
+    "zero_reference_governor_safety_overrides": true
+  },
+  "ready_for_active_data_aggregation": true,
+  "success": true
+}
