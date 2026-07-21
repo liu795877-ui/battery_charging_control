@@ -192,3 +192,13 @@ jupyter-lab notebooks\09_phase6_paper_method_validation.ipynb
 ```
 
 本轮 434/500 个初态被接受，生成 3472 个样本，数据集闸门通过；但 DNN 测试 NRMSE 为 5.63%，25 ℃ 闭环电流 NRMSE 为 7.73%，充电时间相对 MPC 偏差 6.22%，并出现 2.6167 A 的单步电流变化，因此名义门槛未通过。15/30 ℃ 和 Phase 5A 压力测试按顺序未运行。详见 `docs/phase6_paper_method_validation.md` 和 `outputs/phase6_report.md`。
+
+# Phase 6B: DNN failure diagnosis
+Phase 6B is independent from Phase 6A. It diagnoses why the pure paper-style DNN did not learn the MPC teacher accurately enough, with error partitions by SOC, temperature, previous current, and constraint-active regions. It also trains larger paper-style DNN candidates and compares pure DNN against a separate projected-DNN control group.
+
+Run:
+```powershell
+python -m battery_fast_charge.phase6b_cli --config configs\phase6b_dnn_failure_diagnosis.yaml --project-root .
+```
+
+Key outputs are documented in `docs/phase6b_dnn_failure_diagnosis.md` and `phase6b_dnn_failure_diagnosis/README.md`.

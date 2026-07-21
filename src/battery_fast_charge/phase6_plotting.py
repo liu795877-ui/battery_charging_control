@@ -9,7 +9,10 @@ import pandas as pd
 
 
 def plot_paper_dataset_audit(
-    attempts: pd.DataFrame, dataset: pd.DataFrame, path: str | Path
+    attempts: pd.DataFrame,
+    dataset: pd.DataFrame,
+    path: str | Path,
+    title_prefix: str = "Phase 6",
 ) -> None:
     """同时显示初态接受区域、展开状态覆盖、标签分布和约束激活。"""
     figure, axes = plt.subplots(2, 2, figsize=(12, 8), constrained_layout=True)
@@ -43,14 +46,18 @@ def plot_paper_dataset_audit(
     axes[1, 1].set(ylabel="Active samples", title="Constraint-active coverage")
     for axis in axes.flat:
         axis.grid(alpha=0.2)
-    figure.suptitle("Phase 6: paper-style MPC dataset audit")
+    figure.suptitle(f"{title_prefix}: paper-style MPC dataset audit")
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(path, dpi=180)
     plt.close(figure)
 
 
-def plot_paper_dnn_offline(predictions: pd.DataFrame, path: str | Path) -> None:
+def plot_paper_dnn_offline(
+    predictions: pd.DataFrame,
+    path: str | Path,
+    title_prefix: str = "Phase 6",
+) -> None:
     """显示测试集教师—DNN 一致性和误差随状态的分布。"""
     test = predictions[predictions["split"] == "test"]
     figure, axes = plt.subplots(1, 2, figsize=(11, 4), constrained_layout=True)
@@ -64,7 +71,7 @@ def plot_paper_dnn_offline(predictions: pd.DataFrame, path: str | Path) -> None:
     axes[1].set(xlabel="SOC [-]", ylabel="DNN - MPC [A]", title="Error versus SOC (color: temperature)")
     for axis in axes:
         axis.grid(alpha=0.2)
-    figure.suptitle("Phase 6: offline explicit-control imitation")
+    figure.suptitle(f"{title_prefix}: offline explicit-control imitation")
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(path, dpi=180)

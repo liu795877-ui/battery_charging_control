@@ -1,0 +1,58 @@
+study:
+  name: chen2020_phase6b_dnn_failure_diagnosis
+  random_seed: 20260721
+
+source_phase3_config: configs/phase3.yaml
+
+paper_method:
+  article: Health-aware optimal charging of lithium-ion batteries using deep-neural networks-based explicit constrained model predictive control
+  doi: 10.1016/j.compchemeng.2025.109096
+  initial_state_count: 1000
+  trajectory_steps: 8
+  hammersley_fraction: 0.95
+  factorial_levels: [3, 2, 2, 2, 2]
+  state_ranges:
+    state_soc: [0.10, 0.79]
+    state_polarization_fast_v: [0.00, 0.09]
+    state_polarization_slow_v: [0.00, 0.09]
+    state_average_temperature_c: [25.0, 33.4]
+    state_previous_current_a: [0.0, 10.0]
+  train_fraction: 0.80
+  validation_fraction: 0.10
+
+network:
+  candidate_hidden_layer_sizes:
+    - [32, 32, 16]
+    - [64, 64, 32]
+  activation: tanh
+  solver: lbfgs
+  regularization_candidates: [0.001]
+  initialization_seeds: [22]
+  maximum_iterations: 2500
+  convergence_tolerance: 1.0e-8
+
+nominal_validation:
+  temperature_c: 25.0
+  maximum_simulation_time_s: 3600.0
+  teacher_trajectory: data/phase3/mpc_chen2020_dfn_closed_loop.csv
+  teacher_metrics: outputs/metrics/phase3_mpc_metrics.json
+  current_nrmse_normalization_a: 10.0
+
+diagnostics:
+  soc_bins: [0.10, 0.25, 0.40, 0.55, 0.70, 0.80]
+  temperature_bins_c: [25.0, 27.0, 29.0, 31.0, 33.5]
+  previous_current_bins_a: [0.0, 2.0, 5.0, 8.0, 10.1]
+  slew_margin_close_a: 0.10
+
+success_criteria:
+  minimum_accepted_initial_states: 700
+  minimum_teacher_acceptance_fraction: 0.70
+  maximum_nominal_current_nrmse: 0.01
+  maximum_nominal_charge_time_gap_fraction: 0.02
+  minimum_inference_speedup_over_mpc: 100.0
+  maximum_voltage_violation_v: 0.01
+  maximum_temperature_violation_c: 0.10
+  maximum_current_violation_a: 0.10
+  maximum_current_change_violation_a: 0.20
+  require_all_temperature_anchors_complete: true
+  require_all_temperature_anchors_without_serious_violation: true
