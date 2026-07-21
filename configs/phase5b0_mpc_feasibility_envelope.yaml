@@ -1,0 +1,35 @@
+study:
+  name: phase5b0_mpc_feasibility_envelope
+  execution_status: planned_not_run
+  source_phase5a_config: configs/phase5a.yaml
+  source_phase3_config: configs/phase3.yaml
+
+frozen_scope:
+  reuse_all_phase5a_reduced_scenarios: true
+  reduced_scenario_count: 69
+  dfn_temperature_anchors_c: [15.0, 25.0, 30.0]
+  maximum_charge_time_s: 3600.0
+  target_soc: 0.80
+  change_battery: false
+
+teacher_comparison:
+  - nominal_mpc_with_estimated_parameters
+  - oracle_mpc_with_true_scenario_parameters
+
+required_outputs:
+  - scenario_feasibility_table
+  - teacher_completion_and_safety_summary
+  - active_constraint_statistics
+  - infeasibility_reason_classification
+  - teacher_feasible_scenario_mask
+
+scenario_classes:
+  - teacher_feasible_ann_failed
+  - teacher_and_ann_infeasible
+  - teacher_and_ann_feasible
+  - nominal_teacher_failed_oracle_teacher_feasible
+
+execution_gate:
+  phase6r_conclusion_frozen: true
+  run_phase5a_ann_stress_now: false
+  run_cross_battery_now: false

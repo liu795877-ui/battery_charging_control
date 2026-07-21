@@ -1,0 +1,88 @@
+{
+  "status": "completed",
+  "teacher": {
+    "reduced": {
+      "steps": 645,
+      "charge_time_min": 53.75,
+      "fallback_count": 0,
+      "mean_solve_time_ms": 147.2936268216662
+    },
+    "dfn": {
+      "steps": 649,
+      "charge_time_min": 54.083333333333336,
+      "fallback_count": 0,
+      "mean_solve_time_ms": 164.1555833587998
+    }
+  },
+  "summary": [
+    {
+      "controller": "five_state_pure",
+      "plant": "dfn",
+      "seed_count": 1,
+      "passing_seed_count": 0,
+      "current_nrmse_mean": 0.0336052144049115,
+      "current_nrmse_std": null,
+      "current_nrmse_best": 0.0336052144049115,
+      "charge_time_gap_mean": 0.0708782742681047,
+      "speedup_mean": 2607.4836749544625
+    },
+    {
+      "controller": "five_state_pure",
+      "plant": "reduced",
+      "seed_count": 3,
+      "passing_seed_count": 0,
+      "current_nrmse_mean": 0.026235017624566898,
+      "current_nrmse_std": 0.004469419309300352,
+      "current_nrmse_best": 0.0229807564357421,
+      "charge_time_gap_mean": 0.06408268733850124,
+      "speedup_mean": 6045.320692935235
+    },
+    {
+      "controller": "full_state_feasible_interval",
+      "plant": "reduced",
+      "seed_count": 3,
+      "passing_seed_count": 0,
+      "current_nrmse_mean": 0.02536015770255477,
+      "current_nrmse_std": 0.0038376113792380783,
+      "current_nrmse_best": 0.0227022149614459,
+      "charge_time_gap_mean": 0.07596899224806193,
+      "speedup_mean": 2211.7978745249216
+    },
+    {
+      "controller": "full_state_feasible_interval",
+      "plant": "dfn",
+      "seed_count": 1,
+      "passing_seed_count": 0,
+      "current_nrmse_mean": 0.0333949968973017,
+      "current_nrmse_std": null,
+      "current_nrmse_best": 0.0333949968973017,
+      "charge_time_gap_mean": 0.0693374422187981,
+      "speedup_mean": 1924.24456347321
+    },
+    {
+      "controller": "full_state_pure",
+      "plant": "reduced",
+      "seed_count": 3,
+      "passing_seed_count": 0,
+      "current_nrmse_mean": 0.026251070048346536,
+      "current_nrmse_std": 0.0019292284804655754,
+      "current_nrmse_best": 0.0244657796451854,
+      "charge_time_gap_mean": 0.06098191214470277,
+      "speedup_mean": 2885.8703453596377
+    },
+    {
+      "controller": "full_state_pure",
+      "plant": "dfn",
+      "seed_count": 1,
+      "passing_seed_count": 0,
+      "current_nrmse_mean": 0.030321660883403,
+      "current_nrmse_std": null,
+      "current_nrmse_best": 0.030321660883403,
+      "charge_time_gap_mean": 0.061633281972265,
+      "speedup_mean": 2708.265614075969
+    }
+  ],
+  "dfn_sampling_policy": "one representative seed per controller because no controller passed the offline majority gate; repeated DFN runs cannot change Phase 6R acceptance",
+  "controllers_passing_both_plants_by_majority": [],
+  "proceed_to_phase6d": false
+}

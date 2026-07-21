@@ -203,3 +203,24 @@ run. Do not run 15/30 °C, Phase 5A perturbations, or cross-battery experiments 
 Primary artifacts: `outputs/phase6c_report.md`, `outputs/metrics/phase6c1_metrics.json`,
 `outputs/metrics/phase6c2_metrics.json`, `outputs/metrics/phase6c3_metrics.json`, and
 `docs/phase6c_constraint_regime_learning.md`.
+
+## Phase 6R completion update (2026-07-21)
+
+Phase 6R corrected the teacher/control timing mismatch by re-solving MPC at every 5 s
+state and retaining only the first action. The new dataset has 1776 samples from 222
+accepted trajectories with a trajectory-isolated 1232/272/272 train/validation/test
+split. Independent rolling-teacher consistency passed with a maximum difference of 0 A.
+
+Across seeds 22/42/73, frozen-test mean NRMSE was 1.257% for five-state pure DNN,
+1.990% for full-state pure DNN, and 3.092% for the full-state feasible-interval DNN;
+all had 0/3 passing seeds. Mean 25 C reduced closed-loop NRMSE was 2.624%, 2.625%, and
+2.536%, respectively. Representative DFN NRMSE was 3.361%, 3.032%, and 3.339%, with
+charge-time gaps of about 6%--8%. The feasible-interval controller removed serious
+current/slew violations but did not repair imitation accuracy.
+
+Phase 6R therefore failed its frozen acceptance contract. Keep
+`proceed_to_phase6d=false`: do not run Phase 6D, 15/30 C, Phase 5A perturbations, or
+cross-battery validation for the pure-DNN route. The next planned stage is Phase 5B-0,
+which establishes the nominal/oracle MPC feasibility envelope before ANN v3 training.
+See `docs/phase6r_corrected_policy_distillation.md`, `outputs/phase6r_report.md`, and
+`docs/phase5b0_mpc_feasibility_plan.md`.

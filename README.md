@@ -202,3 +202,19 @@ python -m battery_fast_charge.phase6b_cli --config configs\phase6b_dnn_failure_d
 ```
 
 Key outputs are documented in `docs/phase6b_dnn_failure_diagnosis.md` and `phase6b_dnn_failure_diagnosis/README.md`.
+
+# Phase 6R: corrected rolling-policy distillation
+
+Phase 6R removes the open-loop block-label mismatch by re-solving MPC at every 5 s state
+and retaining only its first action. Run the three checkpointed stages in order:
+
+```powershell
+python -m battery_fast_charge.phase6r_teacher_cli
+python -m battery_fast_charge.phase6r_training_cli
+python -m battery_fast_charge.phase6r_validation_cli
+```
+
+The corrected labels materially reduced offline error, but none of the three controller
+forms passed the frozen <1% offline gate. Nominal 25 C reduced/DFN closed-loop errors and
+charge-time gaps also failed. Phase 6D therefore remains disabled. See
+`docs/phase6r_corrected_policy_distillation.md` and `outputs/phase6r_report.md`.
