@@ -181,3 +181,25 @@ Phase 6B 可通过项目脚本入口重新运行，但默认应优先复用现�
 4. `data/phase6b_dnn_failure_diagnosis/error_partition_diagnostics.csv`
 
 最后，研究表述应保持克制：目前已经证明的是“纯 DNN 在本配置下没有充分逼近 MPC，输出投影能恢复斜率可行性但不能修复拟合误差”；尚未证明的是“论文方法普遍无效”或“已获得可部署的最优充电控制器”。
+# Phase 6C completion update (2026-07-21)
+
+Phase 6B is frozen at commit `879ad0f` and remote tag `phase6b-baseline`. Phase 6C was
+completed on branch `codex/phase6c-constraint-regime-learning` without changing the
+Phase 6B 7024-sample trajectory split or 704-sample test set.
+
+Phase 6C-1 completed 45 ablation runs. It exactly reproduced the Phase 6B seed-22 result
+and diagnosed generalization/data coverage as the primary limitation. All group-mean
+test NRMSE values remained above 5%, so pure network scaling was stopped.
+
+Phase 6C-2 added 800 accepted MPC trajectories (500 boundary-targeted and 300 DAgger),
+producing 6400 samples assigned only to Phase 6C training/new-validation sets.
+
+Phase 6C-3 completed five-seed 25 °C DFN validation. Mean frozen-test / closed-loop
+NRMSE values were 5.551% / 4.969% for pure DNN, 5.522% / 5.179% for projected DNN,
+and 7.990% / 3.511% for structured-delta DNN. Every controller had 0/5 strict passing
+seeds. Therefore the paper-style pure DNN transfer did not pass, and Phase 6D must not
+run. Do not run 15/30 °C, Phase 5A perturbations, or cross-battery experiments yet.
+
+Primary artifacts: `outputs/phase6c_report.md`, `outputs/metrics/phase6c1_metrics.json`,
+`outputs/metrics/phase6c2_metrics.json`, `outputs/metrics/phase6c3_metrics.json`, and
+`docs/phase6c_constraint_regime_learning.md`.

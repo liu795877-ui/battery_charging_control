@@ -1,0 +1,129 @@
+{
+  "status": "completed",
+  "configuration": {
+    "study_name": "chen2020_phase6c2_targeted_teacher_data",
+    "random_seed": 20260722,
+    "source_phase3_config": "configs/phase3.yaml",
+    "frozen_baseline": {
+      "dataset": "data/phase6b_dnn_failure_diagnosis/paper_teacher_dataset.csv",
+      "dataset_sha256": "640b45c017594c3a8f954b498a99058d2e5cc8ecf6cff88425d5df94815de5da",
+      "pure_dnn_trajectory": "data/phase6b_dnn_failure_diagnosis/pure_dnn_dfn_25c.csv",
+      "pure_dnn_trajectory_sha256": "32b4608c444cbe3325198d81d7d42d04993643971c1d3872587a70206a67aa9f"
+    },
+    "sampling": {
+      "targeted_boundary_trajectory_count": 500,
+      "closed_loop_dagger_trajectory_count": 300,
+      "dagger_candidate_count": 2000,
+      "trajectory_steps": 8,
+      "new_validation_fraction": 0.15,
+      "checkpoint_interval": 10,
+      "targeted_ranges": {
+        "state_soc": [
+          0.1,
+          0.4
+        ],
+        "state_polarization_fast_v": [
+          0.0,
+          0.09
+        ],
+        "state_polarization_slow_v": [
+          0.0,
+          0.09
+        ],
+        "state_average_temperature_c": [
+          25.0,
+          27.0
+        ],
+        "state_previous_current_a": [
+          0.0,
+          5.0
+        ]
+      },
+      "dagger_jitter_standard_deviation": {
+        "state_soc": 0.002,
+        "state_polarization_fast_v": 0.003,
+        "state_polarization_slow_v": 0.003,
+        "state_average_temperature_c": 0.1,
+        "state_previous_current_a": 0.15
+      },
+      "global_state_bounds": {
+        "state_soc": [
+          0.1,
+          0.79
+        ],
+        "state_polarization_fast_v": [
+          0.0,
+          0.09
+        ],
+        "state_polarization_slow_v": [
+          0.0,
+          0.09
+        ],
+        "state_average_temperature_c": [
+          25.0,
+          33.4
+        ],
+        "state_previous_current_a": [
+          0.0,
+          10.0
+        ]
+      }
+    },
+    "acceptance": {
+      "minimum_teacher_acceptance_fraction": 0.7,
+      "minimum_accepted_trajectory_count": 500
+    }
+  },
+  "frozen_baseline_audit": {
+    "dataset_sha256": "640b45c017594c3a8f954b498a99058d2e5cc8ecf6cff88425d5df94815de5da",
+    "pure_dnn_trajectory_sha256": "32b4608c444cbe3325198d81d7d42d04993643971c1d3872587a70206a67aa9f",
+    "sample_count": 7024,
+    "test_sample_count": 704,
+    "test_trajectory_count": 88,
+    "trajectory_split_leak_count": 0
+  },
+  "teacher_data": {
+    "attempted_trajectory_count": 800,
+    "accepted_trajectory_count": 800,
+    "teacher_acceptance_fraction": 1.0,
+    "unfolded_sample_count": 6400,
+    "split_sample_counts": {
+      "phase6c_train": 5440,
+      "phase6c_validation": 960
+    },
+    "split_trajectory_counts": {
+      "phase6c_train": 680,
+      "phase6c_validation": 120
+    },
+    "source_metrics": {
+      "closed_loop_DAgger": {
+        "attempted_trajectory_count": 300,
+        "accepted_trajectory_count": 300,
+        "acceptance_fraction": 1.0,
+        "unfolded_sample_count": 2400
+      },
+      "targeted_boundary_sampling": {
+        "attempted_trajectory_count": 500,
+        "accepted_trajectory_count": 500,
+        "acceptance_fraction": 1.0,
+        "unfolded_sample_count": 4000
+      }
+    },
+    "active_constraint_counts": {
+      "voltage": 919,
+      "temperature": 1261,
+      "current_upper": 0,
+      "current_change": 999
+    },
+    "mean_teacher_solve_time_ms": 1605.4845089999617,
+    "maximum_teacher_solve_time_ms": 3984.0706000031787,
+    "checks": {
+      "minimum_acceptance_fraction": true,
+      "minimum_accepted_trajectory_count": true,
+      "trajectory_split_isolation": true,
+      "new_splits_only": true,
+      "both_sources_present": true
+    },
+    "success": true
+  }
+}

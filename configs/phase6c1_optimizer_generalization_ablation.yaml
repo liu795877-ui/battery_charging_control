@@ -1,0 +1,43 @@
+study:
+  name: chen2020_phase6c1_optimizer_generalization_ablation
+  random_seed: 20260721
+
+baseline:
+  phase6b_commit: 879ad0f
+  dataset: data/phase6b_dnn_failure_diagnosis/paper_teacher_dataset.csv
+  dataset_sha256: 640b45c017594c3a8f954b498a99058d2e5cc8ecf6cff88425d5df94815de5da
+  expected_sample_count: 7024
+  expected_split_sample_counts:
+    train: 5616
+    validation: 704
+    test: 704
+  expected_split_trajectory_counts:
+    train: 702
+    validation: 88
+    test: 88
+  current_nrmse_normalization_a: 10.0
+
+network:
+  hidden_layer_sizes:
+    - [16, 16]
+    - [32, 32, 16]
+    - [64, 64, 32]
+  activation: tanh
+  regularization_alpha: 0.001
+  initialization_seeds: [22, 42, 73, 101, 202]
+
+optimizers:
+  methods: [lbfgs, adam, adam_lbfgs]
+  convergence_tolerance: 1.0e-8
+  lbfgs_maximum_iterations: 2500
+  adam_maximum_iterations: 2500
+  adam_pretrain_iterations: 1000
+  finetune_lbfgs_maximum_iterations: 1500
+  adam_learning_rate_init: 0.001
+  adam_no_improvement_iterations: 100
+
+analysis:
+  low_training_nrmse_threshold: 0.05
+  high_test_nrmse_threshold: 0.05
+  seed_instability_test_nrmse_std_threshold: 0.01
+  seed_instability_test_nrmse_range_threshold: 0.02
