@@ -179,3 +179,16 @@ jupyter-lab notebooks\08_robustness_validation.ipynb
 本阶段未通过：降阶完成率为 68.12%，物理安全率为 65.22%；15 ℃ 和 25 ℃ DFN 安全完成，但 30 ℃ 在 60 min 时只达到 61.22% SOC，且安全层实质介入 91.39% 的控制步。当前结果表明 ANN v2 只在名义温度附近得到验证，不能直接进入 BMS。下一步应在高温和参数不利区域扩展教师数据并训练 ANN v3，而不是降低物理门槛。
 
 建议先读 `docs/phase5a_robustness.md`，再看 `notebooks/08_robustness_validation.ipynb`。主要输出位于 `data/phase5a/`、`outputs/metrics/phase5a_metrics.json`、`outputs/figures/phase5a_*` 和 `outputs/phase5a_report.md`。
+
+# 第六阶段：论文方法迁移验证
+
+Phase 6 独立于 Phase 1–5，按 Shokry 等（2025）的核心路线实现混合初态采样、MPC 短轨迹标签展开和不带安全过滤器的三隐层 DNN，并先在 25 ℃ Chen2020 DFN 上与 Phase 3 MPC teacher 对照。
+
+运行：
+
+```powershell
+python -m battery_fast_charge.phase6_cli --config configs\phase6_paper_method_validation.yaml --project-root .
+jupyter-lab notebooks\09_phase6_paper_method_validation.ipynb
+```
+
+本轮 434/500 个初态被接受，生成 3472 个样本，数据集闸门通过；但 DNN 测试 NRMSE 为 5.63%，25 ℃ 闭环电流 NRMSE 为 7.73%，充电时间相对 MPC 偏差 6.22%，并出现 2.6167 A 的单步电流变化，因此名义门槛未通过。15/30 ℃ 和 Phase 5A 压力测试按顺序未运行。详见 `docs/phase6_paper_method_validation.md` 和 `outputs/phase6_report.md`。
