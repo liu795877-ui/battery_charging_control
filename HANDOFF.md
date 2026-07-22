@@ -273,3 +273,23 @@ safety thresholds. Primary outputs are `outputs/metrics/phase5b05_metrics.json`,
 `data/phase5b05_mpc_recovery/recovery_controller_summary.csv`,
 `outputs/phase5b05_report.md`, and
 `notebooks/11_phase5b05_mpc_recovery_executed.ipynb`.
+
+## Phase 5B-0.6 completion update (2026-07-22)
+
+Phase 5B-0.6 strictly replayed `nominal`, `lhs_008`, `lhs_012`, `lhs_029`, and
+`lhs_056` with paired original/recovery MPC. Each pair used the same random innovation
+sequence, initial state, scenario parameters, frozen control-update schedule, and 3600 s
+cutoff. No ANN was trained and the 69-scenario sweep was not run.
+
+Under the corrected paired contract both original MPC and recovery MPC were feasible on
+all 5/5 scenarios. Their trajectory currents and all diagnostic slacks matched to floating-
+point precision; maximum braking-current deficit was 0 A. The earlier 3/5 recovery result
+was an audit artifact caused by using the wrong random seed/scenario index and not reusing
+the Phase 5B-0 cutoff and target-current cap logic.
+
+Do not train a new ANN or run all 69 scenarios yet. The corrected audit supports revising
+the recovery contract and adding prospective braking diagnostics before deciding whether
+Phase 5B-1 is justified; preserve the 4.2 V, 35 C, and 2 A/5 s safety limits.
+Primary artifacts are `data/phase5b06_contract_audit/`,
+`outputs/metrics/phase5b06_metrics.json`, `outputs/phase5b06_report.md`, and
+`notebooks/12_phase5b06_contract_audit_executed.ipynb`.

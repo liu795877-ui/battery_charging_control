@@ -38,6 +38,12 @@ class RecoveryMPCResult:
     predicted_terminal_soc: float
     minimum_constraint_margin: float
     candidate_feasibility: dict[str, bool]
+    slack_voltage_v: float = 0.0
+    slack_temperature_c: float = 0.0
+    slack_soc: float = 0.0
+    slack_current_change_a: float = 0.0
+    braking_distance_steps: int = 0
+    braking_current_deficit_a: float = 0.0
 
 
 def slew_safe_interval(
@@ -79,6 +85,28 @@ class RecoverableConstrainedMPC(ConstrainedMPC):
         margins = self._constraint_margins(state, blocks, prediction)
         minimum = float(np.min(margins))
         return minimum >= -self.config.optimizer.constraint_tolerance, prediction, minimum
+
+    def _constraint_slacks(self, state: ReducedState, blocks: np.ndarray, prediction: dict[str, np.ndarray]) -> dict[str, float]:
+        differences = np.diff(np.concatenate([[state.previous_current_a], blocks]))
+        constraints = self.config.constraints
+        return {
+            "slack_voltage_v": float(np.maximum(prediction["voltage_v"] - constraints.mpc_maximum_voltage_v, 0.0).max(initial=0.0)),
+            "slack_temperature_c": float(np.maximum(prediction["temperature_c"] - constraints.mpc_maximum_temperature_c, 0.0).max(initial=0.0)),
+            "slack_soc": float(np.maximum(prediction["soc"] - self.config.battery.target_soc, 0.0).max(initial=0.0)),
+            "slack_current_change_a": float(np.maximum(np.abs(differences) - constraints.maximum_current_change_a_per_step, 0.0).max(initial=0.0)),
+        }
+
+    def _braking_demand(self, state: ReducedState) -> tuple[int, float]:
+        limit = self.config.constraints.physical_maximum_voltage_v
+        temperature_limit = self.config.constraints.physical_maximum_temperature_c
+        safe_current = 0.0
+        for current in np.linspace(0.0, self.config.constraints.maximum_current_a, 201):
+            _, output = self.model.step(state, float(current))
+            if output.terminal_voltage_v <= limit + self.config.validation.physical_constraint_tolerance and output.average_temperature_c <= temperature_limit + self.config.validation.physical_constraint_tolerance:
+                safe_current = float(current)
+        deficit = max(0.0, state.previous_current_a - safe_current)
+        delta = self.config.constraints.maximum_current_change_a_per_step
+        return (int(np.ceil(deficit / delta)) if delta > 0 else 0), max(0.0, deficit - delta)
 
     def _shifted_previous(self, elapsed_steps: int) -> np.ndarray | None:
         if self._last_feasible_expanded is None:
@@ -175,6 +203,8 @@ class RecoverableConstrainedMPC(ConstrainedMPC):
         solve_time = perf_counter() - started
         optimized = np.asarray(optimization.x, dtype=float)
         optimized_feasible, optimized_prediction, optimized_margin = self._audit_sequence(state, optimized)
+        slacks = self._constraint_slacks(state, optimized, optimized_prediction)
+        braking_steps, braking_deficit = self._braking_demand(state)
         candidates: list[tuple[str, np.ndarray | None]] = [
             ("shifted_previous_feasible", shifted),
             ("projected_ann_sequence", self._projected_ann_blocks(state)),
@@ -252,4 +282,7 @@ class RecoverableConstrainedMPC(ConstrainedMPC):
             predicted_terminal_soc=float(prediction["soc"][-1]),
             minimum_constraint_margin=margin,
             candidate_feasibility=audits,
+            **slacks,
+            braking_distance_steps=braking_steps,
+            braking_current_deficit_a=braking_deficit,
         )
