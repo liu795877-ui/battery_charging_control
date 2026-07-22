@@ -251,17 +251,25 @@ Primary outputs: `outputs/metrics/phase5b0_metrics.json`,
 `docs/phase5b0_mpc_feasibility_envelope.md`, and
 `notebooks/10_phase5b0_mpc_feasibility_executed.ipynb`.
 
-## Phase 5B-0.5 implementation update (ready for user run)
+## Phase 5B-0.5 completion update (2026-07-22)
 
-Do not start Phase 5B-1 yet. Phase 5B-0.5 is implemented on branch
-`codex/phase5b05-mpc-recovery` but its representative long run is intentionally not run
-by Codex. It adds slew-safe fallback, retained/shifted feasible sequences, a projected ANN
-candidate, conservative slew-down candidate, and separate numerical-recovered,
-prediction-domain-infeasible, and hard-safety/slew-conflict labels.
+Do not start Phase 5B-1. The 15-scenario representative recovery recheck completed all
+30 nominal/oracle controller runs. The slew-safe fallback achieved zero non-conflict
+fallback slew violations, and the three failure classes are now auditable. The nominal
+25 C scenario was fully feasible for both controller variants.
 
-The frozen selector produces 15 unique scenarios covering five teacher-feasible, five
-unresolved, five teacher-and-ANN-infeasible cases, plus nominal/hot/cold anchors after
-deduplication. Run `python -m battery_fast_charge.phase5b05_cli` with `PYTHONPATH=src`.
-The run is checkpointed under `data/phase5b05_mpc_recovery/`. Return stdout/stderr,
-`recovery_run_summary.csv`, and `outputs/metrics/phase5b05_metrics.json`; then create the
-executed result notebook and decide whether a full 69-scenario recovery recheck is justified.
+The representative gate nevertheless failed. Nominal recovery was fully feasible on
+2/15 scenarios versus 5/15 for the matched Phase 5B-0 baseline (gain -3). Oracle recovery
+was feasible on 1/15 versus 1/15 at baseline (gain 0), so oracle remained weaker than
+nominal recovery. Across both controllers there were 2647 prediction-domain-infeasible
+decisions and 1031 hard-safety/slew conflicts, but zero ordinary-fallback slew violations.
+No numerical-failure case had a fully feasible retained candidate.
+
+Therefore do not run the full 69-scenario recovery recheck and do not enter Phase 5B-1.
+The next diagnostic should reconcile Phase 5B-0's feasibility definition with the stricter
+recovery audit and check consistency between prediction limits and the 4.2 V / 35 C hard
+safety thresholds. Primary outputs are `outputs/metrics/phase5b05_metrics.json`,
+`data/phase5b05_mpc_recovery/recovery_run_summary.csv`,
+`data/phase5b05_mpc_recovery/recovery_controller_summary.csv`,
+`outputs/phase5b05_report.md`, and
+`notebooks/11_phase5b05_mpc_recovery_executed.ipynb`.

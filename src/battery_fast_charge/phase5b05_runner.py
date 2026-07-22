@@ -29,6 +29,16 @@ from .robustness import _estimated_state, generate_reduced_stress_scenarios, per
 CONTROLLERS = ("nominal_mpc_recovery", "oracle_mpc_recovery")
 
 
+def scenario_row_by_id(scenarios: pd.DataFrame, scenario_id: str) -> pd.Series:
+    """Return a scenario row without losing its identifier during lookup."""
+    matches = scenarios.loc[scenarios["scenario_id"].astype(str) == str(scenario_id)]
+    if len(matches) != 1:
+        raise ValueError(
+            f"Expected exactly one stress scenario for {scenario_id!r}, found {len(matches)}"
+        )
+    return matches.iloc[0].copy()
+
+
 def select_representative_scenarios(
     table: pd.DataFrame, config: PhaseFiveBZeroFiveConfig
 ) -> pd.DataFrame:
@@ -232,13 +242,12 @@ def run_phase_five_b_zero_five(
     representatives.to_csv(data_dir / "representative_scenarios.csv", index=False)
     phase5a = load_phase_five_a_config(root / config.source_phase5a_config)
     scenarios = generate_reduced_stress_scenarios(phase5a)
-    scenario_map = scenarios.set_index("scenario_id")
     runs_path = data_dir / "recovery_run_summary.csv"
     records = pd.read_csv(runs_path).to_dict("records") if runs_path.exists() else []
     completed = {(str(row["scenario_id"]), str(row["controller"])) for row in records}
     for _, selected in representatives.iterrows():
         scenario_id = str(selected["scenario_id"])
-        scenario = scenario_map.loc[scenario_id]
+        scenario = scenario_row_by_id(scenarios, scenario_id)
         scenario_index = int(scenarios.index[scenarios["scenario_id"] == scenario_id][0])
         for controller in CONTROLLERS:
             if (scenario_id, controller) in completed:

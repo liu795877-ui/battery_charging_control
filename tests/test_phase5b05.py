@@ -10,7 +10,10 @@ from battery_fast_charge.phase5b05_mpc import (
     project_current_to_slew_interval,
     slew_safe_interval,
 )
-from battery_fast_charge.phase5b05_runner import select_representative_scenarios
+from battery_fast_charge.phase5b05_runner import (
+    scenario_row_by_id,
+    select_representative_scenarios,
+)
 
 
 class OneStepSafetyModel:
@@ -81,3 +84,15 @@ def test_representative_selection_preserves_required_groups_and_extremes() -> No
     assert {"nominal", "corner_hot_resistive_optimistic", "corner_cold_resistive"} <= set(selected["scenario_id"])
     assert selected["selection_labels"].str.contains("teacher_feasible").sum() == 5
     assert selected["selection_labels"].str.contains("unresolved").sum() == 5
+
+
+def test_scenario_lookup_preserves_scenario_id_column() -> None:
+    scenarios = pd.DataFrame.from_records(
+        [
+            {"scenario_id": "nominal", "initial_soc": 0.1},
+            {"scenario_id": "hot", "initial_soc": 0.2},
+        ]
+    )
+    scenario = scenario_row_by_id(scenarios, "hot")
+    assert scenario["scenario_id"] == "hot"
+    assert np.isclose(scenario["initial_soc"], 0.2)

@@ -1,0 +1,3 @@
+controller,scenario_count,baseline_feasible_count,recovery_feasible_count,fallback_slew_violation_count,hard_safety_slew_conflict_count,numerical_failure_recovered_count,prediction_domain_infeasible_count,mean_solve_time_ms,maximum_solve_time_ms,feasible_gain
+nominal_mpc_recovery,15,5,2,0,487,0,1220,837.9463302104122,5449.641799999881,-3
+oracle_mpc_recovery,15,1,1,0,544,0,1427,867.3404330738178,5758.941199999754,0
