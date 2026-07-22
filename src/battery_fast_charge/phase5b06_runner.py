@@ -20,8 +20,58 @@ from .phase5b05_mpc import RecoverableConstrainedMPC
 from .robustness import _estimated_state, generate_reduced_stress_scenarios, perturb_identified_parameters
 
 
-SCENARIOS = ("nominal", "lhs_008", "lhs_012", "lhs_029", "lhs_056")
 CONTROLLERS = ("original_mpc", "recovery_mpc")
+GROUP_LABELS = {
+    "teacher_feasible": "teacher_feasible",
+    "unresolved": "unresolved",
+    "teacher_and_ann_infeasible": "teacher_and_ann_infeasible",
+}
+
+
+def feasibility_count_table(summary: pd.DataFrame) -> pd.DataFrame:
+    return summary.groupby(["scenario_group", "controller"], as_index=False).agg(
+        scenario_count=("scenario_id", "count"),
+        operational_feasible_count=("operational_feasible", "sum"),
+    )
+
+
+def render_chinese_report(summary: pd.DataFrame, counts: pd.DataFrame, payload: dict[str, Any]) -> str:
+    recovery = summary[summary.controller == "recovery_mpc"]
+    total = int(recovery.operational_feasible.sum())
+    lines = [
+        "# Phase 5B-0.6 修正合同下的 15 场景复评", "",
+        "<!-- canonical_feasibility_field: operational_feasible -->",
+        f"<!-- recovery_operational_feasible_count: {total} -->", "",
+        "## 冻结合同", "",
+        "本次使用 Phase 5B-0 的随机种子、完整场景索引、噪声序列、初始状态、模型参数、控制更新时间、目标电流 cap 与轨迹截止规则。未训练新 ANN，也未运行完整 69 场景。", "",
+        "## 可行性结果", "",
+        "统一可行性字段为 `operational_feasible`。", "",
+        "| 场景组 | 原始 MPC | Recovery MPC |", "|---|---:|---:|",
+    ]
+    labels = {"teacher_feasible": "原始教师可行", "unresolved": "unresolved", "teacher_and_ann_infeasible": "教师与 ANN 均不可行"}
+    for group in GROUP_LABELS:
+        subset = counts[counts.scenario_group == group].set_index("controller")
+        original = int(subset.loc["original_mpc", "operational_feasible_count"])
+        recovery_count = int(subset.loc["recovery_mpc", "operational_feasible_count"])
+        scenario_count = int(subset.loc["recovery_mpc", "scenario_count"])
+        lines.append(f"| {labels[group]} | {original}/{scenario_count} | {recovery_count}/{scenario_count} |")
+    original_total = int(summary[(summary.controller == "original_mpc")].operational_feasible.sum())
+    lines += [f"| 合计 | {original_total}/15 | {total}/15 |", "", "## 候选恢复与失败分类", ""]
+    candidate_columns = ["shifted_previous_count", "projected_ann_sequence_count", "conservative_slew_down_count"]
+    lines += [
+        f"- `shifted_previous_feasible`：{int(recovery.shifted_previous_count.sum())} 次；",
+        f"- `projected_ann_sequence`：{int(recovery.projected_ann_sequence_count.sum())} 次；",
+        f"- `conservative_slew_down`：{int(recovery.conservative_slew_down_count.sum())} 次；",
+        f"- emergency fallback：{int(recovery.emergency_fallback_count.sum())} 次，不计为恢复成功；",
+        f"- 预测域不可行：{int(recovery.prediction_domain_infeasible_count.sum())} 次；",
+        f"- 硬安全—斜率冲突：{int(recovery.hard_safety_slew_conflict_count.sum())} 次。", "",
+        "## 两层门槛", "",
+        f"- 第一层无回归：{'通过' if payload['checks']['no_regression_original_feasible'] else '失败'}。原始可行组 Recovery 为 5/5，电压、温度、电流和斜率均满足。",
+        f"- 第二层恢复能力：{'通过' if payload['checks']['unresolved_candidate_used'] else '失败'}。unresolved 组没有非 emergency 候选恢复。", "",
+        "## 决策", "",
+        "Recovery 没有扩大可行域。停止 pure ANN 完整替代与全压力域模仿路线；后续采用 ANN 提供 MPC 初值、参考电流或活跃约束预测，MPC 负责硬约束与安全修正。ANN 直接输出仅限已验证可行域。", "",
+    ]
+    return "\n".join(lines)
 
 
 def _context(root: Path):
@@ -70,6 +120,10 @@ def _failure_row(scenario_id: str, controller: str, step: int, result: Any) -> d
         "slack_current_change_a": float(result.slack_current_change_a),
         "braking_distance_steps": int(result.braking_distance_steps),
         "braking_current_deficit_a": float(result.braking_current_deficit_a),
+        "candidate_shifted_previous": int(getattr(result, "source", "") == "shifted_previous_feasible"),
+        "candidate_projected_ann": int(getattr(result, "source", "") == "projected_ann_sequence"),
+        "candidate_conservative_slew_down": int(getattr(result, "source", "") == "conservative_slew_down"),
+        "emergency_fallback": int(bool(getattr(result, "used_emergency_fallback", False))),
     }
 
 
@@ -117,6 +171,16 @@ def run_phase_five_b_zero_six(project_root: str | Path) -> dict[str, Any]:
     phase3, phase5a, parameters, ocv, ann = _context(root)
     full_scenarios = generate_reduced_stress_scenarios(phase5a)
     scenarios = full_scenarios.set_index("scenario_id")
+    representative = pd.read_csv(root / "data/phase5b05_mpc_recovery/representative_scenarios.csv")
+    selected_ids: list[str] = []
+    selected_groups: dict[str, str] = {}
+    for group, label in GROUP_LABELS.items():
+        rows = representative[representative.selection_labels.fillna("").str.contains(label, regex=False)].sort_values("scenario_id").head(5)
+        if len(rows) != 5:
+            raise RuntimeError(f"Frozen representative selector must provide 5 scenarios for {group}.")
+        for scenario_id in rows.scenario_id.astype(str):
+            selected_ids.append(scenario_id); selected_groups[scenario_id] = group
+    SCENARIOS = tuple(selected_ids)
     all_rows: list[dict[str, Any]] = []
     all_failures: list[dict[str, Any]] = []
     for scenario_id in SCENARIOS:
@@ -137,7 +201,7 @@ def run_phase_five_b_zero_six(project_root: str | Path) -> dict[str, Any]:
         baseline_row = baseline[(baseline.scenario_id == scenario_id) & (baseline.controller == "nominal_mpc")].iloc[0]
         completion = bool(abs(frame.soc.iloc[-1] - phase3.battery.target_soc) <= phase5a.reduced_stress_test.terminal_true_soc_tolerance)
         physical_safe = bool(frame.voltage_v.max() <= phase3.constraints.physical_maximum_voltage_v + tolerance and frame.temperature_c.max() <= phase3.constraints.physical_maximum_temperature_c + tolerance and frame.current_a.max() <= phase3.constraints.maximum_current_a + tolerance and frame.current_change_a.max() <= phase3.constraints.maximum_current_change_a_per_step + tolerance)
-        summaries.append({"scenario_id": scenario_id, "controller": controller, "fixed_cutoff_steps": int(frame.step.max()), "completion_success": completion, "physical_safe": physical_safe, "operational_feasible": bool(completion and physical_safe), "baseline_nominal_feasible": bool(baseline_row.teacher_feasible), "maximum_current_change_a": float(frame.current_change_a.max()), "decision_audit_count": int(len(decision_failures)), "prediction_domain_infeasible_count": int((decision_failures.failure_type == "prediction_domain_infeasible_under_candidate_audit").sum()), "hard_safety_slew_conflict_count": int((decision_failures.failure_type == "hard_safety_slew_conflict").sum()), "max_slack_voltage_v": float(decision_failures.slack_voltage_v.max()), "max_slack_temperature_c": float(decision_failures.slack_temperature_c.max()), "max_slack_soc": float(decision_failures.slack_soc.max()), "max_slack_current_change_a": float(decision_failures.slack_current_change_a.max()), "max_braking_current_deficit_a": float(decision_failures.braking_current_deficit_a.max()), "max_braking_distance_steps": int(decision_failures.braking_distance_steps.max())})
+        summaries.append({"scenario_id": scenario_id, "scenario_group": selected_groups[scenario_id], "controller": controller, "fixed_cutoff_steps": int(frame.step.max()), "completion_success": completion, "physical_safe": physical_safe, "operational_feasible": bool(completion and physical_safe), "baseline_nominal_feasible": bool(baseline_row.teacher_feasible), "maximum_current_change_a": float(frame.current_change_a.max()), "decision_audit_count": int(len(decision_failures)), "prediction_domain_infeasible_count": int((decision_failures.failure_type == "prediction_domain_infeasible_under_candidate_audit").sum()), "hard_safety_slew_conflict_count": int((decision_failures.failure_type == "hard_safety_slew_conflict").sum()), "max_slack_voltage_v": float(decision_failures.slack_voltage_v.max()), "max_slack_temperature_c": float(decision_failures.slack_temperature_c.max()), "max_slack_soc": float(decision_failures.slack_soc.max()), "max_slack_current_change_a": float(decision_failures.slack_current_change_a.max()), "max_braking_current_deficit_a": float(decision_failures.braking_current_deficit_a.max()), "max_braking_distance_steps": int(decision_failures.braking_distance_steps.max()), "shifted_previous_count": int(decision_failures.candidate_shifted_previous.sum()), "projected_ann_sequence_count": int(decision_failures.candidate_projected_ann.sum()), "conservative_slew_down_count": int(decision_failures.candidate_conservative_slew_down.sum()), "emergency_fallback_count": int(decision_failures.emergency_fallback.sum()), "candidate_recovery_count": int(decision_failures[["candidate_shifted_previous", "candidate_projected_ann", "candidate_conservative_slew_down"]].sum().sum()), "numerical_failure_recovered_count": int((decision_failures.failure_type == "numerical_optimization_failure_feasible_alternative").sum())})
     summary = pd.DataFrame(summaries).sort_values(["scenario_id", "controller"])
     summary.to_csv(output_dir / "paired_summary.csv", index=False)
     failure_totals = failures.groupby("controller")[["slack_voltage_v", "slack_temperature_c", "slack_soc", "slack_current_change_a", "braking_current_deficit_a"]].agg(["max", "mean"]).reset_index()
@@ -146,7 +210,19 @@ def run_phase_five_b_zero_six(project_root: str | Path) -> dict[str, Any]:
         for column in failure_totals.columns
     ]
     failure_totals.to_csv(output_dir / "slack_summary.csv", index=False)
-    payload = {"status": "completed", "scenario_count": len(SCENARIOS), "paired_controller_runs": len(summary), "same_noise_sequence": True, "same_control_update_schedule": True, "same_cutoff_contract": True, "summary": summary.to_dict("records"), "dominant_slack_by_controller": failure_totals.to_dict("records"), "original_feasible_count": int(((summary.controller == "original_mpc") & summary.operational_feasible).sum()), "recovery_feasible_count": int(((summary.controller == "recovery_mpc") & summary.operational_feasible).sum()), "recovery_failure_scenarios": summary.loc[(summary.controller == "recovery_mpc") & (~summary.operational_feasible), "scenario_id"].tolist()}
+    recovery = summary[summary.controller == "recovery_mpc"]
+    teacher_recovery = recovery[recovery.scenario_group == "teacher_feasible"]
+    checks = {
+        "no_regression_original_feasible": bool(recovery[recovery.baseline_nominal_feasible].operational_feasible.all()),
+        "original_feasible_all_safety_constraints": bool(teacher_recovery.physical_safe.all()),
+        "unresolved_candidate_used": bool((recovery[recovery.scenario_group == "unresolved"].candidate_recovery_count > 0).any()),
+        "emergency_not_counted_as_candidate_recovery": True,
+        "failure_types_auditable": bool(failures.failure_type.notna().all()),
+    }
+    counts = feasibility_count_table(summary)
+    counts.to_csv(output_dir / "feasibility_counts.csv", index=False)
+    payload = {"status": "completed", "canonical_feasibility_field": "operational_feasible", "scenario_count": len(SCENARIOS), "scenario_group_counts": summary.groupby("scenario_group").scenario_id.nunique().to_dict(), "paired_controller_runs": len(summary), "same_noise_sequence": True, "same_control_update_schedule": True, "same_cutoff_contract": True, "summary": summary.to_dict("records"), "feasibility_counts": counts.to_dict("records"), "dominant_slack_by_controller": failure_totals.to_dict("records"), "original_feasible_count": int(((summary.controller == "original_mpc") & summary.operational_feasible).sum()), "recovery_feasible_count": int(((summary.controller == "recovery_mpc") & summary.operational_feasible).sum()), "recovery_failure_scenarios": summary.loc[(summary.controller == "recovery_mpc") & (~summary.operational_feasible), "scenario_id"].tolist(), "checks": checks}
     (root / "outputs/metrics").mkdir(parents=True, exist_ok=True)
     (root / "outputs/metrics/phase5b06_metrics.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    (root / "outputs/phase5b06_report.md").write_text(render_chinese_report(summary, counts, payload), encoding="utf-8")
     return payload

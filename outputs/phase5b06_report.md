@@ -1,53 +1,37 @@
-# Phase 5B-0.6 paired feasibility-contract audit
+# Phase 5B-0.6 修正合同下的 15 场景复评
 
-## Scope
+<!-- canonical_feasibility_field: operational_feasible -->
+<!-- recovery_operational_feasible_count: 5 -->
 
-The audit replayed `nominal`, `lhs_008`, `lhs_012`, `lhs_029`, and `lhs_056`. Original
-MPC and recovery MPC shared the same noise innovations, initial state, plant/controller
-parameters, frozen control-update schedule, and 3600 s cutoff. No ANN training or
-69-scenario sweep was performed.
+## 冻结合同
 
-## Paired result
+本次使用 Phase 5B-0 的随机种子、完整场景索引、噪声序列、初始状态、模型参数、控制更新时间、目标电流 cap 与轨迹截止规则。未训练新 ANN，也未运行完整 69 场景。
 
-| Scenario | Original MPC | Recovery MPC |
+## 可行性结果
+
+统一可行性字段为 `operational_feasible`。
+
+| 场景组 | 原始 MPC | Recovery MPC |
 |---|---:|---:|
-| nominal | feasible | feasible |
-| lhs_008 | feasible | infeasible |
-| lhs_012 | feasible | infeasible |
-| lhs_029 | feasible | feasible |
-| lhs_056 | feasible | feasible |
+| 原始教师可行 | 5/5 | 5/5 |
+| unresolved | 0/5 | 0/5 |
+| 教师与 ANN 均不可行 | 0/5 | 0/5 |
+| 合计 | 5/15 | 5/15 |
 
-The original MPC and recovery MPC both recovered all five frozen Phase 5B-0 feasible
-scenarios under the corrected strict paired replay. Every pair used identical currents,
-constraint slacks, and zero braking deficit to floating-point precision. The earlier
-Phase 5B-0.5 loss therefore came from an inconsistent replay contract: the temporary audit
-used the wrong random seed/scenario index and did not reuse the baseline cutoff/cap logic.
+## 候选恢复与失败分类
 
-## Constraint relaxation evidence
+- `shifted_previous_feasible`：0 次；
+- `projected_ann_sequence`：0 次；
+- `conservative_slew_down`：0 次；
+- emergency fallback：1067 次，不计为恢复成功；
+- 预测域不可行：750 次；
+- 硬安全—斜率冲突：317 次。
 
-For the two recovery-only failures, the maximum required relaxations of the audited
-optimizer sequence were:
+## 两层门槛
 
-| Scenario | Voltage (V) | Temperature (C) | SOC | Slew (A/5 s) | Braking deficit (A) |
-|---|---:|---:|---:|---:|---:|
-| lhs_008 | ~0 | ~0 | ~0 | ~0 | 0 |
-| lhs_012 | ~0 | ~0 | ~0 | ~0 | 0 |
+- 第一层无回归：通过。原始可行组 Recovery 为 5/5，电压、温度、电流和斜率均满足。
+- 第二层恢复能力：失败。unresolved 组没有非 emergency 候选恢复。
 
-These values are diagnostic slacks, not proposed safety-limit relaxations. The final
-4.2 V, 35 C, and 2 A/5 s limits remain unchanged.
+## 决策
 
-## Interpretation and decision
-
-There is no failure in the corrected five-scenario paired contract. The earlier apparent
-temperature/SOC/slew deficits were artifacts of inconsistent random-sequence indexing,
-cutoff handling, and target-current cap handling. The audit nevertheless confirms that
-the proposed slack and braking diagnostics are operational and should remain in future
-full-domain studies.
-
-Do not proceed to Phase 5B-1. The next implementation should:
-
-1. freeze the corrected replay contract as the reference for any further recovery study;
-2. preserve voltage, temperature, and slew as hard safety constraints;
-3. add a prospective braking-feasibility constraint before hard-safety conflict occurs;
-4. decide whether to soften only the terminal SOC objective after a separate contract audit;
-5. rerun only these five paired scenarios after any contract change before expanding the domain.
+Recovery 没有扩大可行域。停止 pure ANN 完整替代与全压力域模仿路线；后续采用 ANN 提供 MPC 初值、参考电流或活跃约束预测，MPC 负责硬约束与安全修正。ANN 直接输出仅限已验证可行域。

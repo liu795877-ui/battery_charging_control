@@ -293,3 +293,13 @@ Phase 5B-1 is justified; preserve the 4.2 V, 35 C, and 2 A/5 s safety limits.
 Primary artifacts are `data/phase5b06_contract_audit/`,
 `outputs/metrics/phase5b06_metrics.json`, `outputs/phase5b06_report.md`, and
 `notebooks/12_phase5b06_contract_audit_executed.ipynb`.
+
+## Phase 5B-0.6 修正合同下 15 场景复评完成（2026-07-22）
+
+已按修正合同完成 15 个代表场景、30 条原始 MPC/Recovery MPC 配对轨迹。场景由冻结代表表自动选取：5 个原始教师可行、5 个 unresolved、5 个教师与 ANN 均不可行。两种控制器共享 Phase 5B-0 的随机种子、完整场景索引、噪声序列、初始状态、模型参数、控制更新时间、目标电流 cap 与轨迹截止规则。
+
+统一可行性字段为 `operational_feasible`。结果为：原始教师可行组 Recovery 5/5，unresolved 0/5，教师与 ANN 均不可行组 0/5，总计 5/15。第一层“无回归”通过；第二层“恢复能力”失败。`shifted_previous_feasible`、`projected_ann_sequence` 和 `conservative_slew_down` 实际使用次数均为 0；困难场景出现 1067 次 emergency、750 次预测域不可行、317 次硬安全—斜率冲突，emergency 未计为恢复成功。
+
+因此 Recovery 没有扩大可行域。停止 pure ANN 完整替代和全压力域模仿路线；后续应转向“ANN 提供 MPC 初值、参考电流或活跃约束预测，MPC 负责硬约束与安全修正”的混合控制。ANN 直接输出仅限已验证可行域。不要在该结论下继续训练 pure ANN 或直接运行完整 69 场景。
+
+主要产物：`data/phase5b06_contract_audit/paired_summary.csv`、`data/phase5b06_contract_audit/feasibility_counts.csv`、`outputs/metrics/phase5b06_metrics.json`、`outputs/phase5b06_report.md`、`notebooks/13_phase5b06_corrected_15scenario_executed.ipynb`。
