@@ -50,6 +50,9 @@ battery-phase6p0 = "battery_fast_charge.phase6p0_cli:main"
 battery-phase2r = "battery_fast_charge.phase2r_cli:main"
 battery-phase2rc = "battery_fast_charge.phase2rc_cli:main"
 battery-phase2rd = "battery_fast_charge.phase2rd_cli:main"
+battery-phase7a-level1 = "battery_fast_charge.phase7a_level1_cli:main"
+battery-phase7a-level1r = "battery_fast_charge.phase7a_level1r_cli:main"
+battery-phase7a-level1s = "battery_fast_charge.phase7a_level1s_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

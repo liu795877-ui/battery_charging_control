@@ -1,0 +1,29 @@
+study:
+  name: phase7a_level1s_training_stability
+
+sources:
+  level1_config: configs/phase7a_level1_1rc.yaml
+  level1r_metrics: outputs/phase7a_level1r_terminal_coverage/metrics.json
+  combined_dataset: data/phase7a_level1r_terminal_coverage/combined_training_contract.csv
+  original_dataset: data/phase7a_level1_1rc/teacher_dataset.csv
+  terminal_dataset: data/phase7a_level1r_terminal_coverage/terminal_teacher_dataset.csv
+  tail_dataset: data/phase7a_level1r_terminal_coverage/tail_training_teacher_dataset.csv
+  closed_loop_initial_states: data/phase7a_level1r_terminal_coverage/closed_loop_initial_states.csv
+
+training_schemes:
+  architectures:
+    - name: deep_32_32_16
+      hidden_layer_sizes: [32, 32, 16]
+    - name: shallow_16
+      hidden_layer_sizes: [16]
+    - name: shallow_32
+      hidden_layer_sizes: [32]
+  optimizers: [adam, lbfgs]
+
+selection:
+  low_current_threshold_a: 0.25
+  # 三项等权秩和；只使用验证集，不读取任何冻结测试指标进行选择。
+  rank_metrics:
+    - validation_nrmse
+    - validation_abs_bias_a
+    - validation_low_current_abs_bias_a

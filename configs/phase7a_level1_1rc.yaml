@@ -1,0 +1,61 @@
+study:
+  name: phase7a_level1_project_1rc_pure_dnn
+
+model:
+  nominal_capacity_ah: 5.0
+  sample_period_s: 5.0
+  r0_ohm: 0.021340978270853076
+  r1_ohm: 0.009118293930560397
+  tau1_s: 17.243601604669564
+  ocv_curve: data/phase2/ocv_curve.csv
+
+mpc:
+  prediction_horizon_steps: 60
+  # 300 s 预测域使用 3 个分段常值决策，避免无斜率约束下的冗余自由度。
+  control_block_steps: 20
+  target_soc: 0.80
+  current_bounds_a: [0.0, 10.0]
+  terminal_voltage_max_v: 4.20
+  soc_tracking_weight: 1.0
+  terminal_soc_weight: 20.0
+  current_smoothness_weight: 0.0001
+  optimizer_max_iterations: 150
+  optimizer_ftol: 1.0e-9
+  constraint_tolerance: 1.0e-6
+
+data:
+  trajectory_count: 240
+  trajectory_steps: 8
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  soc_bounds: [0.10, 0.75]
+  polarization_bounds_v: [0.00, 0.08]
+  random_seed: 20260722
+  audit_state_count: 100
+  warm_starts_per_state: 15
+  closed_loop_trajectory_count: 12
+  closed_loop_soc_bounds: [0.45, 0.70]
+  maximum_closed_loop_steps: 420
+
+network:
+  hidden_layer_sizes: [32, 32, 16]
+  activation: tanh
+  regularization_alpha: 0.001
+  initialization_seeds: [22, 42, 73, 101, 137]
+  maximum_iterations: 2500
+  convergence_tolerance: 1.0e-8
+  learning_rate_init: 0.001
+  no_improvement_iterations: 100
+
+gates:
+  minimum_teacher_acceptance_fraction: 0.90
+  maximum_multivalued_state_fraction: 0.05
+  maximum_near_optimal_action_range_p95_a: 0.05
+  relative_objective_tolerance: 1.0e-4
+  absolute_objective_tolerance: 1.0e-6
+  offline_nrmse_max: 0.01
+  closed_loop_current_nrmse_max: 0.01
+  charge_time_gap_fraction_max: 0.02
+  minimum_target_reach_fraction: 1.0
+  maximum_constraint_violation: 0.001
+  minimum_speedup: 100.0
