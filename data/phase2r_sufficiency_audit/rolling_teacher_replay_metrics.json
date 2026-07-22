@@ -1,0 +1,17 @@
+{
+  "sample_count": 1776,
+  "trajectory_count": 222,
+  "mean_replay_current_difference_a": 0.0016399530683867008,
+  "median_replay_current_difference_a": 3.836377797661328e-05,
+  "p95_replay_current_difference_a": 0.000301122251880475,
+  "p99_replay_current_difference_a": 0.0670890489426874,
+  "maximum_replay_current_difference_a": 0.2239716986476656,
+  "replay_mismatch_count": 1222,
+  "tolerance_a": 1e-06,
+  "large_difference_threshold_a": 0.01,
+  "large_difference_count": 29,
+  "large_difference_fraction": 0.01632882882882883,
+  "exact_success": false,
+  "memory_summary_usable": true,
+  "success": false
+}

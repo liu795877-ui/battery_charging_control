@@ -16,3 +16,7 @@ outputs/phase6p0_ndc_paper/frozen_test_audit.csv
 outputs/phase6p0_ndc_paper/frozen_test_open_loop_predictions.csv
 outputs/phase6p0_ndc_paper/frozen_test_dnn_closed_loop.csv
 outputs/phase6p0_ndc_paper/ndc_dnn_model.npz
+data/phase2r_sufficiency_audit/pulse_profiles/
+data/phase2r_sufficiency_audit/dfn_pulse_grid.csv
+data/phase2r_sufficiency_audit/model_variant_predictions.csv
+data/phase2r_sufficiency_audit/rolling_teacher_control_memory.csv

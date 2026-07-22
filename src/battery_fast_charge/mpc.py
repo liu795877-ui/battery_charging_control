@@ -219,6 +219,11 @@ class ConstrainedMPC:
         self.number_of_blocks = config.control.number_of_control_blocks
         self._warm_start: np.ndarray | None = None
 
+    @property
+    def last_optimal_block_currents_a(self) -> np.ndarray | None:
+        """返回上一求解保存的控制块副本，供只读控制状态审计使用。"""
+        return None if self._warm_start is None else self._warm_start.copy()
+
     def _expand_blocks(self, block_currents_a: np.ndarray) -> np.ndarray:
         """把较少的分块决策变量展开为每 5 s 一个预测值。"""
         return np.repeat(

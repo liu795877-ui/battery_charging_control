@@ -1,0 +1,39 @@
+study:
+  name: chen2020_phase2r_model_and_control_state_sufficiency
+  random_seed: 20260722
+
+sources:
+  phase2_config: configs/phase2.yaml
+  phase3_config: configs/phase3.yaml
+  phase6r_config: configs/phase6r_corrected_policy_distillation.yaml
+  fixed_parameters: outputs/metrics/phase2_identified_parameters.json
+  fixed_ocv_curve: data/phase2/ocv_curve.csv
+  rolling_teacher_dataset: data/phase6r_corrected_policy_distillation/rolling_first_action_dataset.csv
+
+model_audit:
+  initial_soc_points: [0.60, 0.65, 0.70, 0.75, 0.80]
+  parameter_anchor_soc_points: [0.60, 0.70, 0.80]
+  ocv_soc_points: [0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 0.98]
+  temperatures_c: [15.0, 25.0, 30.0]
+  pulse_c_rates: [0.5, 1.0, 2.0]
+  sample_period_s: 5.0
+  rest_before_s: 60.0
+  pulse_duration_s: 300.0
+  rest_after_s: 300.0
+  prediction_horizons_s: [5.0, 25.0, 300.0]
+  physical_maximum_voltage_v: 4.20
+  physical_maximum_temperature_c: 35.0
+  dfn_upper_voltage_cutoff_v: 5.0
+  electrical_fit_maximum_evaluations: 300
+  voltage_rmse_limit_mv: 50.0
+  temperature_rmse_limit_c: 1.5
+
+state_audit:
+  neighbor_count: 25
+  replay_current_tolerance_a: 1.0e-6
+  replay_p95_tolerance_a: 1.0e-3
+  large_replay_difference_a: 1.0e-2
+  maximum_large_replay_difference_fraction: 0.02
+  significant_variance_reduction_fraction: 0.20
+  sufficient_local_standard_deviation_a: 0.25
+  sufficient_p95_neighbor_label_difference_a: 0.50
