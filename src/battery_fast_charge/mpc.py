@@ -224,6 +224,21 @@ class ConstrainedMPC:
         """返回上一求解保存的控制块副本，供只读控制状态审计使用。"""
         return None if self._warm_start is None else self._warm_start.copy()
 
+    def set_initial_block_currents_a(self, block_currents_a: np.ndarray | None) -> None:
+        """显式设置下一次求解的初值，仅用于可重复的多起点/恢复实验。"""
+        if block_currents_a is None:
+            self._warm_start = None
+            return
+        values = np.asarray(block_currents_a, dtype=float)
+        if values.shape != (self.number_of_blocks,):
+            raise ValueError(f"warm start 必须包含 {self.number_of_blocks} 个控制块。")
+        if not np.all(np.isfinite(values)):
+            raise ValueError("warm start 必须全部为有限数。")
+        maximum = self.config.constraints.maximum_current_a
+        if np.any(values < 0.0) or np.any(values > maximum):
+            raise ValueError(f"warm start 必须位于 [0, {maximum}] A。")
+        self._warm_start = values.copy()
+
     def _expand_blocks(self, block_currents_a: np.ndarray) -> np.ndarray:
         """把较少的分块决策变量展开为每 5 s 一个预测值。"""
         return np.repeat(

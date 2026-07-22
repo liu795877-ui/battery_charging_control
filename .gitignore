@@ -25,3 +25,9 @@ outputs/phase2rc_prospective_memory_audit/stdout.log
 outputs/phase2rc_prospective_memory_audit/stderr.log
 outputs/phase2rc_prospective_memory_audit/process_id.txt
 outputs/phase2rc_prospective_memory_audit/exit_code.txt
+data/phase2rd_final_discrimination/full_control_sequence_teacher.csv
+data/phase2rd_final_discrimination/multistart_solutions.csv
+outputs/phase2rd_final_discrimination/stdout.log
+outputs/phase2rd_final_discrimination/stderr.log
+outputs/phase2rd_final_discrimination/process_id.txt
+outputs/phase2rd_final_discrimination/exit_code.txt

@@ -1,0 +1,44 @@
+{
+  "study_name": "chen2020_phase2rd_final_pure_dnn_discrimination",
+  "status": "completed",
+  "teacher": {
+    "attempted_trajectories": 240,
+    "accepted_trajectories": 222,
+    "acceptance_fraction": 0.925,
+    "sample_count": 1776,
+    "contract_success": true
+  },
+  "d1_multistart": {
+    "state_count": 100,
+    "warm_starts_per_state": 15,
+    "near_optimal_multivalued_state_count": 57,
+    "near_optimal_multivalued_fraction": 0.57,
+    "warm_start_sensitive_state_count": 58,
+    "all_starts_feasible_state_count": 100,
+    "maximum_near_optimal_first_action_range_a": 0.36585233744587153,
+    "control_law_multivalued": true
+  },
+  "d2_d3_variance": {
+    "full_sequence_k25_mean_local_standard_deviation_a": 0.36993594111885547,
+    "full_sequence_k25_neighbor_label_difference_p95_a": 0.561323742372565,
+    "full_sequence_k25_sufficient": false,
+    "full_sequence_all_k_sufficient": false,
+    "auditable_mode_groups_at_k25": [
+      "temperature",
+      "temperature+slew",
+      "voltage",
+      "voltage+slew",
+      "voltage+temperature"
+    ],
+    "unauditable_mode_groups_at_k25": [
+      "interior",
+      "slew",
+      "voltage+temperature+slew"
+    ]
+  },
+  "decision": {
+    "continue_pure_dnn": false,
+    "conclusion": "停止 pure DNN 直接替代路线",
+    "reason": "相同完整状态下仍存在不可忽略的近最优第一动作多值性。"
+  }
+}
