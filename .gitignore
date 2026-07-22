@@ -5,3 +5,14 @@ __pycache__/
 *.egg-info/
 .idea/
 .venv/
+tmp/pdfs/
+outputs/phase6p0_ndc_paper/training_initial_states.csv
+outputs/phase6p0_ndc_paper/training_teacher_2000.csv
+outputs/phase6p0_ndc_paper/training_trajectory_audit.csv
+outputs/phase6p0_ndc_paper/training_internal_predictions.csv
+outputs/phase6p0_ndc_paper/frozen_test_initial_states_30.csv
+outputs/phase6p0_ndc_paper/frozen_test_mpc_trajectories.csv
+outputs/phase6p0_ndc_paper/frozen_test_audit.csv
+outputs/phase6p0_ndc_paper/frozen_test_open_loop_predictions.csv
+outputs/phase6p0_ndc_paper/frozen_test_dnn_closed_loop.csv
+outputs/phase6p0_ndc_paper/ndc_dnn_model.npz

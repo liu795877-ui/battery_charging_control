@@ -1,0 +1,91 @@
+{
+  "study_name": "phase6p0_ndc_paper_in_situ_reproduction",
+  "source_doi": "10.1016/j.compchemeng.2025.109096",
+  "data": {
+    "training_initial_states": 400,
+    "complete_training_trajectories": 400,
+    "training_samples": 2000,
+    "complete_test_trajectories": 30,
+    "test_samples": 4500
+  },
+  "network": {
+    "architecture": [
+      2,
+      7,
+      5,
+      3,
+      1
+    ],
+    "parameter_count": 83,
+    "selected_seed": 71,
+    "normalization": "MATLAB-style mapminmax to [-1,1] inferred because the paper does not report preprocessing",
+    "training_algorithm": "Bayesian evidence updates around regularized nonlinear least squares (BR-LM approximation)",
+    "split_metrics": {
+      "internal_test": {
+        "sample_count": 200,
+        "rmse_a": 0.00014798269112260026,
+        "mae_a": 4.070486872643463e-05,
+        "maximum_absolute_error_a": 0.0015058459674146,
+        "nrmse_percent": 0.004932784413186054
+      },
+      "train": {
+        "sample_count": 1800,
+        "rmse_a": 5.2994149211886534e-05,
+        "mae_a": 2.3268659065444436e-05,
+        "maximum_absolute_error_a": 0.0006175717886778,
+        "nrmse_percent": 0.0017664816826846721
+      }
+    },
+    "resumed_from_saved_artifacts": true,
+    "seed_count": 5,
+    "passing_seed_count": 4,
+    "seed_internal_nrmse_mean_percent": 0.9973846288720158,
+    "seed_internal_nrmse_std_percent": 2.068132871889589,
+    "seed_internal_nrmse_best_percent": 0.0049327844131859
+  },
+  "offline": {
+    "nrmse_percent": 0.03693029746246976,
+    "rmse_a": 0.0011079089238740928,
+    "maximum_absolute_error_a": 0.05503025250892768
+  },
+  "closed_loop": {
+    "paired_sample_count": 4500,
+    "mean_trajectory_current_nrmse_percent": 0.03255595211176895,
+    "maximum_trajectory_current_nrmse_percent": 0.22968153555788856,
+    "target_reach_fraction": 1.0,
+    "constraint_violations": {
+      "current_upper_average_a": 3.7323717710948915e-08,
+      "current_upper_maximum_a": 0.0001546875157760752,
+      "current_lower_average_a": 0.0,
+      "current_lower_maximum_a": 0.0,
+      "surface_voltage_average_v": 0.0,
+      "surface_voltage_maximum_v": 0.0,
+      "terminal_voltage_average_v": 3.656432854715656e-06,
+      "terminal_voltage_maximum_v": 0.005275831645630724,
+      "health_average_v": 1.3333022977482357e-07,
+      "health_maximum_v": 4.661100233809001e-05
+    },
+    "timing": {
+      "mpc_total_s": 13.046805500030816,
+      "dnn_total_s": 0.16673440007070894,
+      "speedup": 78.24903256015502
+    }
+  },
+  "maximum_constraint_violation": 0.005275831645630724,
+  "gates": {
+    "offline_nrmse": true,
+    "closed_loop_current_nrmse": true,
+    "target_reach": true,
+    "constraint_violation": true,
+    "speedup": true,
+    "majority_seeds": true
+  },
+  "success": true,
+  "artifacts": {
+    "figures": [
+      "outputs\\phase6p0_ndc_paper\\figures\\training_design.png",
+      "outputs\\phase6p0_ndc_paper\\figures\\closed_loop_examples.png",
+      "outputs\\phase6p0_ndc_paper\\figures\\seed_stability.png"
+    ]
+  }
+}
