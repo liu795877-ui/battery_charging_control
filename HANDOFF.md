@@ -250,3 +250,18 @@ Primary outputs: `outputs/metrics/phase5b0_metrics.json`,
 `data/phase5b_mpc_feasibility/teacher_feasible_scenario_mask.csv`,
 `docs/phase5b0_mpc_feasibility_envelope.md`, and
 `notebooks/10_phase5b0_mpc_feasibility_executed.ipynb`.
+
+## Phase 5B-0.5 implementation update (ready for user run)
+
+Do not start Phase 5B-1 yet. Phase 5B-0.5 is implemented on branch
+`codex/phase5b05-mpc-recovery` but its representative long run is intentionally not run
+by Codex. It adds slew-safe fallback, retained/shifted feasible sequences, a projected ANN
+candidate, conservative slew-down candidate, and separate numerical-recovered,
+prediction-domain-infeasible, and hard-safety/slew-conflict labels.
+
+The frozen selector produces 15 unique scenarios covering five teacher-feasible, five
+unresolved, five teacher-and-ANN-infeasible cases, plus nominal/hot/cold anchors after
+deduplication. Run `python -m battery_fast_charge.phase5b05_cli` with `PYTHONPATH=src`.
+The run is checkpointed under `data/phase5b05_mpc_recovery/`. Return stdout/stderr,
+`recovery_run_summary.csv`, and `outputs/metrics/phase5b05_metrics.json`; then create the
+executed result notebook and decide whether a full 69-scenario recovery recheck is justified.

@@ -234,3 +234,11 @@ teachers. Therefore most Phase 5A ANN failures cannot yet be called imitation fa
 use `data/phase5b_mpc_feasibility/teacher_feasible_scenario_mask.csv` for Phase 5B-1 and
 read `docs/phase5b0_mpc_feasibility_envelope.md`. The executed review notebook is
 `notebooks/10_phase5b0_mpc_feasibility_executed.ipynb`.
+
+# Phase 5B-0.5: MPC recovery recheck
+
+Before Phase 5B-1, Phase 5B-0.5 adds slew-safe fallback, retained feasible sequences,
+projected ANN and conservative candidates, and explicit numerical/infeasible/hard-safety
+failure types. It first runs only a representative scenario set. See
+`docs/phase5b05_mpc_recovery.md`. The long representative run is intentionally left for
+the user to execute with `python -m battery_fast_charge.phase5b05_cli`.

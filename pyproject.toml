@@ -44,6 +44,7 @@ battery-phase6r-teacher = "battery_fast_charge.phase6r_teacher_cli:main"
 battery-phase6r-train = "battery_fast_charge.phase6r_training_cli:main"
 battery-phase6r-validate = "battery_fast_charge.phase6r_validation_cli:main"
 battery-phase5b0 = "battery_fast_charge.phase5b0_cli:main"
+battery-phase5b05 = "battery_fast_charge.phase5b05_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
