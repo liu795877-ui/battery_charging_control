@@ -224,3 +224,29 @@ cross-battery validation for the pure-DNN route. The next planned stage is Phase
 which establishes the nominal/oracle MPC feasibility envelope before ANN v3 training.
 See `docs/phase6r_corrected_policy_distillation.md`, `outputs/phase6r_report.md`, and
 `docs/phase5b0_mpc_feasibility_plan.md`.
+
+## Phase 5B-0 completion update (2026-07-22)
+
+Phase 5B-0 completed the frozen 69-scenario Phase 5A reduced-model feasibility envelope.
+It produced 138 controller runs: nominal MPC and parameter-oracle MPC for every scenario.
+The oracle knew scenario capacity/electro-thermal parameters but shared the nominal MPC's
+noisy state-estimation sequence; it did not receive perfect state measurements.
+
+The complete teacher contract required true target completion, true physical safety,
+optimizer success fraction at least 95%, and zero fallback. Nominal MPC was fully feasible
+on 5/69 scenarios; oracle MPC on 1/69. Completion fractions were 86.96% and 85.51%, while
+physical-safety fractions were 7.25% and 1.45%. The scenario classes were 35
+teacher-and-ANN-infeasible, 5 teacher-and-ANN-feasible, and 29 unresolved cases where the
+Phase 5A safety-layer ANN appeared feasible but both unfiltered MPC teachers failed.
+There were no nominal-failed/oracle-feasible cases.
+
+This means most Phase 5A failures cannot yet be attributed to ANN imitation error. Use
+the 5-scenario nominal teacher mask for Phase 5B-1, separately diagnose the 35 teacher-
+infeasible cases, and treat the 29 unresolved cases as safety-layer/hybrid-controller
+evidence. Do not run cross-battery experiments or claim pure ANN replacement success.
+
+Primary outputs: `outputs/metrics/phase5b0_metrics.json`,
+`data/phase5b_mpc_feasibility/scenario_feasibility_table.csv`,
+`data/phase5b_mpc_feasibility/teacher_feasible_scenario_mask.csv`,
+`docs/phase5b0_mpc_feasibility_envelope.md`, and
+`notebooks/10_phase5b0_mpc_feasibility_executed.ipynb`.

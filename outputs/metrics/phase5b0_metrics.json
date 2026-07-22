@@ -1,0 +1,103 @@
+{
+  "status": "completed",
+  "configuration": {
+    "study_name": "phase5b0_mpc_feasibility_envelope",
+    "random_seed": 20260720,
+    "execution_status": "completed",
+    "source_phase3_config": "configs/phase3.yaml",
+    "source_phase5a_config": "configs/phase5a.yaml",
+    "source_phase5a_summary": "data/phase5a/reduced_stress_summary.csv",
+    "information_boundary": {
+      "nominal_mpc": "nominal_parameters_and_noisy_estimated_state",
+      "oracle_mpc": "true_scenario_parameters_and_same_noisy_estimated_state",
+      "oracle_has_perfect_state": false
+    },
+    "scope": {
+      "reuse_all_phase5a_reduced_scenarios": true,
+      "expected_reduced_scenario_count": 69,
+      "maximum_charge_time_s": 3600.0,
+      "target_soc": 0.8,
+      "change_battery": false,
+      "run_dfn_anchors": false,
+      "run_cross_battery": false
+    },
+    "execution": {
+      "worker_count": 1,
+      "control_block_execution": "phase3_slew_aware_block_schedule",
+      "checkpoint_every_completed_runs": 1,
+      "save_all_trajectories": true
+    },
+    "activity_margins": {
+      "voltage_v": 0.01,
+      "temperature_c": 0.1,
+      "current_a": 0.1,
+      "current_change_a": 0.1
+    },
+    "feasibility": {
+      "terminal_true_soc_tolerance": 0.015,
+      "minimum_optimizer_success_fraction": 0.95,
+      "maximum_fallback_count": 0,
+      "require_physical_safety": true
+    },
+    "required_outputs": [
+      "controller_run_summary",
+      "scenario_feasibility_table",
+      "teacher_completion_and_safety_summary",
+      "active_constraint_statistics",
+      "infeasibility_reason_classification",
+      "teacher_feasible_scenario_mask"
+    ],
+    "scenario_classes": [
+      "teacher_feasible_ann_failed",
+      "teacher_and_ann_infeasible",
+      "teacher_and_ann_feasible",
+      "nominal_teacher_failed_oracle_teacher_feasible"
+    ]
+  },
+  "controller_summary": [
+    {
+      "controller": "nominal_mpc",
+      "scenario_count": 69,
+      "feasible_count": 5,
+      "completion_fraction": 0.8695652173913043,
+      "physical_safety_fraction": 0.07246376811594203,
+      "mean_charge_time_min": 43.96980676328502,
+      "maximum_charge_time_min": 60.0,
+      "mean_solve_time_ms": 1110.553239307075,
+      "maximum_solve_time_ms": 9634.2450000011,
+      "fallback_scenario_count": 64,
+      "feasible_fraction": 0.07246376811594203
+    },
+    {
+      "controller": "oracle_mpc",
+      "scenario_count": 69,
+      "feasible_count": 1,
+      "completion_fraction": 0.855072463768116,
+      "physical_safety_fraction": 0.014492753623188406,
+      "mean_charge_time_min": 43.9915458937198,
+      "maximum_charge_time_min": 60.0,
+      "mean_solve_time_ms": 1190.3717941430266,
+      "maximum_solve_time_ms": 10075.43660000374,
+      "fallback_scenario_count": 68,
+      "feasible_fraction": 0.014492753623188406
+    }
+  ],
+  "scenario_class_counts": [
+    {
+      "scenario_class": "teacher_and_ann_infeasible",
+      "scenario_count": 35
+    },
+    {
+      "scenario_class": "ann_feasible_teachers_failed_unresolved",
+      "scenario_count": 29
+    },
+    {
+      "scenario_class": "teacher_and_ann_feasible",
+      "scenario_count": 5
+    }
+  ],
+  "teacher_feasible_mask_count": 5,
+  "unresolved_class_count": 29,
+  "ready_for_phase5b1_sampling_design": true,
+  "dfn_anchors_run": false
+}

@@ -218,3 +218,19 @@ The corrected labels materially reduced offline error, but none of the three con
 forms passed the frozen <1% offline gate. Nominal 25 C reduced/DFN closed-loop errors and
 charge-time gaps also failed. Phase 6D therefore remains disabled. See
 `docs/phase6r_corrected_policy_distillation.md` and `outputs/phase6r_report.md`.
+
+# Phase 5B-0: MPC feasibility envelope
+
+Phase 5B-0 reuses the frozen 69 Phase 5A reduced-model scenarios and compares nominal
+MPC with a parameter-oracle MPC under the same state-estimation errors. It does not run
+DFN anchors, perturbation reruns, cross-battery tests, or battery changes.
+
+```powershell
+python -m battery_fast_charge.phase5b0_cli --config configs\phase5b0_mpc_feasibility_envelope.yaml --project-root .
+```
+
+The completed results show only 5/69 fully feasible nominal-MPC teachers and 1/69 oracle
+teachers. Therefore most Phase 5A ANN failures cannot yet be called imitation failures;
+use `data/phase5b_mpc_feasibility/teacher_feasible_scenario_mask.csv` for Phase 5B-1 and
+read `docs/phase5b0_mpc_feasibility_envelope.md`. The executed review notebook is
+`notebooks/10_phase5b0_mpc_feasibility_executed.ipynb`.

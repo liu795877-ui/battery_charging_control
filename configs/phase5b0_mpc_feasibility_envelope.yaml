@@ -1,22 +1,47 @@
 study:
   name: phase5b0_mpc_feasibility_envelope
-  execution_status: planned_not_run
-  source_phase5a_config: configs/phase5a.yaml
-  source_phase3_config: configs/phase3.yaml
+  random_seed: 20260720
+  execution_status: completed
 
-frozen_scope:
+source_phase3_config: configs/phase3.yaml
+source_phase5a_config: configs/phase5a.yaml
+source_phase5a_summary: data/phase5a/reduced_stress_summary.csv
+
+scope:
   reuse_all_phase5a_reduced_scenarios: true
-  reduced_scenario_count: 69
-  dfn_temperature_anchors_c: [15.0, 25.0, 30.0]
+  expected_reduced_scenario_count: 69
   maximum_charge_time_s: 3600.0
   target_soc: 0.80
   change_battery: false
+  run_dfn_anchors: false
+  run_cross_battery: false
 
-teacher_comparison:
-  - nominal_mpc_with_estimated_parameters
-  - oracle_mpc_with_true_scenario_parameters
+information_boundary:
+  nominal_mpc: nominal_parameters_and_noisy_estimated_state
+  oracle_mpc: true_scenario_parameters_and_same_noisy_estimated_state
+  oracle_has_perfect_state: false
+
+execution:
+  # 当前桌面运行时 CPU 配额下多进程 SLSQP 会严重争用；单 worker 实测吞吐更高。
+  worker_count: 1
+  control_block_execution: phase3_slew_aware_block_schedule
+  checkpoint_every_completed_runs: 1
+  save_all_trajectories: true
+
+activity_margins:
+  voltage_v: 0.01
+  temperature_c: 0.10
+  current_a: 0.10
+  current_change_a: 0.10
+
+feasibility:
+  terminal_true_soc_tolerance: 0.015
+  minimum_optimizer_success_fraction: 0.95
+  maximum_fallback_count: 0
+  require_physical_safety: true
 
 required_outputs:
+  - controller_run_summary
   - scenario_feasibility_table
   - teacher_completion_and_safety_summary
   - active_constraint_statistics
@@ -28,8 +53,3 @@ scenario_classes:
   - teacher_and_ann_infeasible
   - teacher_and_ann_feasible
   - nominal_teacher_failed_oracle_teacher_feasible
-
-execution_gate:
-  phase6r_conclusion_frozen: true
-  run_phase5a_ann_stress_now: false
-  run_cross_battery_now: false
