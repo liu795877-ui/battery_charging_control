@@ -20,3 +20,8 @@ data/phase2r_sufficiency_audit/pulse_profiles/
 data/phase2r_sufficiency_audit/dfn_pulse_grid.csv
 data/phase2r_sufficiency_audit/model_variant_predictions.csv
 data/phase2r_sufficiency_audit/rolling_teacher_control_memory.csv
+data/phase2rc_prospective_memory_audit/native_control_memory_teacher.csv
+outputs/phase2rc_prospective_memory_audit/stdout.log
+outputs/phase2rc_prospective_memory_audit/stderr.log
+outputs/phase2rc_prospective_memory_audit/process_id.txt
+outputs/phase2rc_prospective_memory_audit/exit_code.txt
