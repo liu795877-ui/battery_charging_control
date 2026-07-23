@@ -1,0 +1,141 @@
+{
+  "study_name": "phase7a_level3p_minimal_output_projection",
+  "configuration": {
+    "study_name": "phase7a_level3p_minimal_output_projection",
+    "source_level3_config": "configs/phase7a_level3_slew.yaml",
+    "frozen_artifacts": {
+      "src/battery_fast_charge/phase7a_level3_model.py": "0f183ee3769a853eca77379daa159b1382d20ff6f6e3d211fd439773383b228b",
+      "configs/phase7a_level3_slew.yaml": "7ebd8b44cf9c65e81199366131f0518bad35e5b70564ff5e806980c5e974349e",
+      "data/phase7a_level3_slew/combined_teacher_dataset.csv": "e246baf09022c62e20721f929e03ee58e521126ac809765730a0553d1a3d492b",
+      "data/phase7a_level3_slew/global_frozen_test.csv": "484b71df5f3afe8dfcf33f4202a608f69d7292c1411621a9e7f05d343730c390",
+      "data/phase7a_level3_slew/terminal_frozen_test.csv": "7ba4a2359016a3549997bc3f892a492ed55f77e872fe3db0b17af8fd4df8be9f",
+      "data/phase7a_level3_slew/closed_loop_initial_states.csv": "8a62cb6b5db34c875ce50dd4d743bb296bea4b962fbd40940c16ba52cfc116bd",
+      "data/phase7a_level3_slew/closed_loop_trajectories.csv": "fd36caa3d480de66e5053355ecf4a708363258eb34de34753f7618638da752be",
+      "outputs/phase7a_level3_slew/dnn_offline_metrics.csv": "3b7d533824dbe1675fcf729cf6596ee48209e66875ef46c8b531e7744b28c093",
+      "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_22.npz": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65",
+      "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_42.npz": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d",
+      "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_73.npz": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9",
+      "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_101.npz": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba",
+      "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_137.npz": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0"
+    },
+    "projection": {
+      "intervention_tolerance_a": 1e-12,
+      "frozen_raw_violation_tolerance_a": 1e-12,
+      "neighborhood_radius_steps": 1
+    },
+    "output": {
+      "data_directory": "data/phase7a_level3p_projection",
+      "result_directory": "outputs/phase7a_level3p_projection"
+    }
+  },
+  "frozen_artifact_verification": {
+    "src/battery_fast_charge/phase7a_level3_model.py": {
+      "expected_sha256": "0f183ee3769a853eca77379daa159b1382d20ff6f6e3d211fd439773383b228b",
+      "actual_sha256": "0f183ee3769a853eca77379daa159b1382d20ff6f6e3d211fd439773383b228b",
+      "matched": true
+    },
+    "configs/phase7a_level3_slew.yaml": {
+      "expected_sha256": "7ebd8b44cf9c65e81199366131f0518bad35e5b70564ff5e806980c5e974349e",
+      "actual_sha256": "7ebd8b44cf9c65e81199366131f0518bad35e5b70564ff5e806980c5e974349e",
+      "matched": true
+    },
+    "data/phase7a_level3_slew/combined_teacher_dataset.csv": {
+      "expected_sha256": "e246baf09022c62e20721f929e03ee58e521126ac809765730a0553d1a3d492b",
+      "actual_sha256": "e246baf09022c62e20721f929e03ee58e521126ac809765730a0553d1a3d492b",
+      "matched": true
+    },
+    "data/phase7a_level3_slew/global_frozen_test.csv": {
+      "expected_sha256": "484b71df5f3afe8dfcf33f4202a608f69d7292c1411621a9e7f05d343730c390",
+      "actual_sha256": "484b71df5f3afe8dfcf33f4202a608f69d7292c1411621a9e7f05d343730c390",
+      "matched": true
+    },
+    "data/phase7a_level3_slew/terminal_frozen_test.csv": {
+      "expected_sha256": "7ba4a2359016a3549997bc3f892a492ed55f77e872fe3db0b17af8fd4df8be9f",
+      "actual_sha256": "7ba4a2359016a3549997bc3f892a492ed55f77e872fe3db0b17af8fd4df8be9f",
+      "matched": true
+    },
+    "data/phase7a_level3_slew/closed_loop_initial_states.csv": {
+      "expected_sha256": "8a62cb6b5db34c875ce50dd4d743bb296bea4b962fbd40940c16ba52cfc116bd",
+      "actual_sha256": "8a62cb6b5db34c875ce50dd4d743bb296bea4b962fbd40940c16ba52cfc116bd",
+      "matched": true
+    },
+    "data/phase7a_level3_slew/closed_loop_trajectories.csv": {
+      "expected_sha256": "fd36caa3d480de66e5053355ecf4a708363258eb34de34753f7618638da752be",
+      "actual_sha256": "fd36caa3d480de66e5053355ecf4a708363258eb34de34753f7618638da752be",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/dnn_offline_metrics.csv": {
+      "expected_sha256": "3b7d533824dbe1675fcf729cf6596ee48209e66875ef46c8b531e7744b28c093",
+      "actual_sha256": "3b7d533824dbe1675fcf729cf6596ee48209e66875ef46c8b531e7744b28c093",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_22.npz": {
+      "expected_sha256": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65",
+      "actual_sha256": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_42.npz": {
+      "expected_sha256": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d",
+      "actual_sha256": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_73.npz": {
+      "expected_sha256": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9",
+      "actual_sha256": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_101.npz": {
+      "expected_sha256": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba",
+      "actual_sha256": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_137.npz": {
+      "expected_sha256": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0",
+      "actual_sha256": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0",
+      "matched": true
+    }
+  },
+  "projection": {
+    "frozen_raw_violation_count": 48,
+    "projection_intervention_count": 48,
+    "exact_key_overlap_count": 48,
+    "interventions_within_one_step_count": 48,
+    "interventions_outside_one_step_count": 0,
+    "frozen_raw_violations_covered_within_one_step_count": 48,
+    "all_interventions_near_frozen_raw_violations": true,
+    "all_frozen_raw_violations_covered_nearby": true,
+    "projection_intervention_fraction": 0.0035957749644168102,
+    "maximum_projection_magnitude_a": 0.13266708451261167,
+    "mean_projection_magnitude_when_active_a": 0.04385062216940227
+  },
+  "closed_loop": {
+    "current_nrmse_min": 0.0022823917716539186,
+    "current_nrmse_max": 0.003381540608571331,
+    "maximum_charge_time_gap_fraction": 0.008690391156323104,
+    "minimum_target_reach_fraction": 1.0,
+    "maximum_voltage_violation_v": 0.0,
+    "maximum_current_violation_a": 0.0,
+    "maximum_slew_violation_a": 4.440892098500626e-16,
+    "maximum_current_step_a": 2.0000000000000004,
+    "minimum_speedup": 626.3155726793187
+  },
+  "decision": {
+    "checks": {
+      "all_frozen_hashes_match": true,
+      "frozen_raw_violation_count_is_48": true,
+      "zero_slew_violation": true,
+      "all_seed_current_nrmse": true,
+      "all_seed_charge_time_gap": true,
+      "all_seed_target_reach": true,
+      "voltage_constraint_satisfied": true,
+      "current_bounds_satisfied": true,
+      "all_interventions_near_frozen_raw_violations": true,
+      "all_seed_speedup": true
+    },
+    "level3p_success": true,
+    "proceed_to_level4": false,
+    "conclusion": "Level 3P 最小投影严格通过，研究停止在 Level 3P"
+  },
+  "status": "completed",
+  "success": true
+}

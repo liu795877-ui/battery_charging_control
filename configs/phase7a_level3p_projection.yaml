@@ -1,0 +1,28 @@
+study:
+  name: phase7a_level3p_minimal_output_projection
+
+source:
+  level3_config: configs/phase7a_level3_slew.yaml
+  frozen_artifacts:
+    src/battery_fast_charge/phase7a_level3_model.py: 0f183ee3769a853eca77379daa159b1382d20ff6f6e3d211fd439773383b228b
+    configs/phase7a_level3_slew.yaml: 7ebd8b44cf9c65e81199366131f0518bad35e5b70564ff5e806980c5e974349e
+    data/phase7a_level3_slew/combined_teacher_dataset.csv: e246baf09022c62e20721f929e03ee58e521126ac809765730a0553d1a3d492b
+    data/phase7a_level3_slew/global_frozen_test.csv: 484b71df5f3afe8dfcf33f4202a608f69d7292c1411621a9e7f05d343730c390
+    data/phase7a_level3_slew/terminal_frozen_test.csv: 7ba4a2359016a3549997bc3f892a492ed55f77e872fe3db0b17af8fd4df8be9f
+    data/phase7a_level3_slew/closed_loop_initial_states.csv: 8a62cb6b5db34c875ce50dd4d743bb296bea4b962fbd40940c16ba52cfc116bd
+    data/phase7a_level3_slew/closed_loop_trajectories.csv: fd36caa3d480de66e5053355ecf4a708363258eb34de34753f7618638da752be
+    outputs/phase7a_level3_slew/dnn_offline_metrics.csv: 3b7d533824dbe1675fcf729cf6596ee48209e66875ef46c8b531e7744b28c093
+    outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_22.npz: 1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65
+    outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_42.npz: 2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d
+    outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_73.npz: f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9
+    outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_101.npz: b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba
+    outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_137.npz: 053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0
+
+projection:
+  intervention_tolerance_a: 1.0e-12
+  frozen_raw_violation_tolerance_a: 1.0e-12
+  neighborhood_radius_steps: 1
+
+output:
+  data_directory: data/phase7a_level3p_projection
+  result_directory: outputs/phase7a_level3p_projection

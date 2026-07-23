@@ -55,6 +55,7 @@ battery-phase7a-level1r = "battery_fast_charge.phase7a_level1r_cli:main"
 battery-phase7a-level1s = "battery_fast_charge.phase7a_level1s_cli:main"
 battery-phase7a-level2 = "battery_fast_charge.phase7a_level2_cli:main"
 battery-phase7a-level3 = "battery_fast_charge.phase7a_level3_cli:main"
+battery-phase7a-level3p = "battery_fast_charge.phase7a_level3p_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
