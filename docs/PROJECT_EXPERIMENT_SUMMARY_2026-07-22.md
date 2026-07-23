@@ -1109,3 +1109,39 @@ Phase 7B-1B/1C 先回归原有 12 个初态，再验证 24 个在安全层实现
 - `outputs/phase7b1b_voltage_safety/metrics.json`
 - `data/phase7b1b_voltage_safety/regression_five_seed_metrics.csv`
 - `data/phase7b1b_voltage_safety/confirmation_five_seed_metrics.csv`
+
+## 32. Phase 7C：冻结控制器的多温度 DFN 外推审计
+
+Phase 7C 不是 Level 4。实验保持五个 ANN、MPC、2RC、Level 3P 投影、5 s采样和11.3055225 mV电压残差增长裕量冻结，在闭环运行前分别冻结15 ℃与30 ℃各24个独立初态。11项既有工件哈希全部匹配，没有新增教师数据或重训 ANN。
+
+预注册停止规则要求安全 MPC 先在两个温度上通过，才允许运行五种子安全 ANN。48条安全 MPC→热 DFN 轨迹完成后触发停止，因此没有运行计划中的240条 ANN 轨迹。
+
+| 指标 | 15 ℃安全 MPC | 30 ℃安全 MPC | 门槛 |
+|---|---:|---:|---:|
+| 最高 DFN 电压 | 4.189892 V | 4.188028 V | ≤4.200001 V |
+| 最高平均电芯温度 | 29.104 ℃ | 42.264 ℃ | ≤35 ℃ |
+| 目标到达率 | 100% | 100% | 100% |
+| 最大电流越界 | 0 A | 0 A | 0 |
+| 最大斜率越界 | 浮点量级 | 浮点量级 | 0 |
+| 电压—斜率空区间 | 0 | 0 | 0 |
+| MPC求解状态失败 | 1步 | 0步 | 0 |
+| 最大电流方向反转 | 0 | 1 | 0 |
+| 最大电压残差 | 35.970 mV | 5.868 mV | 诊断 |
+| 最大单步残差正增长 | 11.387 mV | 10.845 mV | 诊断 |
+| 安全层介入率 | 44.24% | 0.00% | 诊断 |
+
+30 ℃最高平均温度超过门槛7.264 ℃，说明当前控制架构缺少热约束感知；这是安全 MPC 与热 DFN 已经暴露的基线问题，不是 ANN 拟合失败。15 ℃最大单步电压残差正增长比25 ℃冻结裕量高约0.082 mV，虽然本次没有造成越压或空区间，但证明25 ℃残差增长界不能被视为全温度上界。
+
+阶段结论：
+
+> 冻结的25 ℃架构在15/30 ℃安全 MPC 基线上继续满足电压、电流、斜率、空区间和目标到达要求，但没有满足高温热安全及全部运行稳定性门槛。Phase 7C 严格停止，不运行多温度 ANN，不进入参数扰动或跨电池实验。
+
+主要证据：
+
+- `docs/phase7c_multitemperature_dfn_validation_plan.md`
+- `data/phase7c_multitemperature/freeze_contract.json`
+- `data/phase7c_multitemperature/closed_loop_metrics.csv`
+- `data/phase7c_multitemperature/trajectory_diagnostics.csv`
+- `outputs/phase7c_multitemperature/metrics.json`
+- `outputs/phase7c_multitemperature/PHASE7C_中文实验报告.md`
+- `notebooks/phase7c_multitemperature_dfn_results.ipynb`
