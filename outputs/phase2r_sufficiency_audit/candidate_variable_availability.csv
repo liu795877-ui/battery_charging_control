@@ -1,0 +1,8 @@
+candidate,status,detail
+I_k_minus_1,available,state_previous_current_a 已在当前五状态 DNN 中
+control_block_phase,recoverable_proxy,使用 step_index mod control_block_steps；滚动 MPC 每步重算，物理含义需谨慎
+ambient_temperature,constant_not_identifiable,Phase 6R 教师数据全部为 25 ℃
+current_mpc_mode,diagnostic_only,由求解后的活跃约束定义，不能直接作为求解前在线输入
+previous_optimal_sequence_summary,replayed_approximate,记录上一控制块首项/均值/末项；CSV 状态重启在少数切换点不能严格复现
+identifiable_parameters,constant_not_identifiable,Phase 6R 使用同一组固定 2RC/热参数
+target_cap_state,replayed_diagnostic,由预测终端 SOC 是否接近目标构造

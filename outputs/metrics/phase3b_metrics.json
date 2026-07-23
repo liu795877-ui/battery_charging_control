@@ -1,0 +1,134 @@
+{
+  "dataset_quality": {
+    "candidate_count": 168,
+    "accepted_count": 168,
+    "rejected_count": 0,
+    "teacher_acceptance_fraction": 1.0,
+    "split_counts": {
+      "train": 112,
+      "test": 28,
+      "validation": 28
+    },
+    "trajectory_split_counts": {
+      "train": 8,
+      "test": 2,
+      "validation": 2
+    },
+    "soc_bin_counts": {
+      "0": 24,
+      "1": 24,
+      "2": 24,
+      "3": 24,
+      "4": 24,
+      "5": 24,
+      "6": 24
+    },
+    "duplicate_feature_row_count": 0,
+    "active_constraint_counts": {
+      "voltage": 48,
+      "temperature": 144,
+      "current_upper": 0,
+      "current_change": 16
+    },
+    "mean_teacher_solve_time_ms": 496.46983571430036,
+    "maximum_teacher_solve_time_ms": 2075.827600000139,
+    "checks": {
+      "candidate_count": true,
+      "teacher_acceptance_fraction": true,
+      "minimum_samples_per_split": true,
+      "minimum_samples_per_soc_bin": true,
+      "trajectory_split_isolation": true,
+      "reachable_sources_only": true,
+      "label_current_bounds": true,
+      "voltage_active_coverage": true,
+      "temperature_active_coverage": true
+    },
+    "success": true
+  },
+  "fair_baseline": {
+    "source": "chen2020_dfn",
+    "reached_target_soc": true,
+    "final_soc": 0.7998928140293783,
+    "charge_time_min": 53.333333333333336,
+    "maximum_voltage_v": 4.142489736809485,
+    "maximum_temperature_c": 33.50239895144665,
+    "maximum_current_a": 5.0,
+    "maximum_current_change_a": 2.0,
+    "safety_override_count": 0,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "current_change_limit_exceeded": false,
+    "success": true
+  },
+  "mpc_reference": {
+    "source": "chen2020_dfn",
+    "reached_target_soc": true,
+    "final_soc": 0.799527237164507,
+    "charge_time_s": 3215.0,
+    "charge_time_min": 53.583333333333336,
+    "maximum_voltage_v": 4.142485355073057,
+    "maximum_temperature_c": 33.5166559880991,
+    "maximum_current_a": 9.832550962985978,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "optimizer_success_fraction": 1.0,
+    "prediction_feasible_fraction": 1.0,
+    "optimization_count": 132,
+    "fallback_count": 0,
+    "mean_mpc_solve_time_ms": 589.0127181817276,
+    "maximum_mpc_solve_time_ms": 1820.7879000001412,
+    "configuration": {
+      "study_name": "chen2020_phase3_mpc_teacher",
+      "random_seed": 42,
+      "battery": {
+        "parameter_set": "Chen2020",
+        "model": "DFN",
+        "thermal_model": "lumped",
+        "nominal_capacity_ah": 5.0,
+        "initial_soc": 0.1,
+        "target_soc": 0.8,
+        "initial_temperature_c": 25.0,
+        "ambient_temperature_c": 25.0
+      },
+      "artifacts": {
+        "identified_parameters": "outputs/metrics/phase2_identified_parameters.json",
+        "validation_metrics": "outputs/metrics/phase2_validation_metrics.json",
+        "ocv_curve": "data/phase2/ocv_curve.csv"
+      },
+      "constraints": {
+        "physical_maximum_voltage_v": 4.2,
+        "physical_maximum_temperature_c": 35.0,
+        "maximum_current_a": 10.0,
+        "maximum_current_change_a_per_step": 2.0,
+        "voltage_uncertainty_margin_v": 0.06,
+        "temperature_uncertainty_margin_c": 1.5
+      },
+      "control": {
+        "control_interval_s": 5.0,
+        "prediction_horizon_steps": 60,
+        "control_block_steps": 5,
+        "maximum_simulation_time_s": 3600.0
+      },
+      "objective": {
+        "soc_tracking_weight": 1.0,
+        "terminal_soc_weight": 20.0,
+        "current_change_weight": 0.0001
+      },
+      "optimizer": {
+        "maximum_iterations": 100,
+        "function_tolerance": 1e-07,
+        "constraint_tolerance": 1e-05
+      },
+      "validation": {
+        "target_soc_tolerance": 0.0005,
+        "physical_constraint_tolerance": 0.001,
+        "minimum_optimizer_success_fraction": 0.95
+      }
+    },
+    "success": true
+  },
+  "success": true,
+  "ready_for_dnn_training": true
+}

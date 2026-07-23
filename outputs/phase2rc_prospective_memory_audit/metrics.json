@@ -1,0 +1,26 @@
+{
+  "study_name": "chen2020_phase2rc_prospective_control_memory",
+  "status": "completed",
+  "teacher": {
+    "attempted_trajectory_count": 240,
+    "accepted_trajectory_count": 222,
+    "acceptance_fraction": 0.925,
+    "sample_count": 1776,
+    "native_previous_plan_rows": 1554,
+    "contract_success": true
+  },
+  "state_audit": {
+    "baseline_mean_local_standard_deviation_a": 0.5026104988270095,
+    "baseline_neighbor_label_difference_p95_a": 1.0207779267706103,
+    "native_memory_mean_local_standard_deviation_a": 0.420473887171042,
+    "native_memory_neighbor_label_difference_p95_a": 0.8099173553718888,
+    "native_memory_variance_reduction_fraction": 0.3222743997977321,
+    "native_memory_significant": true,
+    "native_memory_locally_sufficient": false,
+    "thresholds": {
+      "mean_local_standard_deviation_a": 0.25,
+      "neighbor_label_difference_p95_a": 0.5,
+      "variance_reduction_fraction": 0.2
+    }
+  }
+}

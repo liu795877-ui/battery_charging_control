@@ -1,0 +1,4 @@
+scenario_class,scenario_count
+teacher_and_ann_infeasible,35
+ann_feasible_teachers_failed_unresolved,29
+teacher_and_ann_feasible,5

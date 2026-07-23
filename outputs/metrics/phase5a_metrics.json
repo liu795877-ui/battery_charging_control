@@ -1,0 +1,460 @@
+{
+  "configuration": {
+    "study_name": "chen2020_phase5a_robustness_validation",
+    "random_seed": 20260720,
+    "source_phase3_config": "configs/phase3.yaml",
+    "source_phase4a_config": "configs/phase4a.yaml",
+    "ann_model": "outputs/models/phase4b2_tiny_ann.npz",
+    "phase4b2_metrics": "outputs/metrics/phase4b2_metrics.json",
+    "reduced_stress_test": {
+      "random_scenario_count": 64,
+      "initial_soc_range": [
+        0.1,
+        0.3
+      ],
+      "ambient_temperature_c_range": [
+        15.0,
+        30.0
+      ],
+      "capacity_multiplier_range": [
+        0.9,
+        1.1
+      ],
+      "resistance_multiplier_range": [
+        0.8,
+        1.2
+      ],
+      "time_constant_multiplier_range": [
+        0.8,
+        1.2
+      ],
+      "heat_capacity_multiplier_range": [
+        0.85,
+        1.15
+      ],
+      "thermal_resistance_multiplier_range": [
+        0.8,
+        1.2
+      ],
+      "heat_gain_multiplier_range": [
+        0.9,
+        1.1
+      ],
+      "soc_bias_range": [
+        -0.005,
+        0.005
+      ],
+      "soc_noise_standard_deviation": 0.002,
+      "temperature_bias_c_range": [
+        -0.5,
+        0.5
+      ],
+      "temperature_noise_standard_deviation_c": 0.2,
+      "polarization_bias_v_range": [
+        -0.005,
+        0.005
+      ],
+      "polarization_noise_standard_deviation_v": 0.002,
+      "terminal_true_soc_tolerance": 0.015,
+      "maximum_simulation_time_s": 3600.0
+    },
+    "dfn_temperature_anchors": {
+      "temperatures_c": [
+        15.0,
+        25.0,
+        30.0
+      ],
+      "initial_soc": 0.1,
+      "maximum_simulation_time_s": 3600.0
+    },
+    "success_criteria": {
+      "minimum_reduced_completion_fraction": 0.95,
+      "minimum_reduced_physical_safety_fraction": 1.0,
+      "maximum_reduced_charge_time_min": 60.0,
+      "maximum_reduced_material_intervention_fraction": 0.2,
+      "require_all_dfn_anchors_complete": true,
+      "require_all_dfn_anchors_physically_safe": true,
+      "maximum_dfn_anchor_charge_time_min": 60.0,
+      "maximum_dfn_material_intervention_fraction": 0.2
+    }
+  },
+  "reduced_stress_test": {
+    "scenario_count": 69,
+    "completion_count": 47,
+    "completion_fraction": 0.6811594202898551,
+    "physical_safety_count": 45,
+    "physical_safety_fraction": 0.6521739130434783,
+    "maximum_charge_time_min": 60.0,
+    "maximum_material_intervention_fraction": 0.5583333333333333,
+    "worst_cases": {
+      "charge_time": {
+        "scenario_id": "corner_hot_resistive_optimistic",
+        "value": 60.0
+      },
+      "voltage": {
+        "scenario_id": "corner_cold_resistive",
+        "value": 4.170320124211069
+      },
+      "temperature": {
+        "scenario_id": "corner_hot_resistive_optimistic",
+        "value": 34.77442136550512
+      },
+      "material_intervention": {
+        "scenario_id": "corner_hot_resistive_optimistic",
+        "value": 0.5583333333333333
+      },
+      "terminal_soc_undercharge": {
+        "scenario_id": "corner_hot_resistive_optimistic",
+        "value": -0.28170393672474947
+      },
+      "current_change": {
+        "scenario_id": "lhs_007",
+        "value": 7.092328588308805
+      }
+    },
+    "failure_scenarios": [
+      {
+        "scenario_id": "corner_hot_resistive_optimistic",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.28170393672474947,
+        "maximum_voltage_v": 3.9406127481061834,
+        "maximum_temperature_c": 34.77442136550512,
+        "maximum_current_change_a": 6.409208810900393
+      },
+      {
+        "scenario_id": "corner_observer_pessimistic",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": 0.0021548727205495943,
+        "maximum_voltage_v": 4.145986978099198,
+        "maximum_temperature_c": 33.356294051956965,
+        "maximum_current_change_a": 4.848393780402061
+      },
+      {
+        "scenario_id": "lhs_001",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.000977170655030113,
+        "maximum_voltage_v": 4.153336984105254,
+        "maximum_temperature_c": 34.00047053070607,
+        "maximum_current_change_a": 4.695154578007792
+      },
+      {
+        "scenario_id": "lhs_002",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.003428092128147986,
+        "maximum_voltage_v": 4.1284624708342585,
+        "maximum_temperature_c": 33.74699908644432,
+        "maximum_current_change_a": 5.719446447167812
+      },
+      {
+        "scenario_id": "lhs_005",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.07706105249058937,
+        "maximum_voltage_v": 4.0840176901576015,
+        "maximum_temperature_c": 29.423777742487136,
+        "maximum_current_change_a": 2.0
+      },
+      {
+        "scenario_id": "lhs_006",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": 0.0033098233267695454,
+        "maximum_voltage_v": 4.142267562083367,
+        "maximum_temperature_c": 34.21797220003563,
+        "maximum_current_change_a": 5.5245125549003
+      },
+      {
+        "scenario_id": "lhs_007",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": 0.0006008544745756961,
+        "maximum_voltage_v": 4.14940954959625,
+        "maximum_temperature_c": 33.536299819748535,
+        "maximum_current_change_a": 7.092328588308805
+      },
+      {
+        "scenario_id": "lhs_010",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.004148622882868103,
+        "maximum_voltage_v": 4.11848563576085,
+        "maximum_temperature_c": 34.36733551712726,
+        "maximum_current_change_a": 6.158873016125229
+      },
+      {
+        "scenario_id": "lhs_015",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.07989704983021662,
+        "maximum_voltage_v": 4.144140352329965,
+        "maximum_temperature_c": 33.67091067276905,
+        "maximum_current_change_a": 5.920828966085421
+      },
+      {
+        "scenario_id": "lhs_016",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.006676137260173798,
+        "maximum_voltage_v": 4.152155315539777,
+        "maximum_temperature_c": 30.723266274623235,
+        "maximum_current_change_a": 2.0000000000000004
+      },
+      {
+        "scenario_id": "lhs_017",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.0044910522696601785,
+        "maximum_voltage_v": 4.156893488946775,
+        "maximum_temperature_c": 33.54990670960936,
+        "maximum_current_change_a": 6.727767867742408
+      },
+      {
+        "scenario_id": "lhs_023",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.0015865717594457651,
+        "maximum_voltage_v": 4.13673936387378,
+        "maximum_temperature_c": 33.81074416034642,
+        "maximum_current_change_a": 6.2507024496939945
+      },
+      {
+        "scenario_id": "lhs_024",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.11581036027462299,
+        "maximum_voltage_v": 4.039046206643716,
+        "maximum_temperature_c": 27.59461228865991,
+        "maximum_current_change_a": 2.0
+      },
+      {
+        "scenario_id": "lhs_025",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.0019240168845420236,
+        "maximum_voltage_v": 4.1660246023197125,
+        "maximum_temperature_c": 26.756115935182258,
+        "maximum_current_change_a": 2.0
+      },
+      {
+        "scenario_id": "lhs_026",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.14779438802438216,
+        "maximum_voltage_v": 4.083305394420072,
+        "maximum_temperature_c": 34.026126535957296,
+        "maximum_current_change_a": 5.549571681129763
+      },
+      {
+        "scenario_id": "lhs_027",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.07112826107281334,
+        "maximum_voltage_v": 4.069919353580742,
+        "maximum_temperature_c": 26.723948514977607,
+        "maximum_current_change_a": 2.0
+      },
+      {
+        "scenario_id": "lhs_030",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.015609076649626519,
+        "maximum_voltage_v": 4.140870282093373,
+        "maximum_temperature_c": 33.59255977817607,
+        "maximum_current_change_a": 6.080554462087409
+      },
+      {
+        "scenario_id": "lhs_032",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.0058971710010538025,
+        "maximum_voltage_v": 4.142369775150295,
+        "maximum_temperature_c": 33.91838107045852,
+        "maximum_current_change_a": 6.585754728268547
+      },
+      {
+        "scenario_id": "lhs_033",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": 0.00302874646453255,
+        "maximum_voltage_v": 4.147528637598206,
+        "maximum_temperature_c": 34.12507888203074,
+        "maximum_current_change_a": 6.168636827626105
+      },
+      {
+        "scenario_id": "lhs_034",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.041465034234083986,
+        "maximum_voltage_v": 4.14895537127224,
+        "maximum_temperature_c": 33.86736457595492,
+        "maximum_current_change_a": 6.674676683626018
+      },
+      {
+        "scenario_id": "lhs_035",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.08321255807426564,
+        "maximum_voltage_v": 4.061288379537909,
+        "maximum_temperature_c": 33.41265868047779,
+        "maximum_current_change_a": 6.154597062068593
+      },
+      {
+        "scenario_id": "lhs_038",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.03344626418100327,
+        "maximum_voltage_v": 4.155436915503916,
+        "maximum_temperature_c": 27.185398440901636,
+        "maximum_current_change_a": 2.0
+      },
+      {
+        "scenario_id": "lhs_040",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.010201004792375068,
+        "maximum_voltage_v": 4.14343655670448,
+        "maximum_temperature_c": 25.344331036039826,
+        "maximum_current_change_a": 2.0
+      },
+      {
+        "scenario_id": "lhs_044",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.014143242305750703,
+        "maximum_voltage_v": 4.161195825286905,
+        "maximum_temperature_c": 33.6289114843538,
+        "maximum_current_change_a": 6.430431379199396
+      },
+      {
+        "scenario_id": "lhs_045",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.047460936699557754,
+        "maximum_voltage_v": 4.122618025668685,
+        "maximum_temperature_c": 28.49083783229401,
+        "maximum_current_change_a": 2.0
+      },
+      {
+        "scenario_id": "lhs_046",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.11473373423905342,
+        "maximum_voltage_v": 4.154307853107407,
+        "maximum_temperature_c": 33.54125459701627,
+        "maximum_current_change_a": 5.895485270107888
+      },
+      {
+        "scenario_id": "lhs_047",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.11924429147983706,
+        "maximum_voltage_v": 4.019015674168678,
+        "maximum_temperature_c": 28.02259642006591,
+        "maximum_current_change_a": 2.0
+      },
+      {
+        "scenario_id": "lhs_048",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.035720849720603076,
+        "maximum_voltage_v": 4.117989452206806,
+        "maximum_temperature_c": 26.670471233181807,
+        "maximum_current_change_a": 2.0
+      },
+      {
+        "scenario_id": "lhs_050",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.0010906348473904703,
+        "maximum_voltage_v": 4.156427089156639,
+        "maximum_temperature_c": 33.20268516852378,
+        "maximum_current_change_a": 5.247534408142866
+      },
+      {
+        "scenario_id": "lhs_051",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.2680420527138243,
+        "maximum_voltage_v": 3.9899136096286467,
+        "maximum_temperature_c": 33.70596675244198,
+        "maximum_current_change_a": 6.613395724126316
+      },
+      {
+        "scenario_id": "lhs_052",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.004065547509793044,
+        "maximum_voltage_v": 4.137965952461606,
+        "maximum_temperature_c": 34.11560526779807,
+        "maximum_current_change_a": 5.21090161659034
+      },
+      {
+        "scenario_id": "lhs_057",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": 0.007788438120132524,
+        "maximum_voltage_v": 4.142030028965324,
+        "maximum_temperature_c": 34.302764245613496,
+        "maximum_current_change_a": 6.0111870942930965
+      },
+      {
+        "scenario_id": "lhs_061",
+        "completion_success": false,
+        "physical_safe": true,
+        "terminal_true_soc_error": -0.04638857905402405,
+        "maximum_voltage_v": 4.123290466742853,
+        "maximum_temperature_c": 30.343077460593385,
+        "maximum_current_change_a": 2.0
+      },
+      {
+        "scenario_id": "lhs_062",
+        "completion_success": true,
+        "physical_safe": false,
+        "terminal_true_soc_error": 0.0016993041276940346,
+        "maximum_voltage_v": 4.139420054979897,
+        "maximum_temperature_c": 33.64087256431922,
+        "maximum_current_change_a": 5.324169559913672
+      },
+      {
+        "scenario_id": "lhs_063",
+        "completion_success": false,
+        "physical_safe": false,
+        "terminal_true_soc_error": -0.07264609361576024,
+        "maximum_voltage_v": 4.1335751889382175,
+        "maximum_temperature_c": 33.496839517298085,
+        "maximum_current_change_a": 6.48349134476017
+      }
+    ],
+    "checks": {
+      "completion_fraction": false,
+      "physical_safety_fraction": false,
+      "maximum_charge_time": true,
+      "maximum_material_intervention": false
+    },
+    "success": false
+  },
+  "dfn_temperature_anchors": {
+    "anchor_count": 3,
+    "all_anchors_complete": false,
+    "all_anchors_physically_safe": false,
+    "maximum_charge_time_min": Infinity,
+    "maximum_material_intervention_fraction": 0.9138888888888889,
+    "checks": {
+      "all_anchors_complete": false,
+      "all_anchors_physically_safe": false,
+      "maximum_charge_time": false,
+      "maximum_material_intervention": false
+    },
+    "success": false
+  },
+  "checks": {
+    "reduced_stress_test": false,
+    "dfn_temperature_anchors": false
+  },
+  "ready_for_observer_validation": false,
+  "success": false
+}

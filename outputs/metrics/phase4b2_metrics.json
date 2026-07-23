@@ -1,0 +1,573 @@
+{
+  "configuration": {
+    "study_name": "chen2020_phase4b2_active_data_aggregation",
+    "random_seed": 42,
+    "source_phase3_config": "configs/phase3.yaml",
+    "source_phase4a_config": "configs/phase4a.yaml",
+    "source_phase4b_config": "configs/phase4b.yaml",
+    "legacy_teacher_dataset": "data/phase3b/teacher_dataset.csv",
+    "seed_ann_model": "outputs/models/phase4a_tiny_ann.npz",
+    "active_data": {
+      "soc_bin_edges": [
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8
+      ],
+      "samples_per_middle_soc_bin_per_trajectory": 2,
+      "samples_per_edge_soc_bin_per_trajectory": 4,
+      "train_trajectory_count": 8,
+      "validation_trajectory_count": 2,
+      "test_trajectory_count": 2,
+      "rollouts": [
+        {
+          "name": "nominal",
+          "kind": "constant_offset",
+          "parameters": {
+            "offset_a": 0.0
+          }
+        },
+        {
+          "name": "bias_down_0p5",
+          "kind": "constant_offset",
+          "parameters": {
+            "offset_a": -0.5
+          }
+        },
+        {
+          "name": "bias_up_0p5",
+          "kind": "constant_offset",
+          "parameters": {
+            "offset_a": 0.5
+          }
+        },
+        {
+          "name": "bias_down_1p0",
+          "kind": "constant_offset",
+          "parameters": {
+            "offset_a": -1.0
+          }
+        },
+        {
+          "name": "bias_up_1p0",
+          "kind": "constant_offset",
+          "parameters": {
+            "offset_a": 1.0
+          }
+        },
+        {
+          "name": "sine_slow",
+          "kind": "sine_offset",
+          "parameters": {
+            "amplitude_a": 0.75,
+            "period_s": 600.0,
+            "phase_rad": 0.0
+          }
+        },
+        {
+          "name": "sine_slow_shifted",
+          "kind": "sine_offset",
+          "parameters": {
+            "amplitude_a": 0.75,
+            "period_s": 600.0,
+            "phase_rad": 1.5707963268
+          }
+        },
+        {
+          "name": "sine_fast",
+          "kind": "sine_offset",
+          "parameters": {
+            "amplitude_a": 0.5,
+            "period_s": 240.0,
+            "phase_rad": 0.0
+          }
+        },
+        {
+          "name": "pulse_0p75",
+          "kind": "pulse_offset",
+          "parameters": {
+            "amplitude_a": 0.75,
+            "period_s": 300.0
+          }
+        },
+        {
+          "name": "pulse_0p5",
+          "kind": "pulse_offset",
+          "parameters": {
+            "amplitude_a": 0.5,
+            "period_s": 180.0
+          }
+        },
+        {
+          "name": "random_blocks_1",
+          "kind": "random_block_offset",
+          "parameters": {
+            "amplitude_a": 0.75,
+            "block_steps": 18,
+            "seed": 707
+          }
+        },
+        {
+          "name": "random_blocks_2",
+          "kind": "random_block_offset",
+          "parameters": {
+            "amplitude_a": 0.75,
+            "block_steps": 30,
+            "seed": 808
+          }
+        }
+      ]
+    },
+    "active_constraint_tolerances": {
+      "voltage_v": 0.01,
+      "temperature_c": 0.1,
+      "current_a": 0.05,
+      "current_change_a": 0.05
+    },
+    "dagger_refinement": {
+      "enabled": true,
+      "samples_per_soc_bin": 8,
+      "split": "train"
+    },
+    "dfn_refinement": {
+      "enabled": true,
+      "samples_per_soc_bin": 8,
+      "split": "train"
+    },
+    "final_network": {
+      "hidden_layer_sizes": [
+        16,
+        16
+      ],
+      "regularization_candidates": [
+        0.0001,
+        0.001,
+        0.01
+      ],
+      "initialization_seeds": [
+        11,
+        33,
+        55
+      ],
+      "maximum_iterations": 10000,
+      "convergence_tolerance": 1e-08,
+      "on_policy_training_weight": 3.0
+    },
+    "success_criteria": {
+      "minimum_accepted_label_count": 300,
+      "minimum_teacher_acceptance_fraction": 0.95,
+      "maximum_test_mae_a": 0.35,
+      "maximum_test_rmse_a": 0.5,
+      "material_intervention_threshold_a": 0.1,
+      "maximum_material_intervention_fraction": 0.05,
+      "maximum_mean_filter_correction_a": 0.05,
+      "maximum_dfn_time_gap_fraction_from_hybrid_teacher": 0.03,
+      "require_improvement_over_phase4a": true,
+      "minimum_inference_speedup_over_hybrid_mpc": 100.0
+    }
+  },
+  "coverage_expansion": {
+    "active_state_count": 322,
+    "mean_nearest_legacy_train_distance": 0.9195974922326152,
+    "p95_nearest_legacy_train_distance": 2.7026609366226544,
+    "maximum_nearest_legacy_train_distance": 4.206914975945564,
+    "fraction_beyond_unit_standardized_distance": 0.39751552795031053
+  },
+  "active_dataset": {
+    "candidate_count": 489,
+    "accepted_count": 486,
+    "rejected_count": 3,
+    "teacher_acceptance_fraction": 0.9938650306748467,
+    "split_counts": {
+      "train": 364,
+      "validation": 64,
+      "test": 58
+    },
+    "teacher_mode_counts": {
+      "terminal_reference_governor": 402,
+      "startup_reference_governor": 44,
+      "thermal_budget_mpc": 40
+    },
+    "source_counts": {
+      "active_ann_rollout": 208,
+      "legacy_relabelled": 168,
+      "dagger_round_2": 56,
+      "dagger_round_3_dfn": 54
+    },
+    "duplicate_feature_row_count": 0,
+    "active_constraint_counts": {
+      "voltage": 79,
+      "temperature": 274,
+      "current_upper": 0,
+      "current_change": 80
+    },
+    "checks": {
+      "minimum_accepted_label_count": true,
+      "minimum_teacher_acceptance_fraction": true,
+      "all_splits_present": true,
+      "trajectory_split_isolation": true,
+      "no_duplicate_feature_rows": true,
+      "reachable_sources_only": true,
+      "all_teacher_modes_present": true
+    },
+    "success": true
+  },
+  "round1_offline_imitation": {
+    "architecture": [
+      5,
+      8,
+      8,
+      1
+    ],
+    "parameter_count": 129,
+    "selected_regularization_alpha": 0.0001,
+    "selected_initialization_seed": 55,
+    "split_metrics": {
+      "test": {
+        "sample_count": 58,
+        "mae_a": 0.10995712214300103,
+        "rmse_a": 0.2126869918243322,
+        "maximum_absolute_error_a": 0.8081356825689969,
+        "bias_a": 0.051144353232387904,
+        "r2": 0.9852575843112291
+      },
+      "train": {
+        "sample_count": 254,
+        "mae_a": 0.011826250291344403,
+        "rmse_a": 0.017619933750663157,
+        "maximum_absolute_error_a": 0.08170500341434384,
+        "bias_a": -0.00011236836368224666,
+        "r2": 0.999869327570545
+      },
+      "validation": {
+        "sample_count": 64,
+        "mae_a": 0.08391823901279044,
+        "rmse_a": 0.19424546310466004,
+        "maximum_absolute_error_a": 0.9932101390101211,
+        "bias_a": -0.0024112396801698258,
+        "r2": 0.9843311548495385
+      }
+    },
+    "test_temperature_active_metrics": {
+      "sample_count": 27,
+      "mae_a": 0.04640587201837798,
+      "rmse_a": 0.14110398758448897,
+      "maximum_absolute_error_a": 0.6824018855289422,
+      "bias_a": -0.029166290097360267,
+      "r2": 0.9722966408576605
+    },
+    "test_voltage_active_metrics": {
+      "sample_count": 7,
+      "mae_a": 0.06625898418405354,
+      "rmse_a": 0.10996621339320604,
+      "maximum_absolute_error_a": 0.26384319361208597,
+      "bias_a": -0.011601556127095807,
+      "r2": 0.9675249068256988
+    },
+    "linear_baseline": {
+      "selected_regularization_alpha": 0.0001,
+      "test_metrics": {
+        "sample_count": 58,
+        "mae_a": 0.49206003304987317,
+        "rmse_a": 0.6322078414599593,
+        "maximum_absolute_error_a": 1.297607195876429,
+        "bias_a": 0.08336918175820797,
+        "r2": 0.8697413563594575
+      }
+    },
+    "training_weight": {
+      "column": null,
+      "minimum": 1.0,
+      "maximum": 1.0,
+      "sum": 254.0
+    }
+  },
+  "round2_offline_imitation": {
+    "architecture": [
+      5,
+      8,
+      8,
+      1
+    ],
+    "parameter_count": 129,
+    "selected_regularization_alpha": 0.1,
+    "selected_initialization_seed": 33,
+    "split_metrics": {
+      "test": {
+        "sample_count": 58,
+        "mae_a": 0.13443354075676794,
+        "rmse_a": 0.2738271170723889,
+        "maximum_absolute_error_a": 1.3246856405237777,
+        "bias_a": 0.07115638458697635,
+        "r2": 0.9755634605795852
+      },
+      "train": {
+        "sample_count": 310,
+        "mae_a": 0.05828365582321778,
+        "rmse_a": 0.09931557743492904,
+        "maximum_absolute_error_a": 0.5894449647389672,
+        "bias_a": -8.017076337403014e-06,
+        "r2": 0.9956406530572942
+      },
+      "validation": {
+        "sample_count": 64,
+        "mae_a": 0.10951043925215431,
+        "rmse_a": 0.1934628439943922,
+        "maximum_absolute_error_a": 0.9237444117872897,
+        "bias_a": -0.020050452051671636,
+        "r2": 0.9844571607190122
+      }
+    },
+    "test_temperature_active_metrics": {
+      "sample_count": 27,
+      "mae_a": 0.08749925330740711,
+      "rmse_a": 0.18242101994373505,
+      "maximum_absolute_error_a": 0.6723822247252098,
+      "bias_a": 0.03678524212927053,
+      "r2": 0.9536975877557555
+    },
+    "test_voltage_active_metrics": {
+      "sample_count": 7,
+      "mae_a": 0.0721980838864611,
+      "rmse_a": 0.11291595592632479,
+      "maximum_absolute_error_a": 0.2619174158566926,
+      "bias_a": -0.008179816373130968,
+      "r2": 0.9657593109692666
+    },
+    "linear_baseline": {
+      "selected_regularization_alpha": 0.0001,
+      "test_metrics": {
+        "sample_count": 58,
+        "mae_a": 0.48560560280885884,
+        "rmse_a": 0.6218648886344357,
+        "maximum_absolute_error_a": 1.3388644246512094,
+        "bias_a": 0.0673823003590789,
+        "r2": 0.8739685686947629
+      }
+    },
+    "training_weight": {
+      "column": null,
+      "minimum": 1.0,
+      "maximum": 1.0,
+      "sum": 310.0
+    }
+  },
+  "offline_imitation": {
+    "architecture": [
+      5,
+      16,
+      16,
+      1
+    ],
+    "parameter_count": 385,
+    "selected_regularization_alpha": 0.01,
+    "selected_initialization_seed": 33,
+    "split_metrics": {
+      "test": {
+        "sample_count": 58,
+        "mae_a": 0.20145808046822375,
+        "rmse_a": 0.3679355613497287,
+        "maximum_absolute_error_a": 1.2006763730194239,
+        "bias_a": -0.07828173610961271,
+        "r2": 0.9558805261154678
+      },
+      "train": {
+        "sample_count": 364,
+        "mae_a": 0.013683702825636223,
+        "rmse_a": 0.02101901292968893,
+        "maximum_absolute_error_a": 0.12636978966431656,
+        "bias_a": 0.0012552043236120016,
+        "r2": 0.9997948560636631
+      },
+      "validation": {
+        "sample_count": 64,
+        "mae_a": 0.15221606216510464,
+        "rmse_a": 0.30923719869774996,
+        "maximum_absolute_error_a": 1.404373720245672,
+        "bias_a": -0.05898409742879811,
+        "r2": 0.9602882814788816
+      }
+    },
+    "test_temperature_active_metrics": {
+      "sample_count": 27,
+      "mae_a": 0.06600260972694566,
+      "rmse_a": 0.18405084365965937,
+      "maximum_absolute_error_a": 0.8473442449715423,
+      "bias_a": -0.04518491445658965,
+      "r2": 0.9528665224969103
+    },
+    "test_voltage_active_metrics": {
+      "sample_count": 7,
+      "mae_a": 0.30631761397474117,
+      "rmse_a": 0.4861200977068319,
+      "maximum_absolute_error_a": 1.0034090719710544,
+      "bias_a": -0.30631761397474117,
+      "r2": 0.3653723097534819
+    },
+    "linear_baseline": {
+      "selected_regularization_alpha": 0.0001,
+      "test_metrics": {
+        "sample_count": 58,
+        "mae_a": 0.4682422259366442,
+        "rmse_a": 0.5904999566750772,
+        "maximum_absolute_error_a": 1.421418752790908,
+        "bias_a": 0.0647008488689165,
+        "r2": 0.8863612271237085
+      }
+    },
+    "training_weight": {
+      "column": "training_weight",
+      "minimum": 1.0,
+      "maximum": 3.0,
+      "sum": 584.0
+    }
+  },
+  "test_metrics_by_teacher_mode": {
+    "startup_reference_governor": {
+      "sample_count": 9,
+      "mae_a": 0.0812558127938301,
+      "rmse_a": 0.11192307603981404,
+      "maximum_absolute_error_a": 0.1870680052885607
+    },
+    "terminal_reference_governor": {
+      "sample_count": 46,
+      "mae_a": 0.23111374304741392,
+      "rmse_a": 0.4083924717083217,
+      "maximum_absolute_error_a": 1.2006763730194239
+    },
+    "thermal_budget_mpc": {
+      "sample_count": 3,
+      "mae_a": 0.10734472394382195,
+      "rmse_a": 0.14946304512209127,
+      "maximum_absolute_error_a": 0.25131056141977215
+    }
+  },
+  "model_round_trip_maximum_error_a": 0.0,
+  "ann_v2_reduced_closed_loop": {
+    "source": "reduced_model",
+    "reached_target_soc": true,
+    "final_soc": 0.7995715707365821,
+    "charge_time_min": 52.083333333333336,
+    "maximum_voltage_v": 4.140009999999975,
+    "maximum_temperature_c": 33.500009999999996,
+    "maximum_current_a": 8.317028930444819,
+    "maximum_current_change_a": 2.0,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "current_change_limit_exceeded": false,
+    "safety_filter_intervention_count": 367,
+    "safety_filter_intervention_fraction": 0.5872,
+    "mean_safety_filter_correction_a": 0.025718886402505848,
+    "p95_safety_filter_correction_a": 0.040836982780770664,
+    "maximum_safety_filter_correction_a": 2.0312083231433586,
+    "material_intervention_threshold_a": 0.1,
+    "material_safety_filter_intervention_count": 20,
+    "material_safety_filter_intervention_fraction": 0.032,
+    "safety_override_count": 0,
+    "target_current_cap_count": 0,
+    "mean_ann_inference_time_ms": 0.03950000000000001,
+    "maximum_ann_inference_time_ms": 0.0753,
+    "success": true
+  },
+  "ann_v2_dfn_closed_loop": {
+    "source": "chen2020_dfn",
+    "reached_target_soc": true,
+    "final_soc": 0.7999305827611188,
+    "charge_time_min": 52.75,
+    "maximum_voltage_v": 4.1425611302,
+    "maximum_temperature_c": 33.50239903318811,
+    "maximum_current_a": 8.353214392319984,
+    "maximum_current_change_a": 2.0,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "current_change_limit_exceeded": false,
+    "safety_filter_intervention_count": 258,
+    "safety_filter_intervention_fraction": 0.4075829383886256,
+    "mean_safety_filter_correction_a": 0.016577858255954044,
+    "p95_safety_filter_correction_a": 0.04418838015505325,
+    "maximum_safety_filter_correction_a": 2.0312083231433586,
+    "material_intervention_threshold_a": 0.1,
+    "material_safety_filter_intervention_count": 10,
+    "material_safety_filter_intervention_fraction": 0.01579778830963665,
+    "safety_override_count": 0,
+    "target_current_cap_count": 0,
+    "mean_ann_inference_time_ms": 0.08036224328593998,
+    "maximum_ann_inference_time_ms": 0.21480000000000002,
+    "success": true
+  },
+  "ann_v1_dfn_reference": {
+    "source": "chen2020_dfn",
+    "reached_target_soc": true,
+    "final_soc": 0.7997157394888254,
+    "charge_time_min": 55.666666666666664,
+    "maximum_voltage_v": 4.14253112732595,
+    "maximum_temperature_c": 33.501151965313625,
+    "maximum_current_a": 9.03452098002544,
+    "maximum_current_change_a": 2.0,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "current_change_limit_exceeded": false,
+    "safety_filter_intervention_count": 336,
+    "safety_filter_intervention_fraction": 0.5029940119760479,
+    "mean_safety_filter_correction_a": 0.06103275101822954,
+    "p95_safety_filter_correction_a": 0.36791618974491136,
+    "maximum_safety_filter_correction_a": 1.3774890143326406,
+    "material_intervention_threshold_a": 0.1,
+    "material_safety_filter_intervention_count": 87,
+    "material_safety_filter_intervention_fraction": 0.13023952095808383,
+    "safety_override_count": 0,
+    "target_current_cap_count": 0,
+    "mean_ann_inference_time_ms": 0.10101137724550897,
+    "maximum_ann_inference_time_ms": 0.5382,
+    "success": true
+  },
+  "hybrid_teacher_reference": {
+    "source": "chen2020_dfn",
+    "reached_target_soc": true,
+    "final_soc": 0.7997417087332402,
+    "charge_time_min": 52.666666666666664,
+    "maximum_voltage_v": 4.1424724954036005,
+    "maximum_temperature_c": 33.50240692752163,
+    "maximum_current_a": 8.358952568209334,
+    "maximum_current_change_a": 2.000000000000001,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "current_change_limit_exceeded": false,
+    "mpc_step_count": 39,
+    "startup_governor_step_count": 15,
+    "terminal_governor_step_count": 578,
+    "optimizer_success_fraction": 0.9743589743589743,
+    "prediction_feasible_fraction": 1.0,
+    "fallback_count": 0,
+    "reference_governor_safety_override_count": 0,
+    "mean_mpc_solve_time_ms": 1013.4551358975073,
+    "maximum_mpc_solve_time_ms": 4554.491900000357,
+    "success": true
+  },
+  "dfn_time_gap_fraction_from_hybrid_teacher": 0.0015822784810127033,
+  "inference_speedup_over_hybrid_mpc": 12611.08568474742,
+  "checks": {
+    "active_dataset": true,
+    "test_mae": true,
+    "test_rmse": true,
+    "numpy_model_round_trip": true,
+    "reduced_closed_loop": true,
+    "dfn_closed_loop": true,
+    "material_intervention_fraction": true,
+    "mean_filter_correction": true,
+    "dfn_time_gap_from_hybrid_teacher": true,
+    "improvement_over_phase4a": true,
+    "inference_speedup": true
+  },
+  "standalone_ann_ready": false,
+  "ready_for_robustness_validation": true,
+  "success": true
+}

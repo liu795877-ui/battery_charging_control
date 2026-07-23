@@ -1,0 +1,45 @@
+study:
+  name: chen2020_phase6c3_structured_dnn_comparison
+  random_seed: 20260723
+
+source_phase3_config: configs/phase3.yaml
+
+data:
+  frozen_phase6b_dataset: data/phase6b_dnn_failure_diagnosis/paper_teacher_dataset.csv
+  frozen_phase6b_dataset_sha256: 640b45c017594c3a8f954b498a99058d2e5cc8ecf6cff88425d5df94815de5da
+  phase6c2_dataset: data/phase6c_constraint_regime_learning/c2_targeted_teacher/targeted_teacher_dataset.csv
+  phase6c2_dataset_sha256: 69d3595edf119993672b3d7204626b6012df3591f08932bbee5783b3593ea10f
+
+network:
+  hidden_layer_sizes: [16, 16]
+  activation: tanh
+  regularization_alpha: 0.001
+  initialization_seeds: [22, 42, 73, 101, 202]
+  maximum_iterations: 2500
+  convergence_tolerance: 1.0e-8
+  learning_rate_init: 0.001
+  no_improvement_iterations: 100
+
+structured_output:
+  maximum_current_change_a_per_step: 2.0
+  inverse_tanh_clip: 0.999
+
+nominal_validation:
+  temperature_c: 25.0
+  maximum_simulation_time_s: 3600.0
+  teacher_trajectory: data/phase3/mpc_chen2020_dfn_closed_loop.csv
+  teacher_metrics: outputs/metrics/phase3_mpc_metrics.json
+  current_nrmse_normalization_a: 10.0
+
+success_criteria:
+  minimum_accepted_initial_states: 700
+  minimum_teacher_acceptance_fraction: 0.70
+  maximum_nominal_current_nrmse: 0.01
+  maximum_nominal_charge_time_gap_fraction: 0.02
+  minimum_inference_speedup_over_mpc: 100.0
+  maximum_voltage_violation_v: 0.01
+  maximum_temperature_violation_c: 0.10
+  maximum_current_violation_a: 0.10
+  maximum_current_change_violation_a: 0.20
+  require_all_temperature_anchors_complete: true
+  require_all_temperature_anchors_without_serious_violation: true

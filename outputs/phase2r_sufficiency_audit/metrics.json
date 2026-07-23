@@ -1,0 +1,372 @@
+{
+  "study_name": "chen2020_phase2r_model_and_control_state_sufficiency",
+  "model_audit": {
+    "pulse_profile_count": 45,
+    "ocv_point_count": 27,
+    "holdout_summary": [
+      {
+        "variant": "fixed_2rc_dual",
+        "horizon_s": 5.0,
+        "voltage_rmse_mv_mean": 18.327448289844313,
+        "voltage_rmse_mv_max": 38.99197016713002,
+        "temperature_rmse_c_mean": 0.026688126633263178,
+        "temperature_rmse_c_max": 0.06703585697783021,
+        "voltage_false_safe_count": 0,
+        "temperature_false_safe_count": 0
+      },
+      {
+        "variant": "fixed_2rc_dual",
+        "horizon_s": 25.0,
+        "voltage_rmse_mv_mean": 18.49053416300491,
+        "voltage_rmse_mv_max": 38.19800725560111,
+        "temperature_rmse_c_mean": 0.09861471267173734,
+        "temperature_rmse_c_max": 0.24841833418031725,
+        "voltage_false_safe_count": 0,
+        "temperature_false_safe_count": 0
+      },
+      {
+        "variant": "fixed_2rc_dual",
+        "horizon_s": 300.0,
+        "voltage_rmse_mv_mean": 28.718836265768477,
+        "voltage_rmse_mv_max": 51.82146504468725,
+        "temperature_rmse_c_mean": 0.5113404246439888,
+        "temperature_rmse_c_max": 1.4093085603960829,
+        "voltage_false_safe_count": 0,
+        "temperature_false_safe_count": 0
+      },
+      {
+        "variant": "related_2rc_dual",
+        "horizon_s": 5.0,
+        "voltage_rmse_mv_mean": 18.605695339640494,
+        "voltage_rmse_mv_max": 35.06026755078044,
+        "temperature_rmse_c_mean": 0.006853145993076419,
+        "temperature_rmse_c_max": 0.014860024180118947,
+        "voltage_false_safe_count": 0,
+        "temperature_false_safe_count": 0
+      },
+      {
+        "variant": "related_2rc_dual",
+        "horizon_s": 25.0,
+        "voltage_rmse_mv_mean": 20.409781874492225,
+        "voltage_rmse_mv_max": 33.282147209281035,
+        "temperature_rmse_c_mean": 0.04731959214877201,
+        "temperature_rmse_c_max": 0.1380669838850112,
+        "voltage_false_safe_count": 0,
+        "temperature_false_safe_count": 0
+      },
+      {
+        "variant": "related_2rc_dual",
+        "horizon_s": 300.0,
+        "voltage_rmse_mv_mean": 29.680156969738846,
+        "voltage_rmse_mv_max": 60.5717937506757,
+        "temperature_rmse_c_mean": 1.5886259433325973,
+        "temperature_rmse_c_max": 4.900750499451732,
+        "voltage_false_safe_count": 3,
+        "temperature_false_safe_count": 0
+      },
+      {
+        "variant": "related_2rc_single",
+        "horizon_s": 5.0,
+        "voltage_rmse_mv_mean": 18.605695339640494,
+        "voltage_rmse_mv_max": 35.06026755078044,
+        "temperature_rmse_c_mean": 0.006694907760448908,
+        "temperature_rmse_c_max": 0.015248236672573018,
+        "voltage_false_safe_count": 0,
+        "temperature_false_safe_count": 0
+      },
+      {
+        "variant": "related_2rc_single",
+        "horizon_s": 25.0,
+        "voltage_rmse_mv_mean": 20.409781874492225,
+        "voltage_rmse_mv_max": 33.282147209281035,
+        "temperature_rmse_c_mean": 0.04573011461400494,
+        "temperature_rmse_c_max": 0.13039534082863977,
+        "voltage_false_safe_count": 0,
+        "temperature_false_safe_count": 0
+      },
+      {
+        "variant": "related_2rc_single",
+        "horizon_s": 300.0,
+        "voltage_rmse_mv_mean": 29.680156969738846,
+        "voltage_rmse_mv_max": 60.5717937506757,
+        "temperature_rmse_c_mean": 1.5641493413403682,
+        "temperature_rmse_c_max": 4.83427987392012,
+        "voltage_false_safe_count": 3,
+        "temperature_false_safe_count": 0
+      }
+    ],
+    "thermal_structure_summary": [
+      {
+        "thermal_structure": "fixed_dual",
+        "rmse_c_mean": 1.7222385448486577,
+        "rmse_c_max": 4.08717988944299,
+        "maximum_absolute_error_c": 5.888427785747375
+      },
+      {
+        "thermal_structure": "temperature_related_dual",
+        "rmse_c_mean": 0.02190323550068974,
+        "rmse_c_max": 0.05257247869958362,
+        "maximum_absolute_error_c": 0.11846136945312935
+      },
+      {
+        "thermal_structure": "temperature_related_single",
+        "rmse_c_mean": 0.00612718388558423,
+        "rmse_c_max": 0.012773266184870898,
+        "maximum_absolute_error_c": 0.026544838699706474
+      }
+    ],
+    "variant_checks": {
+      "fixed_2rc_dual": {
+        "all_horizon_mean_voltage_rmse_within_limit": true,
+        "all_horizon_mean_temperature_rmse_within_limit": true,
+        "voltage_false_safe_count": 0,
+        "temperature_false_safe_count": 0
+      },
+      "related_2rc_dual": {
+        "all_horizon_mean_voltage_rmse_within_limit": true,
+        "all_horizon_mean_temperature_rmse_within_limit": false,
+        "voltage_false_safe_count": 3,
+        "temperature_false_safe_count": 0
+      },
+      "related_2rc_single": {
+        "all_horizon_mean_voltage_rmse_within_limit": true,
+        "all_horizon_mean_temperature_rmse_within_limit": false,
+        "voltage_false_safe_count": 3,
+        "temperature_false_safe_count": 0
+      }
+    }
+  },
+  "state_audit": {
+    "replay": {
+      "sample_count": 1776,
+      "trajectory_count": 222,
+      "mean_replay_current_difference_a": 0.0016399530683867008,
+      "median_replay_current_difference_a": 3.836377797661328e-05,
+      "p95_replay_current_difference_a": 0.000301122251880475,
+      "p99_replay_current_difference_a": 0.0670890489426874,
+      "maximum_replay_current_difference_a": 0.2239716986476656,
+      "replay_mismatch_count": 1222,
+      "tolerance_a": 1e-06,
+      "large_difference_threshold_a": 0.01,
+      "large_difference_count": 29,
+      "large_difference_fraction": 0.01632882882882883,
+      "exact_success": false,
+      "memory_summary_usable": true,
+      "success": false
+    },
+    "summary": {
+      "current_dnn_input_locally_sufficient": false,
+      "current_dnn_mean_local_standard_deviation_a": 0.5024263655063503,
+      "current_dnn_p95_nearest_neighbor_label_difference_a": 1.0207776609312262,
+      "significant_additions_vs_current_dnn": [
+        "plus_previous_plan_summary"
+      ],
+      "thresholds": {
+        "mean_local_standard_deviation_a": 0.25,
+        "p95_nearest_neighbor_label_difference_a": 0.5,
+        "significant_variance_reduction_fraction": 0.2
+      }
+    },
+    "metrics": [
+      {
+        "feature_set": "electrothermal_4",
+        "features": "state_soc,state_polarization_fast_v,state_polarization_slow_v,state_average_temperature_c",
+        "feature_count": 4,
+        "effective_variable_feature_count": 4,
+        "mean_conditional_variance_a2": 0.9600522272266928,
+        "median_conditional_variance_a2": 0.5876313599163612,
+        "p95_conditional_variance_a2": 2.923107469609879,
+        "mean_local_standard_deviation_a": 0.8496189527792634,
+        "p95_local_standard_deviation_a": 1.7097089871256768,
+        "nearest_neighbor_label_difference_mean_a": 0.479813929582177,
+        "nearest_neighbor_label_difference_p95_a": 2.0000000000000044,
+        "knn_leave_one_out_rmse_a": 1.00062670174912,
+        "knn_leave_one_out_nrmse_percent_of_10a": 10.006267017491199,
+        "mean_neighbor_distance": 0.6766399435757227,
+        "variance_reduction_from_electrothermal_4_fraction": 0.0,
+        "variance_reduction_from_current_dnn_5_fraction": -1.6733620734836512,
+        "significant_reduction_vs_current_dnn": false
+      },
+      {
+        "feature_set": "current_dnn_5_plus_previous_current",
+        "features": "state_soc,state_polarization_fast_v,state_polarization_slow_v,state_average_temperature_c,state_previous_current_a",
+        "feature_count": 5,
+        "effective_variable_feature_count": 5,
+        "mean_conditional_variance_a2": 0.35911791999639286,
+        "median_conditional_variance_a2": 0.12449164835268489,
+        "p95_conditional_variance_a2": 1.5331828099114488,
+        "mean_local_standard_deviation_a": 0.5024263655063503,
+        "p95_local_standard_deviation_a": 1.2382173021451448,
+        "nearest_neighbor_label_difference_mean_a": 0.22637809362438654,
+        "nearest_neighbor_label_difference_p95_a": 1.0207776609312262,
+        "knn_leave_one_out_rmse_a": 0.4088929094640079,
+        "knn_leave_one_out_nrmse_percent_of_10a": 4.088929094640079,
+        "mean_neighbor_distance": 0.8657036351130774,
+        "variance_reduction_from_electrothermal_4_fraction": 0.6259391835027783,
+        "variance_reduction_from_current_dnn_5_fraction": 0.0,
+        "significant_reduction_vs_current_dnn": false
+      },
+      {
+        "feature_set": "plus_thermal_split",
+        "features": "state_soc,state_polarization_fast_v,state_polarization_slow_v,state_core_temperature_c,state_surface_temperature_c,state_previous_current_a",
+        "feature_count": 6,
+        "effective_variable_feature_count": 6,
+        "mean_conditional_variance_a2": 0.3684212810767333,
+        "median_conditional_variance_a2": 0.10394696204810643,
+        "p95_conditional_variance_a2": 1.63922237282886,
+        "mean_local_standard_deviation_a": 0.4936955983177277,
+        "p95_local_standard_deviation_a": 1.2803211895123718,
+        "nearest_neighbor_label_difference_mean_a": 0.25649202044332536,
+        "nearest_neighbor_label_difference_p95_a": 1.6362192324235592,
+        "knn_leave_one_out_rmse_a": 0.43888876648867486,
+        "knn_leave_one_out_nrmse_percent_of_10a": 4.388887664886749,
+        "mean_neighbor_distance": 0.9705425403683832,
+        "variance_reduction_from_electrothermal_4_fraction": 0.6162487095717766,
+        "variance_reduction_from_current_dnn_5_fraction": -0.025906145481221943,
+        "significant_reduction_vs_current_dnn": false
+      },
+      {
+        "feature_set": "plus_control_block_phase",
+        "features": "state_soc,state_polarization_fast_v,state_polarization_slow_v,state_average_temperature_c,state_previous_current_a,control_block_phase",
+        "feature_count": 6,
+        "effective_variable_feature_count": 6,
+        "mean_conditional_variance_a2": 0.44397870615255264,
+        "median_conditional_variance_a2": 0.20654637563500672,
+        "p95_conditional_variance_a2": 1.570799041310546,
+        "mean_local_standard_deviation_a": 0.5881698127862068,
+        "p95_local_standard_deviation_a": 1.2533152068525852,
+        "nearest_neighbor_label_difference_mean_a": 0.3692546973691962,
+        "nearest_neighbor_label_difference_p95_a": 1.2400264251000004,
+        "knn_leave_one_out_rmse_a": 0.4334332601309961,
+        "knn_leave_one_out_nrmse_percent_of_10a": 4.334332601309961,
+        "mean_neighbor_distance": 1.1597346685009617,
+        "variance_reduction_from_electrothermal_4_fraction": 0.5375473400701585,
+        "variance_reduction_from_current_dnn_5_fraction": -0.23630340183807075,
+        "significant_reduction_vs_current_dnn": false
+      },
+      {
+        "feature_set": "plus_mpc_mode",
+        "features": "state_soc,state_polarization_fast_v,state_polarization_slow_v,state_average_temperature_c,state_previous_current_a,mode_voltage_active,mode_temperature_active,mode_slew_active",
+        "feature_count": 8,
+        "effective_variable_feature_count": 8,
+        "mean_conditional_variance_a2": 0.405231146351779,
+        "median_conditional_variance_a2": 0.13236438496167244,
+        "p95_conditional_variance_a2": 1.69783394058055,
+        "mean_local_standard_deviation_a": 0.529610632377884,
+        "p95_local_standard_deviation_a": 1.3030095061390106,
+        "nearest_neighbor_label_difference_mean_a": 0.24158512306748836,
+        "nearest_neighbor_label_difference_p95_a": 1.2821563580917152,
+        "knn_leave_one_out_rmse_a": 0.4550621100395551,
+        "knn_leave_one_out_nrmse_percent_of_10a": 4.550621100395551,
+        "mean_neighbor_distance": 0.9652397772936031,
+        "variance_reduction_from_electrothermal_4_fraction": 0.577907185818034,
+        "variance_reduction_from_current_dnn_5_fraction": -0.12840692092404993,
+        "significant_reduction_vs_current_dnn": false
+      },
+      {
+        "feature_set": "plus_previous_plan_summary",
+        "features": "state_soc,state_polarization_fast_v,state_polarization_slow_v,state_average_temperature_c,state_previous_current_a,previous_plan_first_a,previous_plan_mean_a,previous_plan_last_a",
+        "feature_count": 8,
+        "effective_variable_feature_count": 8,
+        "mean_conditional_variance_a2": 0.22410778834404158,
+        "median_conditional_variance_a2": 0.09719819407112623,
+        "p95_conditional_variance_a2": 0.8490992204613511,
+        "mean_local_standard_deviation_a": 0.41281910968912605,
+        "p95_local_standard_deviation_a": 0.9214630905655976,
+        "nearest_neighbor_label_difference_mean_a": 0.20163466986347967,
+        "nearest_neighbor_label_difference_p95_a": 0.7454223968671811,
+        "knn_leave_one_out_rmse_a": 0.35088983080260194,
+        "knn_leave_one_out_nrmse_percent_of_10a": 3.508898308026019,
+        "mean_neighbor_distance": 1.0570724827848208,
+        "variance_reduction_from_electrothermal_4_fraction": 0.7665670866767085,
+        "variance_reduction_from_current_dnn_5_fraction": 0.37594930281871586,
+        "significant_reduction_vs_current_dnn": true
+      },
+      {
+        "feature_set": "plus_target_cap_state",
+        "features": "state_soc,state_polarization_fast_v,state_polarization_slow_v,state_average_temperature_c,state_previous_current_a,target_cap_active",
+        "feature_count": 6,
+        "effective_variable_feature_count": 5,
+        "mean_conditional_variance_a2": 0.35911791999639286,
+        "median_conditional_variance_a2": 0.12449164835268489,
+        "p95_conditional_variance_a2": 1.5331828099114488,
+        "mean_local_standard_deviation_a": 0.5024263655063503,
+        "p95_local_standard_deviation_a": 1.2382173021451448,
+        "nearest_neighbor_label_difference_mean_a": 0.22637809362438654,
+        "nearest_neighbor_label_difference_p95_a": 1.0207776609312262,
+        "knn_leave_one_out_rmse_a": 0.4088929094640079,
+        "knn_leave_one_out_nrmse_percent_of_10a": 4.088929094640079,
+        "mean_neighbor_distance": 0.8657036351130774,
+        "variance_reduction_from_electrothermal_4_fraction": 0.6259391835027783,
+        "variance_reduction_from_current_dnn_5_fraction": 0.0,
+        "significant_reduction_vs_current_dnn": false
+      },
+      {
+        "feature_set": "all_online_or_diagnostic_variables",
+        "features": "state_soc,state_polarization_fast_v,state_polarization_slow_v,state_core_temperature_c,state_surface_temperature_c,state_previous_current_a,control_block_phase,mode_voltage_active,mode_temperature_active,mode_slew_active,previous_plan_first_a,previous_plan_mean_a,previous_plan_last_a,target_cap_active",
+        "feature_count": 14,
+        "effective_variable_feature_count": 13,
+        "mean_conditional_variance_a2": 0.3148387923772394,
+        "median_conditional_variance_a2": 0.13797571899242433,
+        "p95_conditional_variance_a2": 1.053264033966201,
+        "mean_local_standard_deviation_a": 0.49578511203099274,
+        "p95_local_standard_deviation_a": 1.0262865211340857,
+        "nearest_neighbor_label_difference_mean_a": 0.27913245216259525,
+        "nearest_neighbor_label_difference_p95_a": 0.8264462809917383,
+        "knn_leave_one_out_rmse_a": 0.3713713348704133,
+        "knn_leave_one_out_nrmse_percent_of_10a": 3.713713348704133,
+        "mean_neighbor_distance": 1.560567835752323,
+        "variance_reduction_from_electrothermal_4_fraction": 0.6720607656036426,
+        "variance_reduction_from_current_dnn_5_fraction": 0.12329968835751282,
+        "significant_reduction_vs_current_dnn": false
+      }
+    ],
+    "availability": [
+      {
+        "candidate": "I_k_minus_1",
+        "status": "available",
+        "detail": "state_previous_current_a 已在当前五状态 DNN 中"
+      },
+      {
+        "candidate": "control_block_phase",
+        "status": "recoverable_proxy",
+        "detail": "使用 step_index mod control_block_steps；滚动 MPC 每步重算，物理含义需谨慎"
+      },
+      {
+        "candidate": "ambient_temperature",
+        "status": "constant_not_identifiable",
+        "detail": "Phase 6R 教师数据全部为 25 ℃"
+      },
+      {
+        "candidate": "current_mpc_mode",
+        "status": "diagnostic_only",
+        "detail": "由求解后的活跃约束定义，不能直接作为求解前在线输入"
+      },
+      {
+        "candidate": "previous_optimal_sequence_summary",
+        "status": "replayed_approximate",
+        "detail": "记录上一控制块首项/均值/末项；CSV 状态重启在少数切换点不能严格复现"
+      },
+      {
+        "candidate": "identifiable_parameters",
+        "status": "constant_not_identifiable",
+        "detail": "Phase 6R 使用同一组固定 2RC/热参数"
+      },
+      {
+        "candidate": "target_cap_state",
+        "status": "replayed_diagnostic",
+        "detail": "由预测终端 SOC 是否接近目标构造"
+      }
+    ]
+  },
+  "decision": {
+    "fixed_model_sufficient": true,
+    "related_model_sufficient": false,
+    "current_dnn_state_sufficient": false,
+    "next_action": "先在新教师数据中精确记录并验证上一最优序列摘要等控制记忆，再决定 Chen2020 DNN 的扩充输入；暂不训练新 ANN。"
+  },
+  "figures": {
+    "model_horizon": "outputs\\phase2r_sufficiency_audit\\figures\\model_horizon_errors.png",
+    "state_variance": "outputs\\phase2r_sufficiency_audit\\figures\\state_conditional_variance.png"
+  }
+}

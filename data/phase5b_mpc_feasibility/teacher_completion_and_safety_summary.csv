@@ -1,0 +1,3 @@
+controller,scenario_count,feasible_count,completion_fraction,physical_safety_fraction,mean_charge_time_min,maximum_charge_time_min,mean_solve_time_ms,maximum_solve_time_ms,fallback_scenario_count,feasible_fraction
+nominal_mpc,69,5,0.8695652173913043,0.07246376811594203,43.96980676328502,60.0,1110.553239307075,9634.2450000011,64,0.07246376811594203
+oracle_mpc,69,1,0.855072463768116,0.014492753623188406,43.9915458937198,60.0,1190.3717941430266,10075.43660000374,68,0.014492753623188406

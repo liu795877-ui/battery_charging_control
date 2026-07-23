@@ -1,0 +1,23 @@
+study:
+  name: phase7a_level1r_terminal_coverage_repair
+
+source_level1_config: configs/phase7a_level1_1rc.yaml
+source_level1_dataset: data/phase7a_level1_1rc/teacher_dataset.csv
+
+coverage:
+  terminal_trajectory_count: 140
+  trajectory_steps: 24
+  train_trajectory_count: 100
+  validation_trajectory_count: 20
+  terminal_test_trajectory_count: 20
+  # 首轮 140 条保持不变；追加 20 条仅训练尾端轨迹，不触碰两个冻结测试集。
+  tail_training_trajectory_count: 20
+  tail_soc_bounds: [0.795, 0.799]
+  soc_bounds: [0.74, 0.799]
+  polarization_bounds_v: [0.0, 0.10]
+  random_seed: 20260723
+  original_frozen_test_trajectory_count: 36
+  minimum_low_current_label_count: 40
+  minimum_taper_current_label_count: 80
+  low_current_threshold_a: 0.25
+  taper_current_bounds_a: [0.25, 5.0]

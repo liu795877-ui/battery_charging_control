@@ -1,0 +1,84 @@
+{
+  "status": "completed",
+  "configuration": {
+    "study_name": "phase5b05_mpc_recovery_and_feasibility_recheck",
+    "random_seed": 20260722,
+    "execution_status": "ready_to_run",
+    "source_phase3_config": "configs/phase3.yaml",
+    "source_phase5a_config": "configs/phase5a.yaml",
+    "source_phase5b0_table": "data/phase5b_mpc_feasibility/scenario_feasibility_table.csv",
+    "source_phase5b0_runs": "data/phase5b_mpc_feasibility/controller_run_summary.csv",
+    "ann_model": "outputs/models/phase4b2_tiny_ann.npz",
+    "representative_selection": {
+      "teacher_feasible_count": 5,
+      "unresolved_count": 5,
+      "teacher_and_ann_infeasible_count": 5,
+      "include_nominal": true,
+      "include_hot_extreme": true,
+      "include_cold_extreme": true
+    },
+    "recovery": {
+      "maximum_current_a": 10.0,
+      "maximum_current_change_a_per_step": 2.0,
+      "one_step_scan_points": 101,
+      "candidate_priority": [
+        "shifted_previous_feasible",
+        "projected_ann_sequence",
+        "conservative_slew_down",
+        "slope_safe_emergency",
+        "hard_safety_emergency"
+      ]
+    },
+    "execution": {
+      "worker_count": 1,
+      "maximum_simulation_time_s": 3600.0,
+      "checkpoint_every_completed_runs": 1,
+      "save_all_trajectories": true
+    },
+    "acceptance": {
+      "maximum_fallback_slew_violation_count": 0,
+      "minimum_matched_nominal_feasible_gain": 2,
+      "require_oracle_not_weaker_than_nominal": true,
+      "require_all_failure_types_auditable": true,
+      "require_full_69_before_phase5b1": true
+    }
+  },
+  "representative_scenario_count": 15,
+  "controller_summary": [
+    {
+      "controller": "nominal_mpc_recovery",
+      "scenario_count": 15,
+      "baseline_feasible_count": 5,
+      "recovery_feasible_count": 2,
+      "fallback_slew_violation_count": 0,
+      "hard_safety_slew_conflict_count": 487,
+      "numerical_failure_recovered_count": 0,
+      "prediction_domain_infeasible_count": 1220,
+      "mean_solve_time_ms": 837.9463302104122,
+      "maximum_solve_time_ms": 5449.641799999881,
+      "feasible_gain": -3
+    },
+    {
+      "controller": "oracle_mpc_recovery",
+      "scenario_count": 15,
+      "baseline_feasible_count": 1,
+      "recovery_feasible_count": 1,
+      "fallback_slew_violation_count": 0,
+      "hard_safety_slew_conflict_count": 544,
+      "numerical_failure_recovered_count": 0,
+      "prediction_domain_infeasible_count": 1427,
+      "mean_solve_time_ms": 867.3404330738178,
+      "maximum_solve_time_ms": 5758.941199999754,
+      "feasible_gain": 0
+    }
+  ],
+  "checks": {
+    "fallback_slew_violation_zero": true,
+    "matched_nominal_feasible_gain": false,
+    "oracle_not_weaker_than_nominal": false,
+    "failure_types_auditable": true
+  },
+  "representative_gate_passed": false,
+  "full_69_recheck_required_before_phase5b1": true,
+  "proceed_to_phase5b1": false
+}

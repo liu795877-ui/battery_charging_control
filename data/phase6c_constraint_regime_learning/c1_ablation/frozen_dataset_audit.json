@@ -1,0 +1,27 @@
+{
+  "path": "data\\phase6b_dnn_failure_diagnosis\\paper_teacher_dataset.csv",
+  "sha256": "640b45c017594c3a8f954b498a99058d2e5cc8ecf6cff88425d5df94815de5da",
+  "sample_count": 7024,
+  "split_sample_counts": {
+    "train": 5616,
+    "validation": 704,
+    "test": 704
+  },
+  "split_trajectory_counts": {
+    "train": 702,
+    "validation": 88,
+    "test": 88
+  },
+  "trajectory_split_leak_count": 0,
+  "missing_columns": [],
+  "checks": {
+    "sha256": true,
+    "sample_count": true,
+    "split_sample_counts": true,
+    "split_trajectory_counts": true,
+    "trajectory_split_isolation": true,
+    "required_columns": true,
+    "finite_features_and_target": true
+  },
+  "success": true
+}

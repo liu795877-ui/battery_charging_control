@@ -1,0 +1,28 @@
+study:
+  name: chen2020_phase2rd_final_pure_dnn_discrimination
+  random_seed: 20260725
+
+sources:
+  phase6r_config: configs/phase6r_corrected_policy_distillation.yaml
+
+full_sequence_dataset:
+  trajectory_count: 240
+  trajectory_steps: 8
+  checkpoint_interval_trajectories: 5
+  minimum_acceptance_fraction: 0.70
+
+multistart:
+  representative_state_count: 100
+  warm_start_count: 15
+  checkpoint_interval_states: 5
+  near_optimal_relative_tolerance: 0.001
+  near_optimal_absolute_tolerance: 1.0e-6
+  meaningful_first_action_range_a: 0.05
+  maximum_ambiguous_state_fraction: 0.05
+
+local_variance:
+  neighbor_counts: [5, 10, 25, 50]
+  sufficient_local_standard_deviation_a: 0.25
+  sufficient_p95_neighbor_label_difference_a: 0.50
+  minimum_mode_sample_count: 30
+

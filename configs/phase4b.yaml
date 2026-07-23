@@ -1,0 +1,27 @@
+study:
+  name: chen2020_phase4b_thermal_budget_mpc
+  random_seed: 42
+
+source_phase3_config: configs/phase3.yaml
+
+thermal_budget_reference:
+  # 初始高电流只持续到SOC或温度任一达到热预算切换状态。
+  peak_current_a: 8.0
+  sustainable_current_a: 5.0
+  switch_soc: 0.1766666667
+  switch_average_temperature_c: 30.5
+  # 热预算切换完成后尽早交给已验证的终端参考调节器，避免短视野MPC
+  # 在中后段持续低于5 A可行参考。
+  reference_release_soc: 0.20
+  reference_tracking_weight: 1000.0
+  reoptimize_every_control_step: true
+
+diagnostic_sweep:
+  peak_currents_a: [7.0, 8.0, 9.0]
+  switch_times_min: [2.0, 3.0, 4.0, 5.0]
+  sustainable_currents_a: [4.5, 5.0]
+
+success_criteria:
+  minimum_improvement_fraction_over_filtered_1c: 0.01
+  minimum_optimizer_success_fraction: 0.95
+  require_zero_fallbacks: true

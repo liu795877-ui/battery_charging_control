@@ -1,0 +1,3 @@
+controller,active_voltage_constraint_fraction,active_temperature_constraint_fraction,active_current_upper_constraint_fraction,active_current_change_constraint_fraction
+nominal_mpc,0.357551519932501,0.7488669721560132,0.02815194628832963,0.2596337247520057
+oracle_mpc,0.3623676531480599,0.7519851019290134,0.02899052954595406,0.26903315175138354

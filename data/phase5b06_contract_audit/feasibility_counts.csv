@@ -1,0 +1,7 @@
+scenario_group,controller,scenario_count,operational_feasible_count
+teacher_and_ann_infeasible,original_mpc,5,0
+teacher_and_ann_infeasible,recovery_mpc,5,0
+teacher_feasible,original_mpc,5,5
+teacher_feasible,recovery_mpc,5,5
+unresolved,original_mpc,5,0
+unresolved,recovery_mpc,5,0

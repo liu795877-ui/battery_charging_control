@@ -1,0 +1,9 @@
+controller,infeasibility_reasons,scenario_count
+nominal_mpc,current_change_violation;mpc_fallback,9
+nominal_mpc,current_change_violation;optimizer_success_fraction;mpc_fallback,46
+nominal_mpc,none,5
+nominal_mpc,target_not_reached;current_change_violation;optimizer_success_fraction;mpc_fallback,9
+oracle_mpc,current_change_violation;mpc_fallback,4
+oracle_mpc,current_change_violation;optimizer_success_fraction;mpc_fallback,54
+oracle_mpc,none,1
+oracle_mpc,target_not_reached;current_change_violation;optimizer_success_fraction;mpc_fallback,10

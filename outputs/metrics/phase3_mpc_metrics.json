@@ -1,0 +1,148 @@
+{
+  "phase2_gate": {
+    "success": true,
+    "scope_assessment": {
+      "average_outputs_validated": true,
+      "core_surface_temperature_split_validated": false,
+      "safe_for_first_mpc_average_temperature_prediction": true,
+      "safe_for_claiming_validated_core_temperature": false
+    }
+  },
+  "reduced_closed_loop": {
+    "source": "reduced_model",
+    "reached_target_soc": true,
+    "final_soc": 0.7995098482576676,
+    "charge_time_s": 3215.0,
+    "charge_time_min": 53.583333333333336,
+    "maximum_voltage_v": 4.140000000000044,
+    "maximum_temperature_c": 33.50000000268323,
+    "maximum_current_a": 9.894814670131863,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "optimizer_success_fraction": 1.0,
+    "prediction_feasible_fraction": 1.0,
+    "optimization_count": 132,
+    "fallback_count": 0,
+    "mean_mpc_solve_time_ms": 251.1377113635469,
+    "maximum_mpc_solve_time_ms": 1498.3972999998514,
+    "configuration": {
+      "study_name": "chen2020_phase3_mpc_teacher",
+      "random_seed": 42,
+      "battery": {
+        "parameter_set": "Chen2020",
+        "model": "DFN",
+        "thermal_model": "lumped",
+        "nominal_capacity_ah": 5.0,
+        "initial_soc": 0.1,
+        "target_soc": 0.8,
+        "initial_temperature_c": 25.0,
+        "ambient_temperature_c": 25.0
+      },
+      "artifacts": {
+        "identified_parameters": "outputs/metrics/phase2_identified_parameters.json",
+        "validation_metrics": "outputs/metrics/phase2_validation_metrics.json",
+        "ocv_curve": "data/phase2/ocv_curve.csv"
+      },
+      "constraints": {
+        "physical_maximum_voltage_v": 4.2,
+        "physical_maximum_temperature_c": 35.0,
+        "maximum_current_a": 10.0,
+        "maximum_current_change_a_per_step": 2.0,
+        "voltage_uncertainty_margin_v": 0.06,
+        "temperature_uncertainty_margin_c": 1.5
+      },
+      "control": {
+        "control_interval_s": 5.0,
+        "prediction_horizon_steps": 60,
+        "control_block_steps": 5,
+        "maximum_simulation_time_s": 3600.0
+      },
+      "objective": {
+        "soc_tracking_weight": 1.0,
+        "terminal_soc_weight": 20.0,
+        "current_change_weight": 0.0001
+      },
+      "optimizer": {
+        "maximum_iterations": 100,
+        "function_tolerance": 1e-07,
+        "constraint_tolerance": 1e-05
+      },
+      "validation": {
+        "target_soc_tolerance": 0.0005,
+        "physical_constraint_tolerance": 0.001,
+        "minimum_optimizer_success_fraction": 0.95
+      }
+    },
+    "success": true
+  },
+  "dfn_closed_loop": {
+    "source": "chen2020_dfn",
+    "reached_target_soc": true,
+    "final_soc": 0.799527237164507,
+    "charge_time_s": 3215.0,
+    "charge_time_min": 53.583333333333336,
+    "maximum_voltage_v": 4.142485355073057,
+    "maximum_temperature_c": 33.5166559880991,
+    "maximum_current_a": 9.832550962985978,
+    "voltage_limit_exceeded": false,
+    "temperature_limit_exceeded": false,
+    "current_limit_exceeded": false,
+    "optimizer_success_fraction": 1.0,
+    "prediction_feasible_fraction": 1.0,
+    "optimization_count": 132,
+    "fallback_count": 0,
+    "mean_mpc_solve_time_ms": 589.0127181817276,
+    "maximum_mpc_solve_time_ms": 1820.7879000001412,
+    "configuration": {
+      "study_name": "chen2020_phase3_mpc_teacher",
+      "random_seed": 42,
+      "battery": {
+        "parameter_set": "Chen2020",
+        "model": "DFN",
+        "thermal_model": "lumped",
+        "nominal_capacity_ah": 5.0,
+        "initial_soc": 0.1,
+        "target_soc": 0.8,
+        "initial_temperature_c": 25.0,
+        "ambient_temperature_c": 25.0
+      },
+      "artifacts": {
+        "identified_parameters": "outputs/metrics/phase2_identified_parameters.json",
+        "validation_metrics": "outputs/metrics/phase2_validation_metrics.json",
+        "ocv_curve": "data/phase2/ocv_curve.csv"
+      },
+      "constraints": {
+        "physical_maximum_voltage_v": 4.2,
+        "physical_maximum_temperature_c": 35.0,
+        "maximum_current_a": 10.0,
+        "maximum_current_change_a_per_step": 2.0,
+        "voltage_uncertainty_margin_v": 0.06,
+        "temperature_uncertainty_margin_c": 1.5
+      },
+      "control": {
+        "control_interval_s": 5.0,
+        "prediction_horizon_steps": 60,
+        "control_block_steps": 5,
+        "maximum_simulation_time_s": 3600.0
+      },
+      "objective": {
+        "soc_tracking_weight": 1.0,
+        "terminal_soc_weight": 20.0,
+        "current_change_weight": 0.0001
+      },
+      "optimizer": {
+        "maximum_iterations": 100,
+        "function_tolerance": 1e-07,
+        "constraint_tolerance": 1e-05
+      },
+      "validation": {
+        "target_soc_tolerance": 0.0005,
+        "physical_constraint_tolerance": 0.001,
+        "minimum_optimizer_success_fraction": 0.95
+      }
+    },
+    "success": true
+  },
+  "success": true
+}

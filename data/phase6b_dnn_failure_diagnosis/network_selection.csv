@@ -1,0 +1,3 @@
+architecture,regularization_alpha,initialization_seed,validation_mae_a,validation_rmse_a,validation_nrmse,optimization_iterations
+32-32-16,0.001,22,0.5871444487007034,0.9191953365388267,0.09191953365388267,2500
+64-64-32,0.001,22,0.7037184980779729,1.1132894767816501,0.11132894767816501,2500

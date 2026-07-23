@@ -1,0 +1,49 @@
+{
+  "electrical_training": {
+    "success": true,
+    "message": "`ftol` termination condition is satisfied.",
+    "function_evaluations": 7,
+    "training_voltage_rmse_mv": 11.219977813235628,
+    "training_voltage_mae_mv": 6.76336032794648
+  },
+  "thermal_training": {
+    "success": true,
+    "message": "`ftol` termination condition is satisfied.",
+    "function_evaluations": 40,
+    "training_average_temperature_rmse_c": 0.5709116377082719,
+    "training_average_temperature_mae_c": 0.4768308692389806,
+    "parameters_at_optimization_bounds": [
+      "r_core_surface_k_per_w"
+    ],
+    "internal_temperature_states_independently_validated": false,
+    "identifiability_note": "DFN lumped thermal data only observes average temperature; core/surface temperatures are latent and the core heat-capacity fraction is fixed. A core-surface resistance on its lower bound indicates that the two-node model has collapsed toward lumped behavior."
+  },
+  "validation": {
+    "voltage": {
+      "rmse_mv": 23.00776269729523,
+      "mae_mv": 15.735941921898275,
+      "maximum_absolute_error_mv": 59.30461101454432
+    },
+    "average_temperature": {
+      "rmse_c": 0.31780951173352,
+      "mae_c": 0.23002889037650448,
+      "maximum_absolute_error_c": 0.9130182752771461
+    },
+    "soc": {
+      "rmse": 1.5716418760424307e-15,
+      "mae": 1.2850697425129831e-15,
+      "maximum_absolute_error": 2.3314683517128287e-15
+    }
+  },
+  "success_criteria": {
+    "voltage_rmse_mv": 50.0,
+    "average_temperature_rmse_c": 1.5
+  },
+  "success": true,
+  "scope_assessment": {
+    "average_outputs_validated": true,
+    "core_surface_temperature_split_validated": false,
+    "safe_for_first_mpc_average_temperature_prediction": true,
+    "safe_for_claiming_validated_core_temperature": false
+  }
+}

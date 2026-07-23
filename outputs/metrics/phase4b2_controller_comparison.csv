@@ -1,0 +1,4 @@
+controller,charge_time_min,material_intervention_fraction,mean_filter_correction_a,maximum_voltage_v,maximum_temperature_c,success
+ANN v1 + safety filter,55.666666666666664,0.13023952095808383,0.06103275101822954,4.14253112732595,33.501151965313625,True
+Hybrid thermal-budget teacher,52.666666666666664,0.0,0.0,4.1424724954036005,33.50240692752163,True
+ANN v2 + safety filter,52.75,0.01579778830963665,0.016577858255954044,4.1425611302,33.50239903318811,True

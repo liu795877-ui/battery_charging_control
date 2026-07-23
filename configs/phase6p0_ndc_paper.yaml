@@ -1,0 +1,56 @@
+study:
+  name: phase6p0_ndc_paper_in_situ_reproduction
+  source_doi: 10.1016/j.compchemeng.2025.109096
+
+ndc:
+  bulk_capacitance_f: 9913.0
+  surface_capacitance_f: 887.0
+  bulk_resistance_ohm: 0.025
+  surface_resistance_ohm: 0.0
+  beta: [0.09, 0.35, -10.0]
+  alpha: [3.2, 3.041, -11.475, 24.457, -23.536, 8.513]
+
+mpc:
+  sample_period_s: 60.0
+  prediction_horizon: 10
+  control_horizon: 2
+  constraint_horizon: 1
+  maximum_closed_loop_steps: 150
+  initial_previous_current_a: 1.0
+  current_bounds_a: [0.0, 3.0]
+  surface_voltage_max_v: 0.95
+  terminal_voltage_max_v: 4.2
+  target_soc: 0.90
+  health_slope: -0.04
+  health_intercept_v: 0.08
+  soc_tracking_weight: 1.0
+  current_increment_weight: 0.1
+  optimizer_max_iterations: 200
+  optimizer_ftol: 1.0e-10
+  constraint_tolerance: 1.0e-7
+
+data:
+  state_bounds_v: [0.0, 0.9]
+  hammersley_count: 324
+  factorial_count: 76
+  training_trajectory_steps: 5
+  independent_test_trajectories: 30
+  internal_training_fraction: 0.90
+  random_seed: 20250701
+
+dnn:
+  hidden_layer_sizes: [7, 5, 3]
+  activation: logistic_sigmoid
+  initialization_seeds: [11, 29, 47, 71, 101]
+  regularization_initial: 1.0e-3
+  noise_precision_initial: 1.0
+  bayesian_updates: 6
+  maximum_function_evaluations: 1200
+  optimization_tolerance: 1.0e-10
+
+gates:
+  offline_nrmse_percent_max: 1.0
+  closed_loop_current_nrmse_percent_max: 1.0
+  maximum_constraint_violation_order_a_or_v: 1.0e-2
+  minimum_target_reach_fraction: 1.0
+  minimum_speedup: 2.0

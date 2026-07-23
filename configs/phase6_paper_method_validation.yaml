@@ -1,0 +1,57 @@
+study:
+  name: chen2020_phase6_paper_method_validation
+  random_seed: 20260721
+
+source_phase3_config: configs/phase3.yaml
+source_phase5a_config: configs/phase5a.yaml
+
+paper_method:
+  article: Health-aware optimal charging of lithium-ion batteries using deep-neural networks-based explicit constrained model predictive control
+  doi: 10.1016/j.compchemeng.2025.109096
+  # 论文 EHM 案例使用 500 个初始状态、每条 8 步并展开为约 4000 个样本。
+  initial_state_count: 500
+  trajectory_steps: 8
+  hammersley_fraction: 0.90
+  # 五维状态下采用 3×2×2×2×2=48 个边界组合，其余样本由 Hammersley 序列补齐。
+  factorial_levels: [3, 2, 2, 2, 2]
+  state_ranges:
+    state_soc: [0.10, 0.79]
+    state_polarization_fast_v: [0.00, 0.09]
+    state_polarization_slow_v: [0.00, 0.09]
+    state_average_temperature_c: [25.0, 33.4]
+    state_previous_current_a: [0.0, 10.0]
+  train_fraction: 0.80
+  validation_fraction: 0.10
+
+network:
+  # 对照论文的三隐层小网络和 cut-and-try 思路，候选宽度限制在 2–20。
+  candidate_hidden_layer_sizes:
+    - [7, 5, 3]
+    - [12, 8, 4]
+    - [20, 15, 10]
+  activation: tanh
+  solver: lbfgs
+  regularization_candidates: [0.0001, 0.001, 0.01]
+  initialization_seeds: [11, 22, 33]
+  maximum_iterations: 5000
+  convergence_tolerance: 1.0e-8
+
+nominal_validation:
+  temperature_c: 25.0
+  maximum_simulation_time_s: 3600.0
+  teacher_trajectory: data/phase3/mpc_chen2020_dfn_closed_loop.csv
+  teacher_metrics: outputs/metrics/phase3_mpc_metrics.json
+  current_nrmse_normalization_a: 10.0
+
+success_criteria:
+  minimum_accepted_initial_states: 350
+  minimum_teacher_acceptance_fraction: 0.70
+  maximum_nominal_current_nrmse: 0.01
+  maximum_nominal_charge_time_gap_fraction: 0.02
+  minimum_inference_speedup_over_mpc: 100.0
+  maximum_voltage_violation_v: 0.01
+  maximum_temperature_violation_c: 0.10
+  maximum_current_violation_a: 0.10
+  maximum_current_change_violation_a: 0.20
+  require_all_temperature_anchors_complete: true
+  require_all_temperature_anchors_without_serious_violation: true

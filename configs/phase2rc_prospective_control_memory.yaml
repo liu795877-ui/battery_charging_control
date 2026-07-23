@@ -1,0 +1,20 @@
+study:
+  name: chen2020_phase2rc_prospective_control_memory
+  random_seed: 20260724
+
+sources:
+  phase6r_config: configs/phase6r_corrected_policy_distillation.yaml
+  phase2r_config: configs/phase2r_model_and_state_sufficiency.yaml
+
+teacher_data:
+  trajectory_count: 240
+  trajectory_steps: 8
+  checkpoint_interval_trajectories: 5
+  minimum_acceptance_fraction: 0.70
+
+state_audit:
+  neighbor_count: 25
+  significant_variance_reduction_fraction: 0.20
+  sufficient_local_standard_deviation_a: 0.25
+  sufficient_p95_neighbor_label_difference_a: 0.50
+

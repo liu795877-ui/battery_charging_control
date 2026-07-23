@@ -1,0 +1,47 @@
+study:
+  name: chen2020_phase3b_mpc_teacher_dataset
+  random_seed: 42
+
+# 第三阶段 B 固定复用第三阶段 A 的电池、模型、约束和 MPC 设置。
+source_phase3_config: configs/phase3.yaml
+
+fair_baseline:
+  # 一步约束过滤器下的 1C 目标电流；它不是优化器，只是公平的守约束基线。
+  desired_current_a: 5.0
+  maximum_simulation_time_s: 3600.0
+
+dataset:
+  # 所有轨迹都从 10% SOC、25 ℃、零极化状态出发，由模型逐步推进得到。
+  # 不允许把 SOC、极化电压、温度和上一时刻电流独立随机拼接。
+  samples_per_soc_bin_per_trajectory: 2
+  soc_bin_edges: [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80]
+  train_trajectory_count: 8
+  validation_trajectory_count: 2
+  test_trajectory_count: 2
+  rollouts:
+    - {name: constant_1c, kind: constant, current_a: 5.0}
+    - {name: constant_1p5c, kind: constant, current_a: 7.5}
+    - {name: constant_2c, kind: constant, current_a: 10.0}
+    - {name: low_then_high, kind: soc_switch, low_current_a: 4.5, high_current_a: 9.0, switch_soc: 0.45}
+    - {name: high_then_low, kind: soc_switch, low_current_a: 9.0, high_current_a: 4.5, switch_soc: 0.45}
+    - {name: pulse_5_9, kind: pulse, low_current_a: 5.0, high_current_a: 9.0, period_s: 240.0}
+    - {name: pulse_4_10, kind: pulse, low_current_a: 4.0, high_current_a: 10.0, period_s: 180.0}
+    - {name: sine_4_10, kind: sine, center_current_a: 7.0, amplitude_a: 3.0, period_s: 360.0}
+    - {name: random_blocks_1, kind: random_blocks, seed: 101, minimum_current_a: 4.0, maximum_current_a: 10.0, block_steps: 12}
+    - {name: random_blocks_2, kind: random_blocks, seed: 202, minimum_current_a: 4.0, maximum_current_a: 10.0, block_steps: 18}
+    - {name: random_blocks_3, kind: random_blocks, seed: 303, minimum_current_a: 4.0, maximum_current_a: 10.0, block_steps: 24}
+    - {name: random_blocks_4, kind: random_blocks, seed: 404, minimum_current_a: 4.0, maximum_current_a: 10.0, block_steps: 30}
+
+active_constraint_tolerances:
+  voltage_v: 0.01
+  temperature_c: 0.10
+  current_a: 0.05
+  current_change_a: 0.05
+
+success_criteria:
+  minimum_candidate_count: 150
+  minimum_teacher_acceptance_fraction: 0.95
+  minimum_samples_per_split: 20
+  minimum_samples_per_soc_bin: 10
+  require_voltage_active_samples: true
+  require_temperature_active_samples: true
