@@ -1145,3 +1145,51 @@ Phase 7C 不是 Level 4。实验保持五个 ANN、MPC、2RC、Level 3P 投影�
 - `outputs/phase7c_multitemperature/metrics.json`
 - `outputs/phase7c_multitemperature/PHASE7C_中文实验报告.md`
 - `notebooks/phase7c_multitemperature_dfn_results.ipynb`
+
+## 33. Phase 7C-R0：热可行域与教师稳定性诊断
+
+Phase 7C-R0保持Phase 7C的48条确认轨迹及其失败结论永久冻结，不重训ANN、不生成ANN教师数据，也不运行240条多温度ANN轨迹。诊断使用新的30 ℃开发起点和恒流/两段式策略判断热约束问题本身是否有解，同时对15 ℃求解失败与30 ℃方向反转进行完全相同状态重放。
+
+### 33.1 30 ℃热可行域
+
+| 策略 | 到达时间 | 最高平均温度 | 判定 |
+|---|---:|---:|---|
+| 1 A恒流 | 6295 s | 30.629 ℃ | 可行 |
+| 2 A恒流 | 3150 s | 32.336 ℃ | 可行 |
+| 2.5 A恒流 | 2520 s | 33.455 ℃ | 可行 |
+| 3 A恒流 | 2100 s | 34.680 ℃ | 可行 |
+| 4 A恒流 | 1600 s | 37.052 ℃ | 热失败 |
+| 5 A恒流 | 1350 s | 39.052 ℃ | 热失败 |
+| 6 A恒流 | 1210 s | 40.723 ℃ | 热失败 |
+| 最快DFN验证两段式 | 1895 s | 34.962 ℃ | 可行 |
+
+因此，30 ℃环境、35 ℃平均温度上限和80% SOC目标之间存在可行策略，不需要先修改温度上限、充电目标或冷却合同。最快候选采用高电流起步、随后降至3 A，仅作为R1开发依据，不是独立确认结果。
+
+使用新开发轨迹拟合的热代理审计Phase 7C原失败轨迹时，5 s一步热限制产生3646次热—斜率空区间，覆盖20/24条30 ℃轨迹。300 s最大斜率制动审计给出的最保守最迟边界约为95 s、SOC 0.5103、平均温度34.60 ℃。这表明一步热限制发现风险太晚，R1必须使用60–300 s短时域预测。
+
+### 33.2 15 ℃求解失败
+
+完全相同状态和控制器默认起点重复20次，SLSQP均以状态8“Positive directional derivative for linesearch”停止，第一动作稳定为6.860435 A。返回计划的最小约束余量约为负 \(1.08\times10^{-8}\)，远小于 \(10^{-6}\) 预注册可行容差；多起点15次中14次正常成功，第一动作和目标函数几乎一致。
+
+因此，该点属于“状态码失败但返回解可行”。下一阶段可以预注册一次固定替代起点重试，但不能回改Phase 7C原失败。
+
+### 33.3 30 ℃方向反转
+
+原始动作序列为5.420 A、3.420 A、5.383 A。第98步控制器默认起点落在3.420 A分支，虽然返回成功状态，但其目标函数约0.8749、KKT残差约0.066；其他起点稳定得到5.389 A分支，目标函数约0.5675，改善约35%。
+
+因此，该事件主要来自求解器分支/局部数值停滞，而不是热约束切换或持续物理振荡。Phase 7C原始“方向反转失败”仍保持不变。
+
+阶段结论：
+
+> 30 ℃热安全问题存在可行解，允许在新的开发集上进入Phase 7C-R1短时域热安全监督层设计；同时应加入一次预注册的教师替代起点重试。新安全MPC基线通过前，仍禁止运行多温度ANN。
+
+主要证据：
+
+- `configs/phase7cr0_diagnostics.yaml`
+- `outputs/phase7cr0_diagnostics/PHASE7C-R0_中文诊断报告.md`
+- `outputs/phase7cr0_diagnostics/metrics.json`
+- `data/phase7cr0_diagnostics/constant_current_metrics.csv`
+- `data/phase7cr0_diagnostics/validated_oracle_metrics.csv`
+- `data/phase7cr0_diagnostics/solver_failure_multistart.csv`
+- `data/phase7cr0_diagnostics/direction_reversal_multistart.csv`
+- `data/phase7cr0_diagnostics/one_step_thermal_feasibility.csv`

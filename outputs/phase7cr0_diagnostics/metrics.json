@@ -1,0 +1,671 @@
+{
+  "study_name": "phase7cr0_multitemperature_teacher_and_thermal_feasibility_diagnostics",
+  "configuration": {
+    "study_name": "phase7cr0_multitemperature_teacher_and_thermal_feasibility_diagnostics",
+    "phase7c_config": "configs/phase7c_multitemperature_dfn_validation.yaml",
+    "phase7b1b_config": "configs/phase7b1b_voltage_safety_layer.yaml",
+    "phase7c_trajectories": "data/phase7c_multitemperature/closed_loop_trajectories.csv",
+    "phase7c_initial_states_15c": "data/phase7c_multitemperature/initial_states_15c.csv",
+    "phase7c_initial_states_30c": "data/phase7c_multitemperature/initial_states_30c.csv",
+    "frozen_artifacts": {
+      "configs/phase7c_multitemperature_dfn_validation.yaml": "9868c21ae18f56826b2226b4de52e35d2f6a6c449a9c1d07a1fa33dfb0c94b51",
+      "src/battery_fast_charge/phase7c_runner.py": "caf1fd08f565fb40518beb218efa710d698c9a104d6c53e644d8a68e79bde4ba",
+      "data/phase7c_multitemperature/freeze_contract.json": "92a017c9cb2c9fd1a50f7324113cb6954700384ce921f4917572c0e844cb8b92",
+      "data/phase7c_multitemperature/closed_loop_trajectories.csv": "fff1a6c600597592237f8a45a5f4b446dcebd4e508b2e373c42a89739d1b062a",
+      "outputs/phase7c_multitemperature/metrics.json": "93501baff78b19b92bb16b037b1b8d6185499ee6f1a9d887a65d2720199ecbc3"
+    },
+    "thermal": {
+      "ambient_temperature_c": 30.0,
+      "maximum_average_temperature_c": 35.0,
+      "target_soc": 0.7995,
+      "initial_soc": 0.45,
+      "initial_polarization_1_v": 0.0,
+      "initial_polarization_2_v": 0.0,
+      "initial_previous_current_a": 0.0,
+      "constant_current_levels_a": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        4.0,
+        5.0,
+        6.0
+      ],
+      "maximum_steps": 1800,
+      "oracle_high_currents_a": [
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        8.0,
+        10.0
+      ],
+      "oracle_low_currents_a": [
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0
+      ],
+      "oracle_switch_temperatures_c": [
+        30.5,
+        31.0,
+        31.5,
+        32.0,
+        32.5,
+        33.0,
+        33.5,
+        34.0
+      ],
+      "oracle_switch_socs": [
+        0.5,
+        0.55,
+        0.6,
+        0.65,
+        0.7,
+        0.74
+      ],
+      "validated_oracle_candidates": 8,
+      "thermal_guard_c": 0.0
+    },
+    "solver": {
+      "failure_temperature_c": 15.0,
+      "failure_trajectory_id": "phase7c_15c_011",
+      "failure_step_index": 56,
+      "repeated_runs": 20,
+      "multistart_count": 15,
+      "multistart_seed": 20260727,
+      "active_constraint_tolerance": 1e-05,
+      "finite_difference_step": 1e-06
+    },
+    "reversal": {
+      "temperature_c": 30.0,
+      "trajectory_id": "phase7c_30c_018",
+      "step_indices": [
+        97,
+        98,
+        99
+      ],
+      "multistart_count": 15,
+      "multistart_seed": 20260728
+    },
+    "data_directory": "data/phase7cr0_diagnostics",
+    "result_directory": "outputs/phase7cr0_diagnostics"
+  },
+  "frozen_artifact_verification": {
+    "configs/phase7c_multitemperature_dfn_validation.yaml": {
+      "expected_sha256": "9868c21ae18f56826b2226b4de52e35d2f6a6c449a9c1d07a1fa33dfb0c94b51",
+      "actual_sha256": "9868c21ae18f56826b2226b4de52e35d2f6a6c449a9c1d07a1fa33dfb0c94b51",
+      "matched": true
+    },
+    "src/battery_fast_charge/phase7c_runner.py": {
+      "expected_sha256": "caf1fd08f565fb40518beb218efa710d698c9a104d6c53e644d8a68e79bde4ba",
+      "actual_sha256": "caf1fd08f565fb40518beb218efa710d698c9a104d6c53e644d8a68e79bde4ba",
+      "matched": true
+    },
+    "data/phase7c_multitemperature/freeze_contract.json": {
+      "expected_sha256": "92a017c9cb2c9fd1a50f7324113cb6954700384ce921f4917572c0e844cb8b92",
+      "actual_sha256": "92a017c9cb2c9fd1a50f7324113cb6954700384ce921f4917572c0e844cb8b92",
+      "matched": true
+    },
+    "data/phase7c_multitemperature/closed_loop_trajectories.csv": {
+      "expected_sha256": "fff1a6c600597592237f8a45a5f4b446dcebd4e508b2e373c42a89739d1b062a",
+      "actual_sha256": "fff1a6c600597592237f8a45a5f4b446dcebd4e508b2e373c42a89739d1b062a",
+      "matched": true
+    },
+    "outputs/phase7c_multitemperature/metrics.json": {
+      "expected_sha256": "93501baff78b19b92bb16b037b1b8d6185499ee6f1a9d887a65d2720199ecbc3",
+      "actual_sha256": "93501baff78b19b92bb16b037b1b8d6185499ee6f1a9d887a65d2720199ecbc3",
+      "matched": true
+    }
+  },
+  "thermal_feasibility": {
+    "constant_current_metrics": [
+      {
+        "policy": "cc_1a",
+        "reached_target": true,
+        "charge_time_s": 6295.0,
+        "final_soc": 0.7997222222221926,
+        "maximum_temperature_c": 30.62850433783325,
+        "maximum_voltage_v": 4.088519968630773,
+        "maximum_current_step_a": 1.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0
+      },
+      {
+        "policy": "cc_1.5a",
+        "reached_target": true,
+        "charge_time_s": 4195.0,
+        "final_soc": 0.7995833333333401,
+        "maximum_temperature_c": 31.373107962972654,
+        "maximum_voltage_v": 4.114484795994259,
+        "maximum_current_step_a": 1.5,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0
+      },
+      {
+        "policy": "cc_2a",
+        "reached_target": true,
+        "charge_time_s": 3150.0,
+        "final_soc": 0.8000000000000158,
+        "maximum_temperature_c": 32.336157006473,
+        "maximum_voltage_v": 4.138449477003944,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0
+      },
+      {
+        "policy": "cc_2.5a",
+        "reached_target": true,
+        "charge_time_s": 2520.0,
+        "final_soc": 0.799861111111106,
+        "maximum_temperature_c": 33.45518974785904,
+        "maximum_voltage_v": 4.159278284662745,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0
+      },
+      {
+        "policy": "cc_3a",
+        "reached_target": true,
+        "charge_time_s": 2100.0,
+        "final_soc": 0.7997222222222244,
+        "maximum_temperature_c": 34.679685190191094,
+        "maximum_voltage_v": 4.177382166775718,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0
+      },
+      {
+        "policy": "cc_4a",
+        "reached_target": true,
+        "charge_time_s": 1600.0,
+        "final_soc": 0.7999573494735135,
+        "maximum_temperature_c": 37.05214501552166,
+        "maximum_voltage_v": 4.188483411683152,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": false,
+        "voltage_intervention_fraction": 0.140625
+      },
+      {
+        "policy": "cc_5a",
+        "reached_target": true,
+        "charge_time_s": 1350.0,
+        "final_soc": 0.7998589220566966,
+        "maximum_temperature_c": 39.05235875551341,
+        "maximum_voltage_v": 4.1889555482977,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": false,
+        "voltage_intervention_fraction": 0.3037037037037037
+      },
+      {
+        "policy": "cc_6a",
+        "reached_target": true,
+        "charge_time_s": 1210.0,
+        "final_soc": 0.800211606915598,
+        "maximum_temperature_c": 40.723475140394896,
+        "maximum_voltage_v": 4.189113079175278,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": false,
+        "voltage_intervention_fraction": 0.4421487603305785
+      }
+    ],
+    "thermal_surrogate_fit": {
+      "coefficient_i2_c_per_step_a2": 0.0026207234161263596,
+      "coefficient_i_c_per_step_a": 0.003211022025391298,
+      "coefficient_temperature_c_per_step_c": -0.0062416491593207555,
+      "intercept_c_per_step": -0.0020991403920301095,
+      "rmse_c_per_step": 0.0007879256404877416,
+      "maximum_absolute_error_c_per_step": 0.01912533324358759,
+      "sample_count": 4484
+    },
+    "validated_oracle_metrics": [
+      {
+        "policy": "oracle_01_h5_l2.5_t34_s0.74",
+        "reached_target": true,
+        "charge_time_s": 2145.0,
+        "final_soc": 0.7999999999999949,
+        "maximum_temperature_c": 34.05561192709888,
+        "maximum_voltage_v": 4.159146458410053,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 5.0,
+        "low_current_a": 2.5,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.74,
+        "surrogate_charge_time_s": 2145.0,
+        "surrogate_maximum_temperature_c": 34.04038807893188
+      },
+      {
+        "policy": "oracle_02_h4_l2.5_t34_s0.74",
+        "reached_target": true,
+        "charge_time_s": 2150.0,
+        "final_soc": 0.8001388888888847,
+        "maximum_temperature_c": 34.02459980288114,
+        "maximum_voltage_v": 4.159240026918768,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 4.0,
+        "low_current_a": 2.5,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.74,
+        "surrogate_charge_time_s": 2150.0,
+        "surrogate_maximum_temperature_c": 34.02759785386183
+      },
+      {
+        "policy": "oracle_03_h5_l2.5_t34_s0.7",
+        "reached_target": true,
+        "charge_time_s": 2160.0,
+        "final_soc": 0.7998611111111056,
+        "maximum_temperature_c": 34.05561192709837,
+        "maximum_voltage_v": 4.159033605844565,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 5.0,
+        "low_current_a": 2.5,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.7,
+        "surrogate_charge_time_s": 2160.0,
+        "surrogate_maximum_temperature_c": 34.04038807893188
+      },
+      {
+        "policy": "oracle_04_h6_l2.5_t34_s0.74",
+        "reached_target": true,
+        "charge_time_s": 2150.0,
+        "final_soc": 0.7997222222222178,
+        "maximum_temperature_c": 34.090535006695006,
+        "maximum_voltage_v": 4.159003492710703,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 6.0,
+        "low_current_a": 2.5,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.74,
+        "surrogate_charge_time_s": 2160.0,
+        "surrogate_maximum_temperature_c": 34.040369595078324
+      },
+      {
+        "policy": "oracle_05_h4_l2.5_t34_s0.7",
+        "reached_target": true,
+        "charge_time_s": 2165.0,
+        "final_soc": 0.8001388888888841,
+        "maximum_temperature_c": 34.02459785022319,
+        "maximum_voltage_v": 4.159191842309567,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 4.0,
+        "low_current_a": 2.5,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.7,
+        "surrogate_charge_time_s": 2165.0,
+        "surrogate_maximum_temperature_c": 34.02759785386183
+      },
+      {
+        "policy": "oracle_06_h6_l2.5_t34_s0.7",
+        "reached_target": true,
+        "charge_time_s": 2165.0,
+        "final_soc": 0.7995833333333286,
+        "maximum_temperature_c": 34.09053500669626,
+        "maximum_voltage_v": 4.15888427554621,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 6.0,
+        "low_current_a": 2.5,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.7,
+        "surrogate_charge_time_s": 2170.0,
+        "surrogate_maximum_temperature_c": 34.040369595078324
+      },
+      {
+        "policy": "oracle_07_h5_l2.5_t34_s0.65",
+        "reached_target": true,
+        "charge_time_s": 2175.0,
+        "final_soc": 0.7997222222222168,
+        "maximum_temperature_c": 34.055611927099164,
+        "maximum_voltage_v": 4.158966246314774,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 5.0,
+        "low_current_a": 2.5,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.65,
+        "surrogate_charge_time_s": 2175.0,
+        "surrogate_maximum_temperature_c": 34.04038807893188
+      },
+      {
+        "policy": "oracle_08_h4_l2.5_t34_s0.65",
+        "reached_target": true,
+        "charge_time_s": 2180.0,
+        "final_soc": 0.7997222222222171,
+        "maximum_temperature_c": 34.024597850224325,
+        "maximum_voltage_v": 4.158962008892212,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 4.0,
+        "low_current_a": 2.5,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.65,
+        "surrogate_charge_time_s": 2180.0,
+        "surrogate_maximum_temperature_c": 34.02759785386183
+      },
+      {
+        "policy": "oracle_01_h5_l3_t34_s0.55",
+        "reached_target": true,
+        "charge_time_s": 1900.0,
+        "final_soc": 0.8000000000000018,
+        "maximum_temperature_c": 34.89424411041381,
+        "maximum_voltage_v": 4.177281876809424,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 5.0,
+        "low_current_a": 3.0,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.55,
+        "surrogate_charge_time_s": 1900.0,
+        "surrogate_maximum_temperature_c": 34.85592790910759
+      },
+      {
+        "policy": "oracle_02_h6_l3_t34_s0.55",
+        "reached_target": true,
+        "charge_time_s": 1895.0,
+        "final_soc": 0.8002777777777796,
+        "maximum_temperature_c": 34.91190928206089,
+        "maximum_voltage_v": 4.17739423469897,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 6.0,
+        "low_current_a": 3.0,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.55,
+        "surrogate_charge_time_s": 1900.0,
+        "surrogate_maximum_temperature_c": 34.87104309139885
+      },
+      {
+        "policy": "oracle_03_h8_l3_t34_s0.55",
+        "reached_target": true,
+        "charge_time_s": 1895.0,
+        "final_soc": 0.7997222222222242,
+        "maximum_temperature_c": 34.933297215217294,
+        "maximum_voltage_v": 4.177147787053501,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 8.0,
+        "low_current_a": 3.0,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.55,
+        "surrogate_charge_time_s": 1905.0,
+        "surrogate_maximum_temperature_c": 34.90160335796927
+      },
+      {
+        "policy": "oracle_04_h10_l3_t34_s0.5",
+        "reached_target": true,
+        "charge_time_s": 1895.0,
+        "final_soc": 0.7997222222222242,
+        "maximum_temperature_c": 34.96164459180642,
+        "maximum_voltage_v": 4.177130620779327,
+        "maximum_current_step_a": 2.0,
+        "empty_interval_count": 0,
+        "thermally_feasible": true,
+        "voltage_intervention_fraction": 0.0,
+        "high_current_a": 10.0,
+        "low_current_a": 3.0,
+        "switch_temperature_c": 34.0,
+        "switch_soc": 0.5,
+        "surrogate_charge_time_s": 1910.0,
+        "surrogate_maximum_temperature_c": 34.93921861392121
+      }
+    ],
+    "feasible_strategy_exists": true,
+    "fastest_dfn_feasible_policy": {
+      "policy": "oracle_04_h10_l3_t34_s0.5",
+      "reached_target": true,
+      "charge_time_s": 1895.0,
+      "final_soc": 0.7997222222222242,
+      "maximum_temperature_c": 34.96164459180642,
+      "maximum_voltage_v": 4.177130620779327,
+      "maximum_current_step_a": 2.0,
+      "empty_interval_count": 0,
+      "thermally_feasible": true,
+      "voltage_intervention_fraction": 0.0,
+      "high_current_a": 10.0,
+      "low_current_a": 3.0,
+      "switch_temperature_c": 34.0,
+      "switch_soc": 0.5,
+      "surrogate_charge_time_s": 1910.0,
+      "surrogate_maximum_temperature_c": 34.93921861392121
+    },
+    "fastest_dfn_feasible_two_stage_policy": {
+      "policy": "oracle_03_h8_l3_t34_s0.55",
+      "reached_target": true,
+      "charge_time_s": 1895.0,
+      "final_soc": 0.7997222222222242,
+      "maximum_temperature_c": 34.933297215217294,
+      "maximum_voltage_v": 4.177147787053501,
+      "maximum_current_step_a": 2.0,
+      "empty_interval_count": 0,
+      "thermally_feasible": true,
+      "voltage_intervention_fraction": 0.0,
+      "high_current_a": 8.0,
+      "low_current_a": 3.0,
+      "switch_temperature_c": 34.0,
+      "switch_soc": 0.55,
+      "surrogate_charge_time_s": 1905.0,
+      "surrogate_maximum_temperature_c": 34.90160335796927
+    },
+    "latest_braking_state_in_fastest_policy": {
+      "time_s": 135.0,
+      "soc": 0.5044444444444444,
+      "temperature_c": 34.146226727375335,
+      "current_a": 6.0
+    },
+    "conservative_300s_braking_boundary": {
+      "trajectory_id": "phase7c_30c_018",
+      "latest_safe_time_s": 95.0,
+      "latest_safe_soc": 0.5102876112795381,
+      "latest_safe_temperature_c": 34.59937957373609,
+      "next_step_too_late": true
+    },
+    "one_step_empty_interval_count": 3646,
+    "one_step_empty_trajectory_count": 20,
+    "first_one_step_empty_interval": {
+      "trajectory_id": "phase7c_30c_018",
+      "step_index": 20,
+      "time_s": 105.0,
+      "soc": 0.5154303180652986,
+      "temperature_c": 35.03164962943106,
+      "previous_current_a": 9.216882604038885,
+      "thermal_safe_current_max_a": 0.42,
+      "slew_lower_a": 7.216882604038885,
+      "thermal_slew_margin_a": -6.796882604038885,
+      "empty_thermal_slew_interval": true,
+      "maximum_temperature_under_300s_max_braking_c": 35.2144202963244,
+      "max_braking_too_late": true
+    }
+  },
+  "solver_failure_audit": {
+    "reconstructed_state": {
+      "soc": 0.6002386022082946,
+      "polarization_1_v": 0.06425440751670822,
+      "polarization_2_v": 0.11164398577285607,
+      "previous_current_a": 6.905609998480746
+    },
+    "original_record": {
+      "raw_current_a": 6.860435147157387,
+      "optimizer_success": false,
+      "prediction_feasible": true,
+      "soc": 0.6002386022082946,
+      "previous_current_a": 6.905609998480746
+    },
+    "identical_repeat_success_count": 0,
+    "identical_repeat_failure_count": 20,
+    "identical_repeat_unique_first_currents": 1,
+    "multistart_success_count": 14,
+    "multistart_failure_count": 1,
+    "multistart_first_current_range_a": [
+      6.860435147146991,
+      6.860435147157968
+    ],
+    "multistart_objective_range": [
+      1.5224490502591155,
+      1.5224490591911715
+    ],
+    "all_returned_plans_strictly_feasible": true,
+    "maximum_kkt_residual": 1.0838532737977857e-08,
+    "identical_repeat_status_messages": {
+      "Positive directional derivative for linesearch": 20
+    },
+    "minimum_returned_constraint_margin": -1.0838532737977857e-08,
+    "best_successful_alternative_start": "random_14",
+    "identical_replay_is_deterministic": true,
+    "finite_retry_rule_is_candidate": true
+  },
+  "direction_reversal_audit": {
+    "trajectory_id": "phase7c_30c_018",
+    "states": [
+      {
+        "step_index": 97,
+        "state": {
+          "soc": 0.6659656119529667,
+          "polarization_1_v": 0.05060987408113445,
+          "polarization_2_v": 0.09762247829994312,
+          "previous_current_a": 5.452392264773548
+        },
+        "original_raw_current_a": 5.42046749518271,
+        "original_applied_current_a": 5.42046749518271,
+        "temperature_c": 42.02082868972252,
+        "terminal_voltage_v": 4.1647739550513165,
+        "success_fraction": 1.0,
+        "first_current_range_a": [
+          5.420467495181386,
+          5.420467495182731
+        ],
+        "objective_range": [
+          0.5839087510092972,
+          0.5839087511254933
+        ],
+        "active_constraint_count_range": [
+          3,
+          3
+        ]
+      },
+      {
+        "step_index": 98,
+        "state": {
+          "soc": 0.6674712973682952,
+          "polarization_1_v": 0.05031173591958901,
+          "polarization_2_v": 0.09718980025788607,
+          "previous_current_a": 5.42046749518271
+        },
+        "original_raw_current_a": 3.420470267093668,
+        "original_applied_current_a": 3.420470267093668,
+        "temperature_c": 41.989877620017296,
+        "terminal_voltage_v": 4.123953111854133,
+        "success_fraction": 1.0,
+        "first_current_range_a": [
+          3.420470267093668,
+          5.3887845490208415
+        ],
+        "objective_range": [
+          0.5675488425796108,
+          0.8748905802258083
+        ],
+        "active_constraint_count_range": [
+          3,
+          3
+        ]
+      },
+      {
+        "step_index": 99,
+        "state": {
+          "soc": 0.6684214279980437,
+          "polarization_1_v": 0.04549834446071305,
+          "polarization_2_v": 0.09575393312644159,
+          "previous_current_a": 3.420470267093668
+        },
+        "original_raw_current_a": 5.382724687603302,
+        "original_applied_current_a": 5.382724687603302,
+        "temperature_c": 42.00299393655149,
+        "terminal_voltage_v": 4.159776599095846,
+        "success_fraction": 1.0,
+        "first_current_range_a": [
+          5.382724687602803,
+          5.382724687604589
+        ],
+        "objective_range": [
+          0.5563926120148268,
+          0.5563926122322777
+        ],
+        "active_constraint_count_range": [
+          3,
+          3
+        ]
+      }
+    ],
+    "original_action_sequence_a": [
+      5.42046749518271,
+      3.420470267093668,
+      5.382724687603302
+    ],
+    "single_reversal_amplitudes_a": [
+      -1.9999972280890423,
+      1.962254420509634
+    ],
+    "all_multistart_plans_feasible": true,
+    "branch_spread_max_a": 1.9683142819271735,
+    "original_middle_action_reproduced": true,
+    "middle_step_default_branch": {
+      "first_current_a": 3.420470267093668,
+      "objective_value": 0.8748905802258083,
+      "kkt_residual": 0.06614377126867435,
+      "success_flag": true
+    },
+    "middle_step_best_branch": {
+      "start_label": "random_06",
+      "first_current_a": 5.3887845490208415,
+      "objective_value": 0.5675488425796108,
+      "kkt_residual": 2.4855584257466035e-10,
+      "objective_improvement_fraction": 0.35129162959655247
+    },
+    "branch_sensitive": true
+  },
+  "decision": {
+    "proceed_to_phase7cr1_development": true,
+    "phase7c_original_failure_unchanged": true,
+    "run_ann": false,
+    "conclusion": "30 ℃热约束下存在DFN验证可行策略，允许在新的开发集上设计R1短时域热安全监督层；Phase 7C确认集只作永久失败回归。"
+  },
+  "status": "completed",
+  "success": true
+}
