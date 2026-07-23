@@ -1,0 +1,34 @@
+study:
+  name: phase7b1a_25c_dfn_voltage_mismatch_and_braking_audit
+
+sources:
+  level3_config: configs/phase7a_level3_slew.yaml
+  phase7b0_config: configs/phase7b0_dfn_cross_model.yaml
+  phase7b0_trajectories: data/phase7b0_dfn_cross_model/closed_loop_trajectories.csv
+  regression_initial_states: data/phase7a_level3_slew/closed_loop_initial_states.csv
+  frozen_artifacts:
+    configs/phase7b0_dfn_cross_model.yaml: 3ff32e8da5b4264afb245cbddc2d76c0e4dedd0a9d8cb2fedfdcc76297336eed
+    data/phase7b0_dfn_cross_model/closed_loop_trajectories.csv: c77fea609d00fd5fe9bd348e70ae1b4f8d0f1963e99f73f782cee4aa779573a0
+    data/phase7a_level3_slew/closed_loop_initial_states.csv: 8a62cb6b5db34c875ce50dd4d743bb296bea4b962fbd40940c16ba52cfc116bd
+    outputs/phase7b0_dfn_cross_model/metrics.json: 0107f949d6fd2afddfd7e28cbd76d47748b598e55fd8449c132c083b1f1abdc6
+
+audit:
+  voltage_limit_v: 4.20
+  thresholds_v: [4.15, 4.18, 4.19, 4.20]
+  residual_growth_guard_method: maximum_positive_growth
+  current_search_tolerance_a: 1.0e-10
+  feasibility_tolerance_a: 1.0e-9
+
+confirmation:
+  trajectory_count: 24
+  design_start_index: 401
+  design_seed: 20260725
+  soc_bounds: [0.45, 0.70]
+  v1_bounds_v: [0.0, 0.06]
+  v2_bounds_v: [0.0, 0.09]
+  previous_current_bounds_a: [0.0, 10.0]
+  initial_voltage_margin_v: 0.005
+
+output:
+  data_directory: data/phase7b1a_voltage_mismatch
+  result_directory: outputs/phase7b1a_voltage_mismatch

@@ -1,0 +1,144 @@
+{
+  "study_name": "phase7b1a_25c_dfn_voltage_mismatch_and_braking_audit",
+  "configuration": {
+    "study_name": "phase7b1a_25c_dfn_voltage_mismatch_and_braking_audit",
+    "source_level3_config": "configs/phase7a_level3_slew.yaml",
+    "source_phase7b0_config": "configs/phase7b0_dfn_cross_model.yaml",
+    "source_trajectories": "data/phase7b0_dfn_cross_model/closed_loop_trajectories.csv",
+    "source_regression_initial_states": "data/phase7a_level3_slew/closed_loop_initial_states.csv",
+    "frozen_artifacts": {
+      "configs/phase7b0_dfn_cross_model.yaml": "3ff32e8da5b4264afb245cbddc2d76c0e4dedd0a9d8cb2fedfdcc76297336eed",
+      "data/phase7b0_dfn_cross_model/closed_loop_trajectories.csv": "c77fea609d00fd5fe9bd348e70ae1b4f8d0f1963e99f73f782cee4aa779573a0",
+      "data/phase7a_level3_slew/closed_loop_initial_states.csv": "8a62cb6b5db34c875ce50dd4d743bb296bea4b962fbd40940c16ba52cfc116bd",
+      "outputs/phase7b0_dfn_cross_model/metrics.json": "0107f949d6fd2afddfd7e28cbd76d47748b598e55fd8449c132c083b1f1abdc6"
+    },
+    "audit": {
+      "voltage_limit_v": 4.2,
+      "thresholds_v": [
+        4.15,
+        4.18,
+        4.19,
+        4.2
+      ],
+      "residual_growth_guard_method": "maximum_positive_growth",
+      "current_search_tolerance_a": 1e-10,
+      "feasibility_tolerance_a": 1e-09
+    },
+    "confirmation": {
+      "trajectory_count": 24,
+      "design_start_index": 401,
+      "design_seed": 20260725,
+      "soc_bounds": [
+        0.45,
+        0.7
+      ],
+      "v1_bounds_v": [
+        0.0,
+        0.06
+      ],
+      "v2_bounds_v": [
+        0.0,
+        0.09
+      ],
+      "previous_current_bounds_a": [
+        0.0,
+        10.0
+      ],
+      "initial_voltage_margin_v": 0.005
+    },
+    "output": {
+      "data_directory": "data/phase7b1a_voltage_mismatch",
+      "result_directory": "outputs/phase7b1a_voltage_mismatch"
+    }
+  },
+  "frozen_artifact_verification": {
+    "configs/phase7b0_dfn_cross_model.yaml": {
+      "expected_sha256": "3ff32e8da5b4264afb245cbddc2d76c0e4dedd0a9d8cb2fedfdcc76297336eed",
+      "actual_sha256": "3ff32e8da5b4264afb245cbddc2d76c0e4dedd0a9d8cb2fedfdcc76297336eed",
+      "matched": true
+    },
+    "data/phase7b0_dfn_cross_model/closed_loop_trajectories.csv": {
+      "expected_sha256": "c77fea609d00fd5fe9bd348e70ae1b4f8d0f1963e99f73f782cee4aa779573a0",
+      "actual_sha256": "c77fea609d00fd5fe9bd348e70ae1b4f8d0f1963e99f73f782cee4aa779573a0",
+      "matched": true
+    },
+    "data/phase7a_level3_slew/closed_loop_initial_states.csv": {
+      "expected_sha256": "8a62cb6b5db34c875ce50dd4d743bb296bea4b962fbd40940c16ba52cfc116bd",
+      "actual_sha256": "8a62cb6b5db34c875ce50dd4d743bb296bea4b962fbd40940c16ba52cfc116bd",
+      "matched": true
+    },
+    "outputs/phase7b0_dfn_cross_model/metrics.json": {
+      "expected_sha256": "0107f949d6fd2afddfd7e28cbd76d47748b598e55fd8449c132c083b1f1abdc6",
+      "actual_sha256": "0107f949d6fd2afddfd7e28cbd76d47748b598e55fd8449c132c083b1f1abdc6",
+      "matched": true
+    }
+  },
+  "frozen_contract": {
+    "artifact_count": 4,
+    "matched_count": 4,
+    "sample_count": 16024,
+    "trajectory_count": 72
+  },
+  "confirmation_set": {
+    "trajectory_count": 24,
+    "sha256": "738ae9eb52e2d7edbd598f9a2231e595743da920a9ae1b884ff8e5b5d5ecaab5",
+    "independent_from_regression_initial_states": true,
+    "not_teacher_data": true
+  },
+  "voltage_residual": {
+    "maximum_positive_residual_v": 0.02911725196505266,
+    "positive_residual_p95_v": 0.02709282694510384,
+    "positive_residual_p99_v": 0.02867240486020144,
+    "maximum_positive_growth_v": 0.011305522502741638,
+    "positive_growth_p95_v": 0.0021426108375345084,
+    "positive_growth_p99_v": 0.005444064241898081,
+    "diagnostic_fixed_margin_v": 0.039977927362943075,
+    "spearman_relationships": {
+      "soc": {
+        "spearman_r": 0.07363167291364713,
+        "pvalue": 1.0322999422677736e-20
+      },
+      "current_a": {
+        "spearman_r": -0.07471193682201223,
+        "pvalue": 2.7989832366438563e-21
+      },
+      "previous_current_a": {
+        "spearman_r": -0.06566668666768113,
+        "pvalue": 8.736260009690131e-17
+      },
+      "predicted_next_voltage_2rc_v": {
+        "spearman_r": 0.7607257548147766,
+        "pvalue": 0.0
+      },
+      "predicted_voltage_margin_v": {
+        "spearman_r": -0.7607257548147766,
+        "pvalue": 0.0
+      }
+    }
+  },
+  "braking_feasibility": {
+    "voltage_slew_conflict_count": 0,
+    "voltage_slew_conflict_fraction": 0.0,
+    "minimum_voltage_slew_margin_a": 0.8402226778442969,
+    "late_braking_threshold_count": 72,
+    "late_braking_proactive_threshold_count": 0,
+    "late_at_voltage_limit_count": 72,
+    "threshold_entry_count": 288,
+    "maximum_required_braking_steps": 1
+  },
+  "decision": {
+    "checks": {
+      "all_frozen_hashes_match": true,
+      "confirmation_set_frozen_before_safety_layer": true,
+      "confirmation_set_is_independent": true,
+      "zero_voltage_slew_empty_intervals": true,
+      "maximum_slew_braking_is_never_late_before_voltage_limit": true
+    },
+    "phase7b1a_success": true,
+    "proceed_to_one_step_phase7b1b": true,
+    "proceed_to_short_horizon_instead": false,
+    "conclusion": "7B-1A 通过：最大残差增长裕量下的一步电压限制始终与 2 A/步斜率约束相容，可进入 7B-1B 一步残差修正"
+  },
+  "status": "completed",
+  "success": true
+}

@@ -1,0 +1,8 @@
+{
+  "path": "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv",
+  "sha256": "738ae9eb52e2d7edbd598f9a2231e595743da920a9ae1b884ff8e5b5d5ecaab5",
+  "trajectory_count": 24,
+  "design_seed": 20260725,
+  "created_before_phase7b1b": true,
+  "not_teacher_data": true
+}
