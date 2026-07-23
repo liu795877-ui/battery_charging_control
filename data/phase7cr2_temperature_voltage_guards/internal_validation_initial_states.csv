@@ -1,0 +1,17 @@
+trajectory_id,role,ambient_temperature_c,initial_temperature_c,base_state_id,risk_stratum,initial_soc,initial_polarization_1_v,initial_polarization_2_v,initial_previous_current_a,design_candidate_index,design_seed
+phase7cr2_internal_validation_15c_000,internal_validation,15.0,15.0,internal_validation_000,general,0.6146728515625,0.04710562414266117,0.0194976,9.341940857975843,1301,20260730
+phase7cr2_internal_validation_15c_001,internal_validation,15.0,15.0,internal_validation_001,general,0.5521728515625,0.013772290809327846,0.0374976,0.9745939192003332,1302,20260730
+phase7cr2_internal_validation_15c_002,internal_validation,15.0,15.0,internal_validation_002,general,0.6771728515625,0.03377229080932785,0.055497599999999994,2.403165347771761,1303,20260730
+phase7cr2_internal_validation_15c_003,internal_validation,15.0,15.0,internal_validation_003,general,0.4740478515625,0.05377229080932784,0.0734976,3.83173677634319,1304,20260730
+phase7cr2_internal_validation_15c_004,internal_validation,15.0,15.0,internal_validation_004,high_risk,0.6596191406249999,0.031330589849108366,0.047548799999999995,8.104123281965848,1305,20260730
+phase7cr2_internal_validation_15c_005,internal_validation,15.0,15.0,internal_validation_005,high_risk,0.672119140625,0.0446639231824417,0.0835488,6.471470220741358,1309,20260730
+phase7cr2_internal_validation_15c_006,internal_validation,15.0,15.0,internal_validation_006,high_risk,0.647119140625,0.05466392318244169,0.0493488,7.042898792169929,1310,20260730
+phase7cr2_internal_validation_15c_007,internal_validation,15.0,15.0,internal_validation_007,high_risk,0.601806640625,0.047997256515775036,0.0673488,8.185755935027071,1312,20260730
+phase7cr2_internal_validation_30c_000,internal_validation,30.0,30.0,internal_validation_000,general,0.6146728515625,0.04710562414266117,0.0194976,9.341940857975843,1301,20260730
+phase7cr2_internal_validation_30c_001,internal_validation,30.0,30.0,internal_validation_001,general,0.5521728515625,0.013772290809327846,0.0374976,0.9745939192003332,1302,20260730
+phase7cr2_internal_validation_30c_002,internal_validation,30.0,30.0,internal_validation_002,general,0.6771728515625,0.03377229080932785,0.055497599999999994,2.403165347771761,1303,20260730
+phase7cr2_internal_validation_30c_003,internal_validation,30.0,30.0,internal_validation_003,general,0.4740478515625,0.05377229080932784,0.0734976,3.83173677634319,1304,20260730
+phase7cr2_internal_validation_30c_004,internal_validation,30.0,30.0,internal_validation_004,high_risk,0.6596191406249999,0.031330589849108366,0.047548799999999995,8.104123281965848,1305,20260730
+phase7cr2_internal_validation_30c_005,internal_validation,30.0,30.0,internal_validation_005,high_risk,0.672119140625,0.0446639231824417,0.0835488,6.471470220741358,1309,20260730
+phase7cr2_internal_validation_30c_006,internal_validation,30.0,30.0,internal_validation_006,high_risk,0.647119140625,0.05466392318244169,0.0493488,7.042898792169929,1310,20260730
+phase7cr2_internal_validation_30c_007,internal_validation,30.0,30.0,internal_validation_007,high_risk,0.601806640625,0.047997256515775036,0.0673488,8.185755935027071,1312,20260730

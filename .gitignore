@@ -46,6 +46,10 @@ data/phase7cr1_thermal_supervisor/runs/
 outputs/phase7cr1_thermal_supervisor/*_run.stdout.log
 outputs/phase7cr1_thermal_supervisor/*_run.stderr.log
 outputs/phase7cr1_thermal_supervisor/development_run.pid
+data/phase7cr2_temperature_voltage_guards/runs/
+outputs/phase7cr2_temperature_voltage_guards/*_run.stdout.log
+outputs/phase7cr2_temperature_voltage_guards/*_run.stderr.log
+outputs/phase7cr2_temperature_voltage_guards/development_run.pid
 outputs/phase7b1b_regression.stdout.log
 outputs/phase7b1b_regression.stderr.log
 outputs/phase7b1b_regression.pid

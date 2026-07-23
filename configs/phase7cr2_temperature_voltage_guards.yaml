@@ -1,0 +1,71 @@
+study:
+  name: phase7cr2_temperature_dependent_voltage_guards
+
+sources:
+  phase7cr1_config: configs/phase7cr1_thermal_supervisor.yaml
+  phase7b1b_config: configs/phase7b1b_voltage_safety_layer.yaml
+  phase7c_config: configs/phase7c_multitemperature_dfn_validation.yaml
+  legacy_phase7c_states:
+    15: data/phase7c_multitemperature/initial_states_15c.csv
+    30: data/phase7c_multitemperature/initial_states_30c.csv
+  legacy_phase7cr1_states: data/phase7cr1_thermal_supervisor/development_initial_states.csv
+  frozen_artifacts:
+    configs/phase7cr1_thermal_supervisor.yaml: fbfaedae34b2d5c7e39fa7556dd5eb7e89d03c64cdf3b93f876e74b827459061
+    src/battery_fast_charge/phase7cr1_runner.py: 70f0c96ac00b76780daf56415d0b9982bc435620b623b205bb45757d2db36516
+    outputs/phase7cr1_thermal_supervisor/metrics.json: d30a2a50e0825b4c68ec005616e741a4dd35ea34a93eb7dfb54fe247c7b104e5
+    outputs/phase7cr1_thermal_supervisor/freeze_manifest.json: da4fdae627fa81ceab113b1c3e0df36f5161789be2b790b46d9ae15981b9ef26
+    data/phase7cr1_thermal_supervisor/development_initial_states.csv: 20757ed88c42d5b7498a9a513ce26c011b1a84f684a5208dce65f67567c64a2a
+    configs/phase7c_multitemperature_dfn_validation.yaml: 9868c21ae18f56826b2226b4de52e35d2f6a6c449a9c1d07a1fa33dfb0c94b51
+    outputs/phase7c_multitemperature/metrics.json: 93501baff78b19b92bb16b037b1b8d6185499ee6f1a9d887a65d2720199ecbc3
+    data/phase7c_multitemperature/initial_states_15c.csv: a3c19c324499d615b552266f6a14c478c597a375c58a2f951a8453acb6492f5f
+    data/phase7c_multitemperature/initial_states_30c.csv: b12fab1583aa0a2e5fb5a96710ec7fee28d28c7cd39f48053d8d8d38c5d7ff5e
+
+voltage_guard:
+  original_25c_guard_v: 0.011305522502741638
+  legacy_minimum_v:
+    15: 0.0113871030773613
+    30: 0.011305522502741638
+  development_margin_v: 0.0005
+  only_maintain_or_increase: true
+  residual_growth_tolerance_v: 1.0e-12
+
+datasets:
+  temperatures_c: [15.0, 30.0]
+  development_count_per_temperature: 16
+  internal_validation_count_per_temperature: 8
+  development_start_index: 1101
+  internal_validation_start_index: 1301
+  design_seed: 20260730
+  general_fraction: 0.5
+  general_bounds:
+    soc: [0.45, 0.70]
+    v1_v: [0.0, 0.06]
+    v2_v: [0.0, 0.09]
+    previous_current_a: [0.0, 10.0]
+  high_risk_bounds:
+    soc: [0.60, 0.70]
+    v1_v: [0.03, 0.06]
+    v2_v: [0.045, 0.09]
+    previous_current_a: [6.0, 10.0]
+  initial_voltage_margin_v: 0.005
+  maximum_workers: 3
+  maximum_steps: 1800
+  target_soc: 0.7995
+
+gates:
+  maximum_voltage_v: 4.200001
+  maximum_average_temperature_c: 35.0
+  maximum_current_a: 10.0
+  minimum_current_a: 0.0
+  maximum_current_step_a: 2.0
+  maximum_guard_exceedance_count: 0
+  maximum_empty_interval_count: 0
+  maximum_solver_failure_count: 0
+  maximum_prediction_infeasible_count: 0
+  maximum_sustained_oscillation_count: 0
+  minimum_target_reach_fraction: 1.0
+  numerical_tolerance: 1.0e-9
+
+output:
+  data_directory: data/phase7cr2_temperature_voltage_guards
+  result_directory: outputs/phase7cr2_temperature_voltage_guards
