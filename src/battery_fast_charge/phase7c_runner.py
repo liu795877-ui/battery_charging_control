@@ -1001,7 +1001,7 @@ def _plot(
 ) -> None:
     output.mkdir(parents=True, exist_ok=True)
     figure, axes = plt.subplots(
-        2, 2, figsize=(12, 8), layout="constrained"
+        2, 2, figsize=(13, 8), layout="constrained"
     )
     colors = {15.0: "#2878B5", 30.0: "#D95319"}
     for temperature_c in sorted(frame.temperature_c.unique()):
@@ -1010,9 +1010,16 @@ def _plot(
             & (frame.controller_kind == "ann")
             & (frame.seed == 22)
         ]
-        example_id = subset.trajectory_id.iloc[0]
+        if subset.empty:
+            subset = frame[
+                (frame.temperature_c == temperature_c)
+                & (frame.controller_kind == "mpc")
+            ]
+        example_id = (
+            subset.groupby("trajectory_id").average_temperature_c.max().idxmax()
+        )
         example = subset[subset.trajectory_id == example_id]
-        label = f"{temperature_c:.0f} ℃"
+        label = f"{temperature_c:.0f} ℃ worst thermal"
         axes[0, 0].plot(
             example.time_s,
             example.terminal_voltage_v,
@@ -1041,14 +1048,15 @@ def _plot(
     axes[0, 1].axhline(35.0, color="red", linestyle="--")
     axes[0, 0].set(ylabel="Terminal voltage [V]")
     axes[0, 1].set(ylabel="Average temperature [℃]")
-    axes[1, 0].set(xlabel="Time [s]", ylabel="Charge current [A]")
-    axes[1, 1].set(xlabel="Time [s]", ylabel="SOC")
+    axes[1, 0].set(ylabel="Charge current [A]")
+    axes[1, 1].set(ylabel="SOC")
     for axis in axes.flat:
         axis.grid(alpha=0.25)
         axis.legend()
     result = "PASS" if all(
         item.get("success", False) for item in temperature_results.values()
     ) else "STOP"
+    figure.supxlabel("Time [s]")
     figure.suptitle(f"Phase 7C frozen-controller validation: {result}")
     figure.savefig(output / "phase7c_multitemperature_validation.png", dpi=180)
     plt.close(figure)
@@ -1058,6 +1066,7 @@ def _write_report(
     path: Path,
     payload: dict[str, Any],
 ) -> None:
+    nominal = payload["nominal_25c_reference"]
     lines = [
         "# Phase 7C：冻结控制器的多温度 DFN 外推验证",
         "",
@@ -1069,21 +1078,59 @@ def _write_report(
         "",
         "## 分温度严格结果",
         "",
-        "| 温度 | 安全 MPC | 安全 ANN | 最高电压 | 最高平均温度 | 结论 |",
-        "|---:|---:|---:|---:|---:|---|",
+        "| 温度 | 验证域 | 安全 MPC/架构 | 安全 ANN | 最高电压 | 最高平均温度 | 结论 |",
+        "|---:|---|---:|---:|---:|---:|---|",
+        (
+            f"| 25 ℃ | Phase 7B-1独立确认 | 通过 | 通过 | "
+            f"{nominal['maximum_ann_voltage_v']:.6f} V | 等温模型，不适用 | "
+            "严格通过 |"
+        ),
     ]
     for token, result in payload["temperature_results"].items():
         ann = result.get("ann")
+        failed = "、".join(
+            key for key, value in result["checks"].items() if not value
+        )
         lines.append(
-            f"| {result['temperature_c']:.0f} ℃ | "
-            f"{'通过' if result['mpc']['target_reach_fraction'] == 1.0 else '失败'} | "
+            f"| {result['temperature_c']:.0f} ℃ | Phase 7C独立确认 | "
+            f"{'通过' if result.get('success', False) else '触发停止'} | "
             f"{'通过' if result.get('success', False) else '未通过/未运行'} | "
             f"{(ann or result['mpc'])['maximum_voltage_v']:.6f} V | "
             f"{(ann or result['mpc'])['maximum_average_temperature_c']:.3f} ℃ | "
-            f"{'严格通过' if result.get('success', False) else '触发停止'} |"
+            f"{'严格通过' if result.get('success', False) else failed} |"
         )
     lines.extend(
         [
+            "",
+            "## 安全 MPC 诊断",
+            "",
+            "| 温度 | 最大残差 | P95/P99残差 | 最大单步正增长 | 最小电压—斜率余量 | 安全层介入率 |",
+            "|---:|---:|---:|---:|---:|---:|",
+        ]
+    )
+    for result in payload["temperature_results"].values():
+        mpc = result["mpc"]
+        lines.append(
+            f"| {result['temperature_c']:.0f} ℃ | "
+            f"{1000 * mpc['maximum_voltage_residual_v']:.3f} mV | "
+            f"{1000 * mpc['p95_voltage_residual_v']:.3f}/"
+            f"{1000 * mpc['p99_voltage_residual_v']:.3f} mV | "
+            f"{1000 * mpc['maximum_positive_residual_growth_v']:.3f} mV | "
+            f"{mpc['minimum_voltage_slew_feasibility_margin_a']:.3f} A | "
+            f"{100 * mpc['voltage_intervention_fraction']:.2f}% |"
+        )
+    lines.extend(
+        [
+            "",
+            "15 ℃最大单步残差正增长为11.387 mV，已经比冻结的25 ℃裕量"
+            "11.306 mV高0.082 mV；本批轨迹仍未越压或出现空区间，但这证明"
+            "25 ℃残差增长界本身不能作为全温度上界。",
+            "",
+            "30 ℃安全 MPC 最高平均温度达到42.264 ℃，超过35 ℃门槛"
+            "7.264 ℃。这属于缺少热约束感知，而不是ANN拟合失败。另有1条"
+            "30 ℃轨迹出现一次显著电流方向反转；15 ℃有1个控制步返回"
+            "optimizer_success=False但prediction_feasible=True，均按预注册"
+            "停止规则保留为失败证据。",
             "",
             "## 阶段判定",
             "",
@@ -1126,7 +1173,31 @@ def analyze_phase7c(
         if seed_tables
         else pd.DataFrame()
     )
-    seed_metrics.to_csv(data_dir / "closed_loop_metrics.csv", index=False)
+    controller_rows = []
+    for result in temperature_results.values():
+        controller_rows.append(
+            {
+                "temperature_c": result["temperature_c"],
+                "controller_kind": "mpc",
+                "seed": -1,
+                **result["mpc"],
+                "strict_success": result["success"],
+            }
+        )
+    controller_metrics = pd.DataFrame(controller_rows)
+    if len(seed_metrics):
+        seed_output = seed_metrics.copy()
+        seed_output.insert(1, "controller_kind", "ann")
+        closed_loop_metrics = pd.concat(
+            [controller_metrics, seed_output],
+            ignore_index=True,
+            sort=False,
+        )
+    else:
+        closed_loop_metrics = controller_metrics
+    closed_loop_metrics.to_csv(
+        data_dir / "closed_loop_metrics.csv", index=False
+    )
     diagnostics = _trajectory_diagnostics(
         frame,
         inherited.mpc.target_soc - phase7b0.dfn.target_soc_tolerance,
@@ -1181,11 +1252,37 @@ def analyze_phase7c(
         )
     else:
         conclusion = "安全 MPC 通过，等待五种子安全 ANN 闭环。"
+    phase7b1_metrics = json.loads(
+        (
+            root / "outputs/phase7b1b_voltage_safety/confirmation_metrics.json"
+        ).read_text(encoding="utf-8")
+    )
+    nominal_summary = phase7b1_metrics["residual_guard"]
     payload = {
         "study_name": config.study_name,
         "configuration": asdict(config),
         "frozen_artifact_verification": verify_frozen_artifacts(config, root),
         "temperature_results": temperature_results,
+        "nominal_25c_reference": {
+            "source": (
+                "outputs/phase7b1b_voltage_safety/"
+                "confirmation_metrics.json"
+            ),
+            "maximum_ann_voltage_v": nominal_summary[
+                "maximum_ann_voltage_v"
+            ],
+            "maximum_mpc_voltage_v": nominal_summary[
+                "maximum_mpc_voltage_v"
+            ],
+            "current_nrmse_range": [
+                nominal_summary["current_nrmse_min"],
+                nominal_summary["current_nrmse_max"],
+            ],
+            "maximum_charge_time_gap_fraction": nominal_summary[
+                "maximum_charge_time_gap_fraction"
+            ],
+            "minimum_speedup": nominal_summary["minimum_speedup"],
+        },
         "decision": {
             "mpc_stage_success": mpc_pass,
             "ann_stage_completed": complete,

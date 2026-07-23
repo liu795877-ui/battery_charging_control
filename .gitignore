@@ -36,6 +36,10 @@ outputs/phase7b0_full_run.stdout.log
 outputs/phase7b0_full_run.stderr.log
 data/phase7b1b_voltage_safety/runs/
 data/phase7c_multitemperature/runs/
+data/phase7c_multitemperature/mpc_closed_loop.csv
+data/phase7c_multitemperature/ann_closed_loop.csv
+outputs/phase7c_multitemperature/*_run.stdout.log
+outputs/phase7c_multitemperature/*_run.stderr.log
 outputs/phase7b1b_regression.stdout.log
 outputs/phase7b1b_regression.stderr.log
 outputs/phase7b1b_regression.pid

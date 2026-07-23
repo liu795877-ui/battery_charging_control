@@ -57,3 +57,41 @@ def test_phase7c_generated_contract_hashes_match() -> None:
     assert payload["frozen_before_closed_loop_execution"]
     assert payload["not_teacher_data"]
     assert len(payload["files"]) == 2
+
+
+def test_phase7c_strict_stop_is_preserved_as_failure_evidence() -> None:
+    config = load_phase7c_config(CONFIG)
+    path = ROOT / config.result_directory / "metrics.json"
+    if not path.exists():
+        return
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert not payload["decision"]["mpc_stage_success"]
+    assert not payload["decision"]["ann_stage_completed"]
+    assert payload["decision"]["strict_stop_triggered"]
+    assert "zero_solver_failure" in payload["decision"]["failed_checks"]["15c"]
+    assert (
+        "maximum_average_temperature"
+        in payload["decision"]["failed_checks"]["30c"]
+    )
+    assert "zero_oscillation" in payload["decision"]["failed_checks"]["30c"]
+
+
+def test_phase7c_mpc_electrical_safety_passed_before_thermal_stop() -> None:
+    config = load_phase7c_config(CONFIG)
+    path = ROOT / config.result_directory / "metrics.json"
+    if not path.exists():
+        return
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    for result in payload["temperature_results"].values():
+        checks = result["checks"]
+        assert checks["maximum_voltage"]
+        assert checks["zero_current_violation"]
+        assert checks["zero_slew_violation"]
+        assert checks["zero_empty_interval"]
+        assert checks["target_reach_100_percent"]
+    assert (
+        payload["temperature_results"]["30c"]["mpc"][
+            "maximum_average_temperature_c"
+        ]
+        > config.gates.maximum_average_temperature_c
+    )

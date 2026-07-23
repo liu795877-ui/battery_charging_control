@@ -1,0 +1,232 @@
+{
+  "study_name": "phase7c_frozen_controller_multitemperature_dfn_validation",
+  "configuration": {
+    "study_name": "phase7c_frozen_controller_multitemperature_dfn_validation",
+    "phase7b1b_config": "configs/phase7b1b_voltage_safety_layer.yaml",
+    "level3_config": "configs/phase7a_level3_slew.yaml",
+    "model_directory": "outputs/phase7a_level3_slew/models",
+    "reference_confirmation_states": "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv",
+    "frozen_artifacts": {
+      "configs/phase7b1b_voltage_safety_layer.yaml": "e1d6e3d6f4e1ea666fcc7336eb67c88802d41ded778246d1dcc4a1e4d72febb9",
+      "src/battery_fast_charge/phase7b1b_runner.py": "8f95a74652da1381d41ffbfab64cfa6ffd8ab33943846fd7c4799a06e6d9fba3",
+      "outputs/phase7b1b_voltage_safety/metrics.json": "ccfbd3754578c8139118229ae226f3cae8eb319d6fb892fc0cd194ee5a76f6ff",
+      "configs/phase7a_level3_slew.yaml": "7ebd8b44cf9c65e81199366131f0518bad35e5b70564ff5e806980c5e974349e",
+      "src/battery_fast_charge/phase7a_level3p_runner.py": "eb94b4df75bead457b93ba48bcdeae44543fe3881a70a31695825cd3d0a78f01",
+      "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv": "738ae9eb52e2d7edbd598f9a2231e595743da920a9ae1b884ff8e5b5d5ecaab5",
+      "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_22.npz": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65",
+      "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_42.npz": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d",
+      "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_73.npz": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9",
+      "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_101.npz": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba",
+      "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_137.npz": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0"
+    },
+    "contract": {
+      "temperatures_c": [
+        15.0,
+        30.0
+      ],
+      "trajectories_per_temperature": 24,
+      "design_start_index": 701,
+      "design_seed": 20260726,
+      "initial_soc_bounds": [
+        0.45,
+        0.7
+      ],
+      "initial_v1_bounds_v": [
+        0.0,
+        0.06
+      ],
+      "initial_v2_bounds_v": [
+        0.0,
+        0.09
+      ],
+      "initial_previous_current_bounds_a": [
+        0.0,
+        10.0
+      ],
+      "initial_voltage_margin_v": 0.005,
+      "maximum_average_temperature_c": 35.0,
+      "thermal_model": "lumped",
+      "maximum_workers": 3,
+      "oscillation_delta_threshold_a": 0.25,
+      "residual_growth_guard_v": 0.011305522502741638
+    },
+    "gates": {
+      "maximum_voltage_v": 4.200001,
+      "maximum_average_temperature_c": 35.0,
+      "maximum_current_nrmse_percent": 1.0,
+      "maximum_mean_charge_time_gap_fraction": 0.02,
+      "minimum_target_reach_fraction": 1.0,
+      "minimum_speedup": 100.0,
+      "numerical_tolerance": 1e-12
+    },
+    "data_directory": "data/phase7c_multitemperature",
+    "result_directory": "outputs/phase7c_multitemperature",
+    "notebook": "notebooks/phase7c_multitemperature_dfn_results.ipynb"
+  },
+  "frozen_artifact_verification": {
+    "configs/phase7b1b_voltage_safety_layer.yaml": {
+      "expected_sha256": "e1d6e3d6f4e1ea666fcc7336eb67c88802d41ded778246d1dcc4a1e4d72febb9",
+      "actual_sha256": "e1d6e3d6f4e1ea666fcc7336eb67c88802d41ded778246d1dcc4a1e4d72febb9",
+      "matched": true
+    },
+    "src/battery_fast_charge/phase7b1b_runner.py": {
+      "expected_sha256": "8f95a74652da1381d41ffbfab64cfa6ffd8ab33943846fd7c4799a06e6d9fba3",
+      "actual_sha256": "8f95a74652da1381d41ffbfab64cfa6ffd8ab33943846fd7c4799a06e6d9fba3",
+      "matched": true
+    },
+    "outputs/phase7b1b_voltage_safety/metrics.json": {
+      "expected_sha256": "ccfbd3754578c8139118229ae226f3cae8eb319d6fb892fc0cd194ee5a76f6ff",
+      "actual_sha256": "ccfbd3754578c8139118229ae226f3cae8eb319d6fb892fc0cd194ee5a76f6ff",
+      "matched": true
+    },
+    "configs/phase7a_level3_slew.yaml": {
+      "expected_sha256": "7ebd8b44cf9c65e81199366131f0518bad35e5b70564ff5e806980c5e974349e",
+      "actual_sha256": "7ebd8b44cf9c65e81199366131f0518bad35e5b70564ff5e806980c5e974349e",
+      "matched": true
+    },
+    "src/battery_fast_charge/phase7a_level3p_runner.py": {
+      "expected_sha256": "eb94b4df75bead457b93ba48bcdeae44543fe3881a70a31695825cd3d0a78f01",
+      "actual_sha256": "eb94b4df75bead457b93ba48bcdeae44543fe3881a70a31695825cd3d0a78f01",
+      "matched": true
+    },
+    "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv": {
+      "expected_sha256": "738ae9eb52e2d7edbd598f9a2231e595743da920a9ae1b884ff8e5b5d5ecaab5",
+      "actual_sha256": "738ae9eb52e2d7edbd598f9a2231e595743da920a9ae1b884ff8e5b5d5ecaab5",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_22.npz": {
+      "expected_sha256": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65",
+      "actual_sha256": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_42.npz": {
+      "expected_sha256": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d",
+      "actual_sha256": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_73.npz": {
+      "expected_sha256": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9",
+      "actual_sha256": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_101.npz": {
+      "expected_sha256": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba",
+      "actual_sha256": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba",
+      "matched": true
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_137.npz": {
+      "expected_sha256": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0",
+      "actual_sha256": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0",
+      "matched": true
+    }
+  },
+  "temperature_results": {
+    "15c": {
+      "temperature_c": 15.0,
+      "mpc": {
+        "trajectory_count": 24,
+        "maximum_voltage_v": 4.1898916840069695,
+        "maximum_average_temperature_c": 29.10406961291756,
+        "maximum_current_violation_a": 0.0,
+        "maximum_slew_violation_a": 4.440892098500626e-16,
+        "maximum_current_step_a": 2.0000000000000004,
+        "empty_interval_count": 0,
+        "target_reach_fraction": 1.0,
+        "optimizer_failure_count": 1,
+        "prediction_infeasible_count": 0,
+        "maximum_direction_reversals": 0,
+        "maximum_voltage_residual_v": 0.0359703817185135,
+        "p95_voltage_residual_v": 0.03342919751640396,
+        "p99_voltage_residual_v": 0.035507021942970736,
+        "maximum_positive_residual_growth_v": 0.0113871030773613,
+        "minimum_voltage_slew_feasibility_margin_a": 1.8838504929153717,
+        "voltage_intervention_fraction": 0.4424295774647887,
+        "maximum_current_correction_a": 0.8106858121391087,
+        "mean_active_current_correction_a": 0.5388093744364673,
+        "first_intervention_soc": 0.6570120863753451,
+        "mean_base_decision_time_ms": 46.75722573937757,
+        "mean_safety_layer_time_ms": 0.16014058102211814,
+        "mean_total_decision_time_ms": 46.91736632039973
+      },
+      "checks": {
+        "maximum_voltage": true,
+        "maximum_average_temperature": true,
+        "zero_current_violation": true,
+        "zero_slew_violation": true,
+        "zero_empty_interval": true,
+        "target_reach_100_percent": true,
+        "zero_oscillation": true,
+        "zero_solver_failure": false
+      },
+      "success": false
+    },
+    "30c": {
+      "temperature_c": 30.0,
+      "mpc": {
+        "trajectory_count": 24,
+        "maximum_voltage_v": 4.1880276176018665,
+        "maximum_average_temperature_c": 42.263684287906415,
+        "maximum_current_violation_a": 0.0,
+        "maximum_slew_violation_a": 4.440892098500626e-16,
+        "maximum_current_step_a": 2.0000000000000004,
+        "empty_interval_count": 0,
+        "target_reach_fraction": 1.0,
+        "optimizer_failure_count": 0,
+        "prediction_infeasible_count": 0,
+        "maximum_direction_reversals": 1,
+        "maximum_voltage_residual_v": 0.0058675474749518,
+        "p95_voltage_residual_v": 0.0049106501880044895,
+        "p99_voltage_residual_v": 0.00515682989256853,
+        "maximum_positive_residual_growth_v": 0.0108453483649526,
+        "minimum_voltage_slew_feasibility_margin_a": 2.0,
+        "voltage_intervention_fraction": 0.0,
+        "maximum_current_correction_a": 5.3290705182007506e-15,
+        "mean_active_current_correction_a": 0.0,
+        "first_intervention_soc": NaN,
+        "mean_base_decision_time_ms": 46.90298305777503,
+        "mean_safety_layer_time_ms": 0.155941278089542,
+        "mean_total_decision_time_ms": 47.058924335864624
+      },
+      "checks": {
+        "maximum_voltage": true,
+        "maximum_average_temperature": false,
+        "zero_current_violation": true,
+        "zero_slew_violation": true,
+        "zero_empty_interval": true,
+        "target_reach_100_percent": true,
+        "zero_oscillation": false,
+        "zero_solver_failure": true
+      },
+      "success": false
+    }
+  },
+  "nominal_25c_reference": {
+    "source": "outputs/phase7b1b_voltage_safety/confirmation_metrics.json",
+    "maximum_ann_voltage_v": 4.189463012123127,
+    "maximum_mpc_voltage_v": 4.1893890758608325,
+    "current_nrmse_range": [
+      0.0017848572930540445,
+      0.002086160128233494
+    ],
+    "maximum_charge_time_gap_fraction": 0.009974926641684536,
+    "minimum_speedup": 170.89368026470734
+  },
+  "decision": {
+    "mpc_stage_success": false,
+    "ann_stage_completed": false,
+    "phase7c_success": false,
+    "strict_stop_triggered": true,
+    "failed_checks": {
+      "15c": [
+        "zero_solver_failure"
+      ],
+      "30c": [
+        "maximum_average_temperature",
+        "zero_oscillation"
+      ]
+    },
+    "conclusion": "Phase 7C 在安全 MPC 阶段触发严格停止：冻结的25 ℃电压/热安全合同不能直接外推到全部温度；未运行 ANN 扩大实验。"
+  },
+  "status": "completed",
+  "success": false
+}
