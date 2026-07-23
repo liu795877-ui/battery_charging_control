@@ -1,0 +1,53 @@
+study:
+  name: phase7cr0_multitemperature_teacher_and_thermal_feasibility_diagnostics
+
+sources:
+  phase7c_config: configs/phase7c_multitemperature_dfn_validation.yaml
+  phase7b1b_config: configs/phase7b1b_voltage_safety_layer.yaml
+  phase7c_trajectories: data/phase7c_multitemperature/closed_loop_trajectories.csv
+  phase7c_initial_states_15c: data/phase7c_multitemperature/initial_states_15c.csv
+  phase7c_initial_states_30c: data/phase7c_multitemperature/initial_states_30c.csv
+  frozen_artifacts:
+    configs/phase7c_multitemperature_dfn_validation.yaml: 9868c21ae18f56826b2226b4de52e35d2f6a6c449a9c1d07a1fa33dfb0c94b51
+    src/battery_fast_charge/phase7c_runner.py: caf1fd08f565fb40518beb218efa710d698c9a104d6c53e644d8a68e79bde4ba
+    data/phase7c_multitemperature/freeze_contract.json: 92a017c9cb2c9fd1a50f7324113cb6954700384ce921f4917572c0e844cb8b92
+    data/phase7c_multitemperature/closed_loop_trajectories.csv: fff1a6c600597592237f8a45a5f4b446dcebd4e508b2e373c42a89739d1b062a
+    outputs/phase7c_multitemperature/metrics.json: 93501baff78b19b92bb16b037b1b8d6185499ee6f1a9d887a65d2720199ecbc3
+
+thermal_feasibility:
+  ambient_temperature_c: 30.0
+  maximum_average_temperature_c: 35.0
+  target_soc: 0.7995
+  initial_soc: 0.45
+  initial_polarization_1_v: 0.0
+  initial_polarization_2_v: 0.0
+  initial_previous_current_a: 0.0
+  constant_current_levels_a: [1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 6.0]
+  maximum_steps: 1800
+  oracle_high_currents_a: [3.0, 4.0, 5.0, 6.0, 8.0, 10.0]
+  oracle_low_currents_a: [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
+  oracle_switch_temperatures_c: [30.5, 31.0, 31.5, 32.0, 32.5, 33.0, 33.5, 34.0]
+  oracle_switch_socs: [0.50, 0.55, 0.60, 0.65, 0.70, 0.74]
+  validated_oracle_candidates: 8
+  thermal_guard_c: 0.0
+
+solver_audit:
+  failure_temperature_c: 15.0
+  failure_trajectory_id: phase7c_15c_011
+  failure_step_index: 56
+  repeated_runs: 20
+  multistart_count: 15
+  multistart_seed: 20260727
+  active_constraint_tolerance: 1.0e-5
+  finite_difference_step: 1.0e-6
+
+reversal_audit:
+  temperature_c: 30.0
+  trajectory_id: phase7c_30c_018
+  step_indices: [97, 98, 99]
+  multistart_count: 15
+  multistart_seed: 20260728
+
+output:
+  data_directory: data/phase7cr0_diagnostics
+  result_directory: outputs/phase7cr0_diagnostics
