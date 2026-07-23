@@ -1,0 +1,79 @@
+{
+  "study_name": "phase7b1b_25c_dfn_voltage_aware_safety_layer",
+  "configuration": {
+    "study_name": "phase7b1b_25c_dfn_voltage_aware_safety_layer",
+    "source_phase7b0_config": "configs/phase7b0_dfn_cross_model.yaml",
+    "source_level3_config": "configs/phase7a_level3_slew.yaml",
+    "regression_initial_states": "data/phase7a_level3_slew/closed_loop_initial_states.csv",
+    "regression_baseline_trajectories": "data/phase7b0_dfn_cross_model/closed_loop_trajectories.csv",
+    "confirmation_initial_states": "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv",
+    "phase7b1a_metrics": "outputs/phase7b1a_voltage_mismatch/metrics.json",
+    "model_directory": "outputs/phase7a_level3_slew/models",
+    "frozen_artifacts": {
+      "configs/phase7b1a_voltage_mismatch_audit.yaml": "d98f5d2b2beeadca601df564b3251ec514fe3752c9d81aeaf06b4d3eeb893acf",
+      "src/battery_fast_charge/phase7b1a_runner.py": "121345717c0a5d92302029a85dd8450ede2375149d112847a039378560325bd1",
+      "outputs/phase7b1a_voltage_mismatch/metrics.json": "5ac5f63a4ab54263514da2b930aa4c9a710f531c609fbeb6d5b4d45d608e9e8a",
+      "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv": "738ae9eb52e2d7edbd598f9a2231e595743da920a9ae1b884ff8e5b5d5ecaab5",
+      "data/phase7b1a_voltage_mismatch/confirmation_freeze.json": "27a29ab6c42d929ff8fd616738bd88460f738cd3f494870083a16ed79977743e"
+    },
+    "safety": {
+      "voltage_limit_v": 4.2,
+      "voltage_tolerance_v": 1e-06,
+      "residual_growth_guard_v": 0.011305522502741638,
+      "diagnostic_fixed_margin_v": 0.039977927362943075,
+      "current_search_tolerance_a": 1e-10,
+      "empty_interval_tolerance_a": 1e-09,
+      "intervention_tolerance_a": 1e-12
+    },
+    "validation": {
+      "oscillation_delta_threshold_a": 0.25,
+      "maximum_workers": 3,
+      "run_fixed_margin_on_regression_only": true
+    },
+    "output": {
+      "data_directory": "data/phase7b1b_voltage_safety",
+      "result_directory": "outputs/phase7b1b_voltage_safety"
+    }
+  },
+  "frozen_artifact_verification": {
+    "configs/phase7b1a_voltage_mismatch_audit.yaml": {
+      "expected_sha256": "d98f5d2b2beeadca601df564b3251ec514fe3752c9d81aeaf06b4d3eeb893acf",
+      "actual_sha256": "d98f5d2b2beeadca601df564b3251ec514fe3752c9d81aeaf06b4d3eeb893acf",
+      "matched": true
+    },
+    "src/battery_fast_charge/phase7b1a_runner.py": {
+      "expected_sha256": "121345717c0a5d92302029a85dd8450ede2375149d112847a039378560325bd1",
+      "actual_sha256": "121345717c0a5d92302029a85dd8450ede2375149d112847a039378560325bd1",
+      "matched": true
+    },
+    "outputs/phase7b1a_voltage_mismatch/metrics.json": {
+      "expected_sha256": "5ac5f63a4ab54263514da2b930aa4c9a710f531c609fbeb6d5b4d45d608e9e8a",
+      "actual_sha256": "5ac5f63a4ab54263514da2b930aa4c9a710f531c609fbeb6d5b4d45d608e9e8a",
+      "matched": true
+    },
+    "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv": {
+      "expected_sha256": "738ae9eb52e2d7edbd598f9a2231e595743da920a9ae1b884ff8e5b5d5ecaab5",
+      "actual_sha256": "738ae9eb52e2d7edbd598f9a2231e595743da920a9ae1b884ff8e5b5d5ecaab5",
+      "matched": true
+    },
+    "data/phase7b1a_voltage_mismatch/confirmation_freeze.json": {
+      "expected_sha256": "27a29ab6c42d929ff8fd616738bd88460f738cd3f494870083a16ed79977743e",
+      "actual_sha256": "27a29ab6c42d929ff8fd616738bd88460f738cd3f494870083a16ed79977743e",
+      "matched": true
+    }
+  },
+  "domains_updated": [
+    "regression",
+    "confirmation"
+  ],
+  "regression_success": true,
+  "confirmation_success": true,
+  "decision": {
+    "phase7b1_complete_success": true,
+    "proceed_to_multi_temperature": true,
+    "short_horizon_required": false,
+    "conclusion": "Phase 7B-1 严格通过：冻结 ANN＋输入投影＋电压感知安全层可进入多温度验证"
+  },
+  "status": "completed",
+  "success": true
+}

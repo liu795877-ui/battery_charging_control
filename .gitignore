@@ -34,3 +34,10 @@ outputs/phase2rd_final_discrimination/exit_code.txt
 data/phase7b0_dfn_cross_model/runs/
 outputs/phase7b0_full_run.stdout.log
 outputs/phase7b0_full_run.stderr.log
+data/phase7b1b_voltage_safety/runs/
+outputs/phase7b1b_regression.stdout.log
+outputs/phase7b1b_regression.stderr.log
+outputs/phase7b1b_regression.pid
+outputs/phase7b1b_confirmation.stdout.log
+outputs/phase7b1b_confirmation.stderr.log
+outputs/phase7b1b_confirmation.pid
