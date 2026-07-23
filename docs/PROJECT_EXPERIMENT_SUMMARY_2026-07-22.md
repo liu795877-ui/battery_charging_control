@@ -1,6 +1,6 @@
 # 动力电池 AI 充电控制项目：完整实验与结果总结
 
-更新时间：2026-07-22
+更新时间：2026-07-23
 项目目录：`C:\Users\LENOVO\Documents\动力电池AI`
 
 ## 1. 项目目标与研究边界
@@ -39,6 +39,10 @@ $$
 本项目目前得到的最重要结论是：
 
 > 在低维、状态充分、教师确定、约束较简单且训练数据覆盖完整的控制问题中，ANN 可以准确逼近 MPC；在包含双极化、电热耦合、硬斜率约束、多约束切换和求解器分支的复杂控制问题中，静态 pure ANN 直接回归 MPC 第一动作不再可靠，此时更适合采用 ANN 辅助 MPC。
+
+Phase 7A 的最新受控消融进一步把这一结论收紧为：
+
+> 模型复杂度和策略拟合不是当前首次失效原因；真正的边界是无约束 ANN 不能提供逐步硬约束保证。解析输出投影只介入 48/13,349 个动作（0.3596%），即可在不重新训练 ANN 的条件下恢复严格斜率可行性。
 
 简化表示为：
 
@@ -86,6 +90,9 @@ $$
 | Phase 7A Level 1 | 自有参数 1RC 两状态验证 | 离线通过，因末端数据缺失闭环约 9% | 覆盖受限 |
 | Phase 7A Level 1R | 修复末端覆盖 | 闭环 0.281%–0.315%，仅时间稳定性未全过 | 接近通过，仍停 Level 1 |
 | Phase 7A Level 1S | 训练稳定性消融 | 深层 LBFGS 五种子严格通过，时间偏差不超过 0.565% | 通过，可进入 Level 2 |
+| Phase 7A Level 2 | 增加第二极化状态 | 闭环 NRMSE 0.148%–0.366%，五种子严格通过 | pure DNN通过 |
+| Phase 7A Level 3 | 增加上一电流和 2 A 硬斜率 | 精度、到达、电压、速度均通过；48 个动作斜率越界 | pure DNN无硬保证 |
+| Phase 7A Level 3P | 冻结网络并增加最小输出投影 | 仅介入0.3596%，斜率违约归零，全部严格门槛通过 | ANN＋投影通过 |
 
 ## 4. Phase 1：Chen2020 高保真基准充电
 
@@ -969,6 +976,8 @@ MPC负责：
 
 因此，本项目后续将一方面继续识别pure ANN的模型—约束复杂度适用边界，另一方面在复杂电热系统中采用ANN提供初值或参考、MPC负责约束和安全修正的学习增强MPC路线。
 
+Phase 7A 已在 Level 3P 正式收口，不进入温度 Level 4。下一阶段改为独立的 Phase 7B-0：冻结 Level 3P 控制器，不新增教师数据、不重新训练 ANN，仅将闭环被控对象从 2RC 切换为 25 ℃ Chen2020 DFN，以隔离跨模型失配造成的电压和到达风险。
+
 ## 27. 版本管理与当前工作区状态
 
 本证据链准备在分支 `codex/phase7a-level1-evidence-chain` 提交。提交前基线为：
@@ -999,3 +1008,38 @@ MPC负责：
 - Level 1报告：`outputs/phase7a_level1_1rc/PHASE7A_LEVEL1_中文实验报告.md`
 - Level 1R报告：`outputs/phase7a_level1r_terminal_coverage/PHASE7A_LEVEL1R_中文实验报告.md`
 - Level 1S报告：`outputs/phase7a_level1s_training_stability/PHASE7A_LEVEL1S_中文实验报告.md`
+
+## 29. Phase 7A Level 2–3–3P：首次失效边界与最小修复
+
+| 阶段 | 唯一新增复杂度 | 闭环电流 NRMSE | 硬斜率 | 阶段结论 |
+|---|---|---:|---|---|
+| Level 2 | 第二极化状态 | 0.148%–0.366% | 未激活 | pure DNN严格通过 |
+| Level 3 | 上一电流＋绝对电流步差≤2 A/5 s | 0.228%–0.340% | 48步失败，最大2.1289 A | pure DNN无硬保证 |
+| Level 3P | 最小输出投影 | 0.228%–0.338% | 通过，最大2.0000 A | ANN＋投影严格通过 |
+
+Level 3P 没有重新训练网络，也没有改变数据、MPC、初态、模型或五个随机种子。13 项冻结工件哈希全部匹配。投影实际介入 48 步，与 Level 3 的 48 个风险动作逐点重合，邻域外新增介入为 0；最大修正 0.1327 A，介入时平均修正 0.0439 A。
+
+核心研究结论为：
+
+> 当前失效边界不是第二极化状态，也不是策略拟合精度，而是无约束 ANN 缺乏逐步硬约束保证。最小解析投影以0.3596%的介入率修复了这一缺口。
+
+核心结论图及源数据：
+
+- `outputs/phase7a_core_conclusion/phase7a_level2_level3_level3p_core_conclusion.svg`
+- `outputs/phase7a_core_conclusion/phase7a_level2_level3_level3p_core_conclusion.pdf`
+- `outputs/phase7a_core_conclusion/phase7a_level2_level3_level3p_core_conclusion.tiff`
+- `outputs/phase7a_core_conclusion/source_data.csv`
+
+## 30. 下一阶段：Phase 7B-0 跨模型验证
+
+Phase 7B-0 不属于 Level 4。它不增加温度状态、温度约束、参数扰动或新 ANN，只改变闭环被控对象：
+
+$$
+\text{冻结 ANN＋投影}\rightarrow\text{2RC}
+\quad\Longrightarrow\quad
+\text{冻结 ANN＋投影}\rightarrow\text{25 ℃ Chen2020 DFN}.
+$$
+
+必须继续冻结 Level 3 五个网络、Level 3P 投影公式、2RC 控制器输入、MPC 参数与约束、初始 SOC、目标 SOC、5 s 采样周期和五个随机种子。Phase 7B-0 首先检查输入约束是否仍严格满足，再检查 DFN 电压、SOC 到达、异常提前降流、闭环振荡、NRMSE、时间偏差和在线加速。
+
+如果电流和斜率继续安全但 DFN 电压越界，应将失败归因于跨模型状态约束失配，并优先研究一步电压可行性检查或有限迭代 MPC 修正，而不是扩大 pure ANN。
