@@ -1,0 +1,183 @@
+{
+  "study_name": "phase7cr1_short_horizon_thermal_safety_supervisor",
+  "configuration": {
+    "study": {
+      "name": "phase7cr1_short_horizon_thermal_safety_supervisor"
+    },
+    "sources": {
+      "phase7cr0_config": "configs/phase7cr0_diagnostics.yaml",
+      "phase7b1b_config": "configs/phase7b1b_voltage_safety_layer.yaml",
+      "frozen_artifacts": {
+        "configs/phase7cr0_diagnostics.yaml": "d317c7a8c4250ade68dad2495cdcaa9de7aa1e588be39cae3e9a68687b0e31b5",
+        "src/battery_fast_charge/phase7cr0_runner.py": "ccddfd1aab695e4ec18f75fec78cf7d08bcc66a1e60ecabe134716b559ac1f97",
+        "outputs/phase7cr0_diagnostics/metrics.json": "930b258af669f8add4e9cc5de4516f1b2e807f91ecd9b247051c5abf2098317f",
+        "data/phase7cr0_diagnostics/constant_current_trajectories.csv": "1b914b23091d09c3fbb5f2bae4717f5cd6911d77220ffbbb0559a7639b7af78a",
+        "data/phase7cr0_diagnostics/validated_oracle_trajectories.csv": "2c1a7e8c12f5ea87c543c389e8ac909ac60c785f737a1eb837f224ae145c3107"
+      }
+    },
+    "thermal_supervisor": {
+      "ambient_temperature_c": 30.0,
+      "maximum_average_temperature_c": 35.0,
+      "prediction_horizon_steps": 60,
+      "prediction_horizon_s": 300.0,
+      "future_current_policy": "constant_candidate",
+      "braking_floor_current_a": 0.0,
+      "temperature_guard_c": 0.1,
+      "sustainable_current_a": 3.0,
+      "current_search_tolerance_a": 0.001,
+      "empty_interval_tolerance_a": 1e-09,
+      "surrogate": {
+        "coefficient_i2_c_per_step_a2": 0.0026207234161263596,
+        "coefficient_i_c_per_step_a": 0.003211022025391298,
+        "coefficient_temperature_c_per_step_c": -0.0062416491593207555,
+        "intercept_c_per_step": -0.0020991403920301095
+      }
+    },
+    "teacher_repair": {
+      "retry_on_failure": true,
+      "compare_alternative_on_slew_boundary": true,
+      "slew_boundary_tolerance_a": 0.0001,
+      "alternative_start": "previous_current_constant",
+      "objective_comparison_tolerance": 1e-10
+    },
+    "development": {
+      "trajectory_count": 8,
+      "design_start_index": 901,
+      "design_seed": 20260729,
+      "initial_soc_bounds": [
+        0.45,
+        0.7
+      ],
+      "initial_v1_bounds_v": [
+        0.0,
+        0.06
+      ],
+      "initial_v2_bounds_v": [
+        0.0,
+        0.09
+      ],
+      "initial_previous_current_bounds_a": [
+        0.0,
+        10.0
+      ],
+      "initial_voltage_margin_v": 0.005,
+      "maximum_workers": 3,
+      "maximum_steps": 1800,
+      "target_soc": 0.7995
+    },
+    "gates": {
+      "maximum_voltage_v": 4.200001,
+      "maximum_average_temperature_c": 35.0,
+      "maximum_current_step_a": 2.0,
+      "minimum_target_reach_fraction": 1.0,
+      "maximum_empty_interval_count": 0,
+      "maximum_solver_failure_count": 0,
+      "maximum_sustained_oscillation_count": 0,
+      "numerical_tolerance": 1e-09
+    },
+    "output": {
+      "data_directory": "data/phase7cr1_thermal_supervisor",
+      "result_directory": "outputs/phase7cr1_thermal_supervisor"
+    }
+  },
+  "frozen_artifact_verification": {
+    "configs/phase7cr0_diagnostics.yaml": {
+      "expected_sha256": "d317c7a8c4250ade68dad2495cdcaa9de7aa1e588be39cae3e9a68687b0e31b5",
+      "actual_sha256": "d317c7a8c4250ade68dad2495cdcaa9de7aa1e588be39cae3e9a68687b0e31b5",
+      "matched": true
+    },
+    "src/battery_fast_charge/phase7cr0_runner.py": {
+      "expected_sha256": "ccddfd1aab695e4ec18f75fec78cf7d08bcc66a1e60ecabe134716b559ac1f97",
+      "actual_sha256": "ccddfd1aab695e4ec18f75fec78cf7d08bcc66a1e60ecabe134716b559ac1f97",
+      "matched": true
+    },
+    "outputs/phase7cr0_diagnostics/metrics.json": {
+      "expected_sha256": "930b258af669f8add4e9cc5de4516f1b2e807f91ecd9b247051c5abf2098317f",
+      "actual_sha256": "930b258af669f8add4e9cc5de4516f1b2e807f91ecd9b247051c5abf2098317f",
+      "matched": true
+    },
+    "data/phase7cr0_diagnostics/constant_current_trajectories.csv": {
+      "expected_sha256": "1b914b23091d09c3fbb5f2bae4717f5cd6911d77220ffbbb0559a7639b7af78a",
+      "actual_sha256": "1b914b23091d09c3fbb5f2bae4717f5cd6911d77220ffbbb0559a7639b7af78a",
+      "matched": true
+    },
+    "data/phase7cr0_diagnostics/validated_oracle_trajectories.csv": {
+      "expected_sha256": "2c1a7e8c12f5ea87c543c389e8ac909ac60c785f737a1eb837f224ae145c3107",
+      "actual_sha256": "2c1a7e8c12f5ea87c543c389e8ac909ac60c785f737a1eb837f224ae145c3107",
+      "matched": true
+    }
+  },
+  "development_set": {
+    "trajectory_count": 8,
+    "not_independent_confirmation": true,
+    "maximum_voltage_v": 4.186496212887358,
+    "maximum_average_temperature_c": 34.90043028629333,
+    "maximum_current_step_a": 2.0,
+    "target_reach_fraction": 1.0,
+    "empty_interval_count": 0,
+    "solver_failure_count": 0,
+    "teacher_retry_count": 822,
+    "alternative_selected_count": 337,
+    "direction_reversal_count": 0,
+    "sustained_oscillation_count": 0,
+    "thermal_intervention_fraction_range": [
+      0.47701149425287354,
+      0.8
+    ],
+    "maximum_thermal_current_correction_a": 3.895034848687788,
+    "earliest_thermal_intervention_time_s": 5.0,
+    "earliest_thermal_intervention_temperature_c": 30.0,
+    "mean_thermal_supervisor_time_ms": 0.3576034490827661
+  },
+  "checks": {
+    "temperature_safe": true,
+    "voltage_safe": true,
+    "slew_safe": true,
+    "zero_empty_interval": true,
+    "zero_solver_failure_after_repair": true,
+    "zero_prediction_infeasible": true,
+    "target_reach_100_percent": true,
+    "zero_sustained_oscillation": true
+  },
+  "success": true,
+  "decision": {
+    "freeze_r1_for_new_confirmation": true,
+    "run_ann": false,
+    "proceed_to_phase7cr2_voltage_guard_development": true,
+    "conclusion": "R1开发集严格通过：可以冻结短时域热监督层并进入R2分温度电压裕量开发；仍禁止运行ANN。"
+  },
+  "development_iterations": [
+    {
+      "name": "无承诺制动预测",
+      "target_reach_fraction": 0.25,
+      "empty_interval_count": 6,
+      "sustained_oscillation_count": null,
+      "accepted": false,
+      "finding": "滚动时域反复推迟制动。"
+    },
+    {
+      "name": "仅恒流窗口上限",
+      "target_reach_fraction": 0.625,
+      "empty_interval_count": 3,
+      "sustained_oscillation_count": null,
+      "accepted": false,
+      "finding": "高初始电流使热上限低于斜率下限。"
+    },
+    {
+      "name": "持续制动模式",
+      "target_reach_fraction": 1.0,
+      "empty_interval_count": 0,
+      "sustained_oscillation_count": 1927,
+      "accepted": false,
+      "finding": "制动解除逻辑产生两步往返。"
+    },
+    {
+      "name": "恒流窗口加瞬态恢复",
+      "target_reach_fraction": 1.0,
+      "empty_interval_count": 0,
+      "sustained_oscillation_count": 0,
+      "accepted": true,
+      "finding": "仅在恒流热上限低于斜率下限时执行瞬态制动。"
+    }
+  ]
+}

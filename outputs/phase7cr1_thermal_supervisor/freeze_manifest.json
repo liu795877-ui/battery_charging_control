@@ -1,0 +1,14 @@
+{
+  "phase": "Phase 7C-R1",
+  "scope": "30 C development-set thermal supervisor only",
+  "independent_confirmation": false,
+  "ann_execution_authorized": false,
+  "artifacts": {
+    "configs/phase7cr1_thermal_supervisor.yaml": "fbfaedae34b2d5c7e39fa7556dd5eb7e89d03c64cdf3b93f876e74b827459061",
+    "src/battery_fast_charge/phase7cr1_runner.py": "70f0c96ac00b76780daf56415d0b9982bc435620b623b205bb45757d2db36516",
+    "data/phase7cr1_thermal_supervisor/development_initial_states.csv": "20757ed88c42d5b7498a9a513ce26c011b1a84f684a5208dce65f67567c64a2a",
+    "data/phase7cr1_thermal_supervisor/development_trajectories.csv": "57f09658a6a5d148e65346cf7b7e5be6066df65e35c786e8086a703a20b3a0d1",
+    "data/phase7cr1_thermal_supervisor/development_metrics.csv": "e420248e6906f5abb6d9caaf6fadb1e0e6f2b9bfcd5b5458a47a9ea668a2ac86",
+    "outputs/phase7cr1_thermal_supervisor/metrics.json": "d30a2a50e0825b4c68ec005616e741a4dd35ea34a93eb7dfb54fe247c7b104e5"
+  }
+}
