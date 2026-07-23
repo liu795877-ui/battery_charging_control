@@ -1,0 +1,4 @@
+stage,added_complexity,closed_loop_nrmse_min_percent,closed_loop_nrmse_max_percent,maximum_current_step_a,hard_slew_status,conclusion,projection_intervention_count,projection_intervention_fraction_percent
+Level 2,Second polarization state,0.1484159385861312,0.36623015897627503,,Not active,pure DNN passes,0,0.0
+Level 3,Previous current + hard slew,0.22808932950707408,0.34047694353945557,2.1289293805857943,Fail,No hard guarantee,0,0.0
+Level 3P,Minimal output projection,0.22823917716539185,0.3381540608571331,2.0000000000000004,Pass,ANN + projection passes,48,0.359577496441681

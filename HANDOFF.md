@@ -1,305 +1,791 @@
-# 项目交接说明
+# 动力电池 ANN–MPC 快速充电项目交接文档
 
-更新时间：2026-07-21
+更新时间：2026-07-23
+
 项目目录：`C:\Users\LENOVO\Documents\动力电池AI`
-当前分支：`agent/phase2-reduced-model-identification`
-当前提交：`592a7e5 Add Phase 6 paper-style DL-E-MPC validation`
 
-## 1. 我们在做什么
+当前分支：`codex/phase7a-level3-slew-constraint`
 
-本项目研究锂离子电池的仿真快速充电控制。当前总体路线是：
+当前 HEAD：`812441c`（Level 3 与 Level 3P 已分别提交，尚待收口文档提交和推送）
 
-1. 使用公开、参数较完整的 Chen2020 电化学参数集，以单体电池为对象；
-2. 充电范围固定为 10%–80% SOC，第一目标是缩短充电时间；
-3. 用带电流、电压、温度和电流变化率约束的 MPC 生成可行的最优/近最优充电轨迹；
-4. 用 ANN/DNN 学习 MPC 的状态到控制量映射，以较低在线计算量逼近 MPC；
-5. 在 DFN 高保真模型闭环中比较 DNN、MPC 和 CC–CV，不预设 DNN 一定更快；
-6. 目前正在迁移验证 2025 年论文 *Health-aware optimal charging of lithium-ion batteries using deep-neural networks-based explicit constrained model predictive control* 的“反复求解约束 MPC 生成数据，再训练显式 DNN 控制器”路线（DOI：10.1016/j.compchemeng.2025.109096）。
+工作区状态：**Level 3/3P 证据已提交；核心图、总总结和 HANDOFF 正在形成独立收口提交。PPT 本轮不再修改。**
 
-研究边界：现阶段只做纯仿真验证，后期才考虑接入 BMS。当前不是在训练真实电池硬件上的最终控制器，也不能把仿真结果直接当作可部署的安全结论。
+---
 
-## 2. 已完成的阶段
+## 0. 新对话先读这里
 
-### Phase 1：基础充电仿真
+本项目研究：
 
-- 建立 Chen2020 电池模型下的 CC–CV 基线和 10%–80% SOC 终止逻辑。
-- 修正过 2C 工况不能正确进入/保持恒压、目标 SOC 终止不正确的问题。
-- Git 标签：`v0.1.0`、`v0.1.1`。
+> 使用 ANN 学习受约束 MPC 的动力电池快速充电策略，以降低 BMS 在线计算量，同时保持电流、电压、充电时间和安全约束。
 
-### Phase 2：降阶模型辨识
+当前最重要的结论是：
 
-- 为 MPC 建立计算量较低的预测模型，并用 Chen2020/DFN 结果校核。
-- 相关说明：`docs/phase2_model.md`。
-- 提交：`8ce8d4a`。
+1. 1RC 和 2RC 简单电模型中，pure DNN 可以稳定逼近 MPC。
+2. 加入上一时刻电流和硬电流斜率约束后，pure DNN 的离线与闭环精度仍然通过，但无法天然保证每一步严格满足硬约束。
+3. Level 3P 增加一个解析输出投影，仅修正原有 48 个风险动作，占全部动作的 0.3596%，即可严格消除斜率违约，同时基本不损害闭环性能。
+4. Phase 7A **停止在 Level 3P，不进入 Level 4**。Level 4 的温度状态、温度约束和参数相关性本轮明确不运行。
+5. 下一步优先级不是训练新网络，而是：
+   - 先提交、推送 Level 3 与 Level 3P 的完整证据链；
+   - 再新开独立阶段，冻结 Level 3P 控制器，做 25 ℃ DFN 跨模型闭环审计。
 
-### Phase 3 / 3B：约束 MPC 与教师数据
+不要把最新结论错误概括为“ANN不能替代MPC”。准确表述是：
 
-- 实现电压、电流、温度和电流斜率约束下的 MPC。
-- 在 Chen2020 DFN 闭环中验证 MPC，并生成可达的 MPC 教师数据集。
-- 相关说明：`docs/phase3_mpc.md`、`docs/phase3b_teacher_data.md`。
-- 提交：`0d03ceb`、`029e761`。
+> 无保护的 pure DNN 可以高精度模仿含斜率约束的 MPC 策略，但不能提供逐步硬约束保证；ANN 加最小解析投影在当前 2RC 同模型域内严格通过，并可替代在线 MPC 求解。
 
-### Phase 4 / 4B / 4B-2：小型 ANN 模仿与主动增广
+---
 
-- 训练过小型 ANN 模仿 MPC。
-- 做过热预算教师验证和针对困难区域的主动数据增广。
-- 相关说明：`docs/phase4_tiny_ann.md`、`docs/phase4b_teacher.md`、`docs/phase4b2_active_learning.md`。
-- 提交：`3756938`、`8001fd1`、`b4d4097`。
+## 1. 研究任务和技术架构
 
-### Phase 5A：鲁棒性压力测试
+### 1.1 长期目标
 
-- 对 ANN 控制器做过温度变化等压力测试，用于暴露分布外和约束风险。
-- 相关说明：`docs/phase5a_robustness.md`。
-- 提交：`fb4a1fd`。
+最终目标是形成适合 BMS 实时部署的快速充电控制器：
 
-### Phase 6A：论文式纯 DNN 方法验证
+$$
+\text{电池状态估计}
+\rightarrow
+\text{ANN 快速控制决策}
+\rightarrow
+\text{轻量安全保证}
+\rightarrow
+\text{电池}
+$$
 
-- 独立建立 `phase6_paper_method_validation`，没有覆盖 Phase 1–5。
-- 按论文思路完成状态采样、MPC 标签生成、纯 DNN 训练、25 ℃ 名义闭环比较。
-- 预设通过门槛包括：闭环电流 NRMSE < 1%、无严重物理约束违约、充电时间相对 MPC 偏差 < 2%、推理显著快于 MPC，并最终检查 15/25/30 ℃。
-- Phase 6A 没有通过纯 DNN 方法验证，因此继续做 Phase 6B 诊断。
-- 相关说明：`docs/phase6_paper_method_validation.md`。
-- 已推送提交：`592a7e5`。
+当前全部工作仍属于仿真研究，尚未完成 HIL、嵌入式部署或真实电芯实验，不能声称已经获得可直接上车的 BMS 控制器。
 
-### Phase 6B：解释纯 DNN 为什么没有学好 MPC
+### 1.2 电池模型、MPC 与 ANN 的分工
 
-Phase 6B 已实现、已运行、已出报告并通过测试，但**尚未提交 Git**。它包含三项实验：
+| 模块 | 作用 | 当前定位 |
+|---|---|---|
+| DFN 高保真模型 | 模拟更真实的电化学动态 | 虚拟电池与最终跨模型验证对象 |
+| 1RC/2RC 降阶模型 | 以较低计算量预测 SOC、电压等状态 | MPC 在线预测模型 |
+| MPC | 在模型和约束下滚动求解最优电流 | 离线教师与性能基准 |
+| ANN/DNN | 学习 MPC 的状态—第一动作映射 | 在线快速策略 |
+| 解析投影/安全层 | 对 ANN 输出提供硬约束保证 | Level 3P 已验证电流与斜率投影 |
 
-1. 按 SOC、温度、上一时刻电流、约束激活/临界状态分区诊断误差，重点检查电流变化率 `ΔI` 约束附近；
-2. 将数据扩大到 1000 个初始状态，并比较 `5-32-32-16-1` 和 `5-64-64-32-1` 两个更大网络；
-3. 将 pure DNN 和 projected DNN 分开比较。pure DNN 完全不裁剪；projected DNN 只把输出投影到 `I_max` 和 `ΔI_max` 可行区间，作为独立对照组。
+ANN 当前主要替代的是 MPC 的**在线重复优化求解**，不是替代电池模型、状态估计或全部安全逻辑。
 
-最终生成 878 条被接受的教师轨迹、7024 个展开样本。选择的网络是 `[5, 32, 32, 16, 1]`，但训练达到 2500 次迭代上限，尚未收敛。
+### 1.3 当前验收合同
 
-关键结果：
+主要严格门槛：
 
-| 指标 | pure DNN | projected DNN |
-|---|---:|---:|
-| 25 ℃ DFN 闭环电流 NRMSE | 5.228% | 7.023% |
-| 10%–80% 充电时间 | 52.17 min | 52.42 min |
-| 相对 MPC 充电时间偏差 | 2.644% | 2.177% |
-| 最大 `ΔI` 违约 | 2.581 A | 0 A |
-| 严重物理违约判定 | 是 | 否 |
+| 指标 | 门槛 |
+|---|---:|
+| 离线冻结测试 NRMSE | 小于 1% |
+| 同模型闭环电流 NRMSE | 小于 1% |
+| 平均充电时间偏差 | 小于 2% |
+| 目标到达率 | 100% |
+| 电流、电压和硬斜率严重违约 | 0 |
+| 在线加速 | 大于 100 倍 |
 
-离线测试集 NRMSE 为 11.494%，R² 为 0.659。最差误差集中在：
+只有这些指标同时通过，才可以说当前层级严格通过。
 
-- 上一时刻电流 2–5 A：NRMSE 15.138%；
-- 上一时刻电流 0–2 A：NRMSE 14.953%；
-- `ΔI` 约束临界附近：NRMSE 14.762%；
-- `ΔI` 约束激活样本：NRMSE 14.751%。
+---
 
-当前最可靠的结论是：输出投影能够消除电流斜率违约，但没有改善控制轨迹拟合，反而使闭环 NRMSE 从 5.228% 上升到 7.023%。所以主要问题不是“网络输出偶尔越界”这么简单，而是 DNN 本体没有准确学到 MPC 在约束切换附近的映射。更大的数据集和更大的网络在这次实验中也没有自动解决问题。
+## 2. 已完成实验路线
 
-Phase 6B 入口与结果：
+## 2.1 Phase 1–4：基础链路
 
-- 配置：`configs/phase6b_dnn_failure_diagnosis.yaml`
-- 运行入口：`src/battery_fast_charge/phase6b_cli.py`
-- 核心流程：`src/battery_fast_charge/phase6b_runner.py`
-- 总报告：`outputs/phase6b_report.md`
-- 完整指标：`outputs/metrics/phase6b_metrics.json`
-- 分区诊断表：`data/phase6b_dnn_failure_diagnosis/error_partition_diagnostics.csv`
-- 方法说明：`docs/phase6b_dnn_failure_diagnosis.md`
-- 图：`outputs/figures/phase6b_*.png`
-- 模型：`outputs/models/phase6b_paper_dnn.npz`
+已完成：
 
-## 3. 当前状态与“卡点”
+- Chen2020 电池参数与 CC–CV 基线；
+- DFN 高保真虚拟电池；
+- 1RC/2RC 与电热降阶模型；
+- 受约束 MPC；
+- MPC 教师轨迹；
+- 小型 ANN 模仿；
+- ANN 安全层与 DFN 闭环。
 
-当前没有代码执行层面的硬阻塞；Phase 6B 已完整跑通。真正的研究卡点是：纯前馈 DNN 对 MPC 的分段、约束切换映射拟合不足，尤其是 `I_previous` 较低以及 `ΔI` 约束激活/临界区域。
+Phase 4B-2 在名义域内表明“ANN候选＋安全层”具有工程可行性，但不能证明 pure ANN 可完全替代 MPC。
 
-同时存在一个版本管理待办：工作区当前有 Phase 6B 的全部未提交改动。新对话开始后应先运行 `git status --short --branch` 核对，不要清理、重置或重新拉取覆盖这些文件。当前已知未提交内容包括：
+主要入口：
 
-- 修改：`README.md`、`pyproject.toml`、`src/battery_fast_charge/phase6_plotting.py`；
-- 新增：Phase 6B 配置、源代码、测试、数据、模型、图、指标、报告和本交接文档；
-- `outputs/phase6b_run_stdout.txt` 和 `outputs/phase6b_run_stderr.txt` 是运行日志。stderr 主要是 scikit-learn 达到迭代上限的收敛警告；提交前可决定是否保留日志，其他 Phase 6B 产物应保留。
+- `docs/phase2_model.md`
+- `docs/phase3_mpc.md`
+- `docs/phase3b_teacher_data.md`
+- `docs/phase4_tiny_ann.md`
+- `docs/phase4b2_active_learning.md`
 
-最近一次完整测试结果：`37 passed`。`git diff --check` 通过，仅出现 Windows 下 LF/CRLF 转换提示。
+## 2.2 Phase 5：压力域和 MPC 可行性
 
-## 4. 建议的下一步
+Phase 5A 在温度、参数扰动和 DFN 压力场中暴露了名义域外失效。
 
-### 第一步：先保存 Phase 6B 版本
+Phase 5B 系列进一步证明：
 
-1. 查看 `git diff` 和 `git status`，确认只有上述 Phase 6B 工作；
-2. 保留源代码、配置、测试、报告、指标、诊断 CSV、模型和图片；
-3. 运行完整测试；
-4. 建议提交信息：`Add Phase 6B DNN failure diagnosis`；
-5. 推送当前分支。不要在没有核对工作区的情况下执行 pull、reset 或 checkout。
+- 复杂压力域中 MPC 教师本身大量不可行；
+- Recovery 可以保持已知可行域，但没有扩大可行域；
+- 不能把教师不可行场景直接当作 pure ANN 模仿学习域；
+- 回放合同若不一致，会制造虚假的控制器回归结论。
 
-### 第二步：开展 Phase 6C，但不要只盲目增大网络
+关键教训见本文件“踩坑”章节。
 
-建议新建独立 `phase6c_constraint_regime_learning`，保留 Phase 6A/6B 原始结果。优先按以下顺序做：
+主要入口：
 
-1. **确认误差机制**：画出 MPC 标签相对 `SOC、T、I_previous` 的局部切片，明确 `ΔI` 激活边界处是否存在折点、不连续或多解/求解器抖动；同时检查同类状态是否因为未纳入 DNN 输入的隐状态而对应不同标签。
-2. **定向数据增广/加权**：增加 `I_previous=0–5 A`、`ΔI` 激活和临界区域样本，在损失中提高这些样本权重；保留统一的独立测试集，不能把增广样本泄漏到测试集。
-3. **把预测目标改为 `ΔI` 做严格对照**：预测下一步电流增量而不是绝对电流，并保持 pure 模型和 projected 模型分组；这利用了问题的自然约束结构，但不能把投影模型冒充纯论文式 DNN。
-4. **约束工况分区/混合专家对照**：可按“斜率约束激活、其他约束激活、内部自由区”训练分类器加回归器，检验单一连续网络是否难以覆盖所有控制区域。
-5. **再处理优化器收敛**：当前两个候选网络都撞到 2500 次迭代上限。先标准化和检查标签几何，再尝试更高迭代数、不同初始化或 Adam/早停；不能把未收敛结果解释成网络容量的最终上限。
-6. **沿用同一评价门槛**：先过 25 ℃ 名义闭环，再做 15/30 ℃ 与 Phase 5A 压力测试。不要因为误差下降就放宽原有 1% NRMSE、2% 时间偏差和物理约束门槛。
+- `outputs/phase5a_report.md`
+- `outputs/phase5b0_report.md`
+- `outputs/phase5b06_report.md`
+- `docs/phase5b0_mpc_feasibility_envelope.md`
+- `docs/phase5b06_corrected_15scenario.md`
 
-建议 Phase 6C 的最小实验矩阵：
+## 2.3 Phase 6：论文方法迁移与失败根因诊断
 
-| 组别 | 输入/目标 | 数据处理 | 输出处理 | 用途 |
-|---|---|---|---|---|
-| A | 原 5 输入 → 绝对电流 | 原始分布 | 无 | Phase 6B 基线 |
-| B | 原 5 输入 → 绝对电流 | 边界增广/加权 | 无 | 判断数据覆盖是否主因 |
-| C | 原 5 输入 → `ΔI` | 边界增广/加权 | 无 | 判断目标参数化是否更合适 |
-| D | 与最佳纯模型相同 | 相同 | `I_max + ΔI_max` 投影 | 只评估可行性后处理贡献 |
+### Phase 6A/6B/6C/6R
 
-只有纯模型先在离线独立测试和 25 ℃ 闭环达到可接受水平，才值得继续扩大到多温度。若定向增广后约束切换区仍明显失败，应转向分区模型、可微约束结构或保留在线优化修正，而不是继续宣称单一 DNN 已学到“最优控制器”。
+直接把论文式 pure DNN 迁移到 Chen2020 复杂控制问题时没有严格通过。
 
-## 5. 已踩过的坑，勿重复
+已排查：
 
-1. **不要把 ANN 说成自动得到“最优控制器”**。ANN 只是模仿有限状态域内的 MPC 教师；最优性来自模型、目标、约束和求解精度，而且只能在验证范围内讨论。
-2. **不要预设 ANN 一定快充得比 CC–CV 更快**。本项目只预设在线推理比反复解 MPC 快，充电时间优劣必须由仿真结果决定。
-3. **不要把 projected DNN 混入 pure DNN 结论**。投影是安全/可行性后处理，必须是独立对照组，否则无法判断网络本体是否学好。
-4. **不要只看总体 RMSE**。总体均值会掩盖 `ΔI` 激活边界和低 `I_previous` 区域的严重错误，必须保留分区诊断。
-5. **不要仅靠扩大网络和数据量得出结论**。Phase 6B 已表明 1000 初态、两个更大网络仍失败，而且均未在 2500 次内收敛；需先处理数据覆盖、标签结构和优化收敛。
-6. **不要把达到迭代上限的模型叫作已充分训练**。当前选择网络 `selected_optimizer_reached_iteration_limit=True`，这是明确限制，报告中必须保留。
-7. **教师数据生成很慢**。1000 个初态的平均 MPC 求解约 0.90 s，最大约 5.29 s。Phase 6B 已实现 CSV 缓存复用；不要无故删除 `data/phase6b_dnn_failure_diagnosis/initial_state_audit.csv` 和 `paper_teacher_dataset.csv` 后重算。
-8. **此前尝试过过大的训练网格**：2 个结构 × 3 个正则化 × 3 个种子、8000 次迭代，实际过慢且网络撞迭代上限，后来收缩为每结构一个正则化和一个种子、2500 次。若恢复完整网格，应当有明确算力/时间预算，并保存中间结果。
-9. **不要覆盖旧阶段**。Phase 6A、6B 以及未来 6C 应保持独立目录、配置、报告和产物，便于论文式方法的可追溯对照。
-10. **不要强行补齐 Chen2020 没有的空间热参数**。该参数集缺少极耳尺寸和多个表面对流参数；人为补齐会把假设误当事实。它主要威胁空间温度分布、热点和局部约束结论。当前单温度/集中热模型阶段可继续，但不能据此声称已验证电芯内部热点安全或真实 BMS 可部署性。
-11. **不要将仿真模型直接部署至 BMS**。后续至少需要参数辨识、模型失配分析、传感器噪声/状态估计、实时性、故障降级、HIL 和真实电芯验证。
-12. **Windows 工具注意事项**：本环境中 `rg` 曾被系统拒绝，可用 PowerShell 的 `Get-ChildItem`/`Select-String`；运行测试和脚本时需设置 `PYTHONPATH` 指向 `src`，并使用项目已配置的虚拟环境。换行符出现 LF/CRLF 提示并不等同于内容错误。
-13. **不要覆盖未提交工作区**。用户之前曾因新任务覆盖项目后从 GitHub 恢复；当前 Phase 6B 尚未提交，若此时直接重新拉取或重置，可能再次丢失工作。
+- 输出投影；
+- 网络容量；
+- 优化器；
+- 数据增广；
+- 结构化增量输出；
+- 教师时序一致性；
+- 控制记忆；
+- 约束区域覆盖。
 
-## 6. 新对话的建议启动检查
+修正教师时序后结果显著改善，但仍未通过严格门槛。
 
-进入项目后依次确认：
+### Phase 6P-0：NDC 阳性对照
+
+NDC 功能性原位复现通过：
+
+- 冻结测试 NRMSE：0.0369%；
+- 30 条闭环平均电流 NRMSE：0.0326%；
+- 目标到达：30/30；
+- 在线加速：96.6 倍。
+
+这排除了“基础 ANN 管线整体错误”。
+
+### Phase 2R/2R-C/2R-D：控制律可学习性审计
+
+最终发现：
+
+- 控制器记忆是缺失信息之一；
+- Chen2020 复杂 MPC 在部分区域存在近最优第一动作多值性；
+- 完整控制序列仍不能让局部单值性全面通过；
+- pure DNN 直接替代复杂 MPC 缺少充分依据。
+
+主要入口：
+
+- `outputs/phase6r_report.md`
+- `outputs/phase6p0_ndc_paper/PHASE6P0_NDC论文原位复现报告.md`
+- `outputs/phase2r_sufficiency_audit/PHASE2R模型与控制状态充分性审计报告.md`
+- `outputs/phase2rc_prospective_memory_audit/PHASE2R-C前瞻式控制记忆审计报告.md`
+- `outputs/phase2rd_final_discrimination/PHASE2R-D最终判别报告.md`
+
+---
+
+## 3. Phase 7A：逐级增加复杂度
+
+Phase 7A 的目的不是继续盲目扩大网络，而是每次只增加一个复杂因素，定位 pure DNN 首次失效点。
+
+实验阶梯：
+
+$$
+\text{1RC}
+\rightarrow
+\text{2RC}
+\rightarrow
+\text{上一电流与硬斜率}
+\rightarrow
+\text{电热约束}
+\rightarrow
+\text{DFN/扰动}
+$$
+
+本轮实际停止在第三层的投影修复，不进入电热 Level 4。
+
+## 3.1 Level 1：1RC 初始实验
+
+教师确定、离线测试通过，但闭环失败：
+
+- 闭环电流 NRMSE 约 9%；
+- 充电时间偏差约 38%。
+
+根因是教师样本最大 SOC 仅约 0.7596，没有覆盖目标 SOC 0.80 附近的末端降流区域。
+
+## 3.2 Level 1R：修复末端覆盖
+
+增加末端轨迹后：
+
+- 闭环电流 NRMSE：0.281%–0.315%；
+- 安全与到达率通过；
+- 部分种子的充电时间偏差仍超过 2%。
+
+## 3.3 Level 1S：训练稳定性
+
+在不修改数据、MPC和控制问题的情况下完成 3 种结构 × 2 种优化器 × 5 种子，共 30 次训练。
+
+选择深层网络加 LBFGS 后严格通过：
+
+- 原始冻结测试 NRMSE：0.158%–0.372%；
+- 末端冻结测试 NRMSE：0.155%–0.284%；
+- 闭环电流 NRMSE：0.167%–0.352%；
+- 最大平均到达时间偏差：0.565%；
+- 目标到达率：100%；
+- 电流、电压违约：0；
+- 最低加速：约 1671 倍。
+
+主要入口：
+
+- `outputs/phase7a_level1s_training_stability/PHASE7A_LEVEL1S_中文实验报告.md`
+- `outputs/phase7a_level1s_training_stability/metrics.json`
+
+## 3.4 Level 2：2RC
+
+状态：
+
+$$
+x_k=
+\begin{bmatrix}
+SOC_k & V_{1,k} & V_{2,k}
+\end{bmatrix}^{\mathsf T}
+$$
+
+仍然只有电流和端电压约束。
+
+严格通过：
+
+- 教师接受：399/400；
+- 100×15 多起点全部成功；
+- 多值状态比例：0%；
+- 第一动作极差 P95：0.0169 A；
+- 全域冻结测试 NRMSE：0.192%–0.274%；
+- 末端冻结测试 NRMSE：0.205%–0.462%；
+- 闭环电流 NRMSE：0.148%–0.366%；
+- 最大时间偏差：1.343%；
+- 目标到达率：100%；
+- 电流、电压违约：0；
+- 最低加速：约 1342 倍。
+
+结论：第二个极化状态不是失效点。
+
+主要入口：
+
+- `outputs/phase7a_level2_2rc/PHASE7A_LEVEL2_中文实验报告.md`
+- `outputs/phase7a_level2_2rc/metrics.json`
+
+---
+
+## 4. 当前最新结果：Level 3 与 Level 3P
+
+## 4.1 Level 3：pure DNN 首次严格失败
+
+Level 3 相对 Level 2 只增加：
+
+1. ANN 输入中的上一时刻电流；
+2. 每 5 s 最大 2 A 的硬电流斜率约束。
+
+状态：
+
+$$
+x_k=
+\begin{bmatrix}
+SOC_k & V_{1,k} & V_{2,k} & I_{k-1}
+\end{bmatrix}^{\mathsf T}
+$$
+
+硬约束：
+
+$$
+\left|I_k-I_{k-1}\right|
+\leq
+2\ \mathrm{A}/5\mathrm{s}
+$$
+
+本层级不包含温度、DFN、参数扰动或 Phase 5A 压力场。
+
+结果：
+
+- 教师轨迹：400/400 接受；
+- 教师样本：5760；
+- 低电流标签：183；
+- 100×15 审计全部成功；
+- 多值状态比例：0%；
+- 第一动作极差 P95：0.0161 A；
+- 全域离线 NRMSE：0.331%–0.521%；
+- 末端离线 NRMSE：0.329%–0.507%；
+- 闭环电流 NRMSE：0.228%–0.340%；
+- 最大充电时间偏差：0.869%；
+- 目标到达率：100%；
+- 电压违约：0 V；
+- 最低加速：约 1035 倍。
+
+唯一失败项：
+
+$$
+\max_k\left|I_k-I_{k-1}\right|
+=
+2.128929\ \mathrm{A}
+$$
+
+超过 2 A 硬门槛：
+
+$$
+2.128929-2
+=
+0.128929\ \mathrm{A}
+$$
+
+逐步数据进一步显示：
+
+- DNN 闭环动作总数：13349；
+- 风险动作：48 步；
+- 风险比例：0.3596%；
+- 五个种子全部出现少量斜率违约；
+- 违约不只发生在初始步，也发生在后续控制步。
+
+结论：
+
+> Level 3 不是策略拟合失败，而是无约束 pure DNN 无法天然保证逐步硬约束。
+
+主要入口：
+
+- `outputs/phase7a_level3_slew/PHASE7A_LEVEL3_中文实验报告.md`
+- `outputs/phase7a_level3_slew/metrics.json`
+- `data/phase7a_level3_slew/closed_loop_trajectories.csv`
+- `notebooks/phase7a_level3_slew_results.ipynb`
+- `configs/phase7a_level3_slew.yaml`
+
+## 4.2 Level 3P：最小解析投影严格通过
+
+Level 3P 冻结了 Level 3 的 13 项工件：
+
+- 模型与MPC实现；
+- 配置；
+- 教师数据；
+- 两套冻结测试；
+- 闭环初态与原始轨迹；
+- 离线指标；
+- 五个 ANN 模型。
+
+13 项 SHA-256 哈希全部匹配；没有重新训练网络，也没有重新生成教师数据。
+
+唯一变化是把 ANN 原始输出投影到当前可行电流区间。
+
+定义：
+
+$$
+I_k^{-}
+=
+\max\left(0,I_{k-1}-2\right)
+$$
+
+$$
+I_k^{+}
+=
+\min\left(10,I_{k-1}+2\right)
+$$
+
+$$
+I_k^{\mathrm{safe}}
+=
+\operatorname{clip}
+\left(
+I_k^{\mathrm{raw}},
+I_k^{-},
+I_k^{+}
+\right)
+$$
+
+这从结构上保证：
+
+$$
+0
+\leq
+I_k^{\mathrm{safe}}
+\leq
+10\ \mathrm{A}
+$$
+
+以及：
+
+$$
+\left|I_k^{\mathrm{safe}}-I_{k-1}\right|
+\leq
+2\ \mathrm{A}/5\mathrm{s}
+$$
+
+投影结果：
+
+- Level 3 原始风险动作：48；
+- Level 3P 实际介入：48；
+- 精确位置重合：48/48；
+- 风险动作 ±1 步邻域外新增介入：0；
+- 介入比例：0.3596%；
+- 介入时平均修正：0.0439 A；
+- 最大修正：0.1327 A。
+
+闭环结果：
+
+- 最大斜率违约：$4.44\times10^{-16}$ A，属于浮点误差，视为 0；
+- 最大单步电流变化：2.000000 A；
+- 电流 NRMSE：0.228%–0.338%；
+- 最大时间偏差：0.869%；
+- 目标到达率：100%；
+- 电压违约：0 V；
+- 电流绝对边界违约：0 A；
+- 最低加速：约 626 倍。
+
+严格结论：
+
+> Level 3P 最小投影严格通过。策略拟合原本已经足够准确；解析投影仅修复少量边界风险动作，即可恢复硬电流和硬斜率可行性。
+
+注意：
+
+- Level 3P 已经不是“无保护 pure DNN”，应称为“ANN策略＋解析输出投影”。
+- 它在当前 2RC 同模型控制域内可以替代在线 MPC 求解。
+- 投影只对电流边界和斜率约束提供数学保证；本轮电压无违约是实验结果，不是投影对所有状态的普遍保证。
+
+主要入口：
+
+- `outputs/phase7a_level3p_projection/PHASE7A_LEVEL3P_中文实验报告.md`
+- `outputs/phase7a_level3p_projection/metrics.json`
+- `data/phase7a_level3p_projection/projection_interventions.csv`
+- `notebooks/phase7a_level3p_projection_results.ipynb`
+- `configs/phase7a_level3p_projection.yaml`
+
+---
+
+## 5. 当前卡在哪里
+
+当前没有算法运行或代码实现层面的硬阻塞。真正的待办是版本封存和下一阶段边界选择。
+
+### 5.1 Level 3/3P 已形成两个独立提交
+
+当前分支：
+
+`codex/phase7a-level3-slew-constraint`
+
+当前证据提交：
+
+- `933ab5e`：Level 3 硬斜率失败证据；
+- `812441c`：Level 3P 最小输出投影修复。
+
+Level 3、Level 3P 的代码、配置、数据、模型、Notebook、报告和测试已经分别提交，下一步是在文档与导师汇报更新后统一推送当前分支。
+
+不要执行：
+
+- `git reset --hard`
+- `git checkout -- .`
+- 未核对工作区就 `pull`
+- 删除 Level 3/3P 数据或模型后重算
+
+### 5.2 工作区包含额外未跟踪产物
+
+除 Level 3/3P 外，还存在：
+
+- 导师汇报 PPT 与渲染预览；
+- PPT 填充素材；
+- 项目总结 Markdown；
+- 旧 Phase 5B/6B 运行日志；
+- `outputs/phase7a_level1s_training_stability/PHASE7A_LEVEL1S_中文实验报告.md` 的行尾状态变化；
+- `pyproject.toml` 新增 Level 3/3P CLI 入口。
+
+提交前必须逐项确认范围，不要把所有未跟踪文件无差别加入一次实验提交。
+
+### 5.3 研究边界
+
+Phase 7A 已明确停止在 Level 3P，不进入 Level 4。
+
+当前尚未证明：
+
+- 25 ℃ DFN 跨模型闭环仍通过；
+- 温度状态和温度约束下仍通过；
+- 参数扰动或模型失配下仍通过；
+- 跨温度、跨电池泛化；
+- HIL 或真实 BMS 实时部署。
+
+---
+
+## 6. 下一步计划
+
+## 6.1 第一优先级：提交并推送 Level 3/3P
+
+建议保留“失败—修复”两段证据，分成两个提交：
+
+### 提交一：Level 3
+
+建议包含：
+
+- `configs/phase7a_level3_slew.yaml`
+- `src/battery_fast_charge/phase7a_level3_*.py`
+- `scripts/build_phase7a_level3_notebook.py`
+- `notebooks/phase7a_level3_slew_results.ipynb`
+- `tests/test_phase7a_level3.py`
+- `data/phase7a_level3_slew/`
+- `outputs/phase7a_level3_slew/`
+- `pyproject.toml` 中对应 CLI 入口
+
+建议提交信息：
+
+`Add Phase 7A Level 3 hard slew boundary`
+
+### 提交二：Level 3P
+
+建议包含：
+
+- `configs/phase7a_level3p_projection.yaml`
+- `src/battery_fast_charge/phase7a_level3p_*.py`
+- `scripts/build_phase7a_level3p_notebook.py`
+- `notebooks/phase7a_level3p_projection_results.ipynb`
+- `tests/test_phase7a_level3p.py`
+- `data/phase7a_level3p_projection/`
+- `outputs/phase7a_level3p_projection/`
+- `pyproject.toml` 中对应 CLI 入口
+- 更新后的 `HANDOFF.md`
+
+建议提交信息：
+
+`Add Phase 7A Level 3P minimal output projection`
+
+提交前运行完整测试并检查：
+
+```powershell
+git status --short --branch
+git diff --check
+$env:PYTHONPATH=(Resolve-Path 'src').Path
+python -m pytest -q
+```
+
+完成后推送当前分支。
+
+## 6.2 第二优先级：更新项目总结和导师汇报
+
+需要把原先“Level 3计划”更新为“Level 3失败＋Level 3P修复”。
+
+推荐核心表：
+
+| 阶段 | 新增因素 | 策略精度 | 硬斜率 | 结论 |
+|---|---|---:|---:|---|
+| Level 2 | 第二极化状态 | 通过 | 无 | pure DNN通过 |
+| Level 3 | 上一电流＋硬斜率 | 通过 | 失败 | pure DNN无硬保证 |
+| Level 3P | 最小输出投影 | 通过 | 通过 | ANN＋投影严格通过 |
+
+推荐核心表述：
+
+> 模型复杂度和策略拟合不是当前失效原因；无约束 ANN 缺少硬约束保证，而解析投影可以仅介入 0.3596% 的风险动作完成修复。
+
+现有汇报材料：
+
+- `outputs/导师汇报_ANN_MPC充电控制研究思路_7页简版_2026-07-23.pptx`
+- `outputs/PPT填充素材_电池模型_MPC_ANN_2026-07-23/`
+- `docs/当前实验思路与已完成实验路线_2026-07-23.md`
+
+这些文件当前未必都适合与实验代码放入同一提交，应单独决定是否纳入版本管理。
+
+## 6.3 第三优先级：新开 Phase 7B-0 跨模型审计
+
+如果继续朝 BMS 应用推进，建议新开独立阶段，而不是 Level 4。
+
+建议名称：
+
+**Phase 7B-0：冻结 Level 3P 控制器的 25 ℃ DFN 跨模型验证**
+
+唯一变化：
+
+$$
+\text{ANN＋投影}\rightarrow\text{2RC}
+$$
+
+变为：
+
+$$
+\text{ANN＋投影}\rightarrow\text{25 ℃ DFN}
+$$
+
+必须冻结：
+
+- Level 3 五个 ANN 模型；
+- Level 3P 投影；
+- MPC和2RC参数；
+- 初始状态；
+- 采样周期；
+- SOC目标；
+- 电流、电压和斜率门槛；
+- 不重新训练；
+- 不新增教师数据。
+
+检查：
+
+- 电流与斜率投影仍应严格满足；
+- DFN端电压是否越界；
+- 目标到达率；
+- 充电时间偏差；
+- ANN与MPC电流NRMSE；
+- 是否出现闭环振荡；
+- 在线加速。
+
+若 DFN 电压失败，不要立刻重训更大网络。先增加：
+
+$$
+\text{ANN输出}
+\rightarrow
+\text{电流/斜率投影}
+\rightarrow
+\text{一步电压可行性检查}
+$$
+
+若一步检查仍不足，再转向：
+
+$$
+\text{ANN候选/参考}
+\rightarrow
+\text{有限迭代MPC安全修正}
+$$
+
+不要在 Phase 7B-0 同时加入温度、参数扰动和跨电池因素，否则无法归因。
+
+---
+
+## 7. 已踩过的坑，不要再踩
+
+### 7.1 不要把低 NRMSE 当作硬约束保证
+
+Level 3 已经证明：
+
+- 闭环 NRMSE 低于 0.35%；
+- 但仍有 48 个动作违反 2 A 硬斜率。
+
+平均误差和最坏逐步约束是两类不同指标，必须分别检查。
+
+### 7.2 不要混淆 pure DNN 与 projected DNN
+
+- pure DNN：原始网络输出直接控制；
+- projected DNN：输出经过可行域投影。
+
+Level 3P 的成功不能写成“pure DNN严格通过”，必须写成“ANN＋解析投影严格通过”。
+
+### 7.3 不要改动冻结工件后仍声称单因素验证
+
+Level 3P 的因果证据来自 13 项哈希全部匹配。若修改模型、数据、初态、ANN或MPC，就不再是投影的单因素对照。
+
+### 7.4 不要无故重新生成教师数据
+
+教师数据生成慢，且重新运行会引入随机性和合同漂移。已有数据、模型和哈希应优先复用。
+
+### 7.5 不要一次加入多个复杂因素
+
+此前 Chen2020 复杂域同时包含：
+
+- 热状态；
+- 参数相关性；
+- 控制记忆；
+- 斜率约束；
+- 模型失配；
+- 求解器分支。
+
+这导致失败难以归因。后续必须继续单因素推进。
+
+### 7.6 不要忽略教师可行性与单值性
+
+Phase 2R-D 和 Phase 5B 已证明：
+
+- 教师可能存在近最优动作多值性；
+- MPC在压力域可能本身不可行；
+- 不可行教师域不能直接用于证明 ANN 模仿失败。
+
+训练前先审计教师。
+
+### 7.7 不要遗漏控制器记忆
+
+当 MPC 目标或约束依赖上一电流、上一控制序列或 warm start 时，这些信息若不进入 ANN 输入，同一表观状态可能对应不同标签。
+
+Level 3 已把上一电流明确加入状态，不能回退到不含 $I_{k-1}$ 的输入后仍比较硬斜率策略。
+
+### 7.8 不要破坏轨迹级数据隔离
+
+训练、验证和冻结测试必须按轨迹隔离，不能把同一轨迹的不同时间步分到不同集合，否则离线指标会虚高。
+
+### 7.9 不要忽略末端覆盖
+
+Level 1 的失败来自没有覆盖 0.80 SOC 附近的末端降流区。离线全局测试通过不代表闭环末端行为正确。
+
+### 7.10 不要让回放合同不一致
+
+Phase 5B-0.5 的错误结论来自：
+
+- 随机种子不一致；
+- 场景索引不一致；
+- 噪声序列不一致；
+- 截止时间不一致；
+- 目标电流 cap 逻辑不一致。
+
+配对比较必须共享完整回放合同。
+
+### 7.11 不要混淆电池模型角色
+
+- DFN更真实，但计算量大，主要作为虚拟电池；
+- 1RC/2RC适合控制预测，但不是比DFN更真实；
+- Level 1–3P主要是同模型电控制验证，不等于电热和DFN已经验证。
+
+### 7.12 不要把仿真结论直接外推到真实BMS
+
+真实部署还需要：
+
+- 在线状态估计；
+- 参数辨识与老化；
+- 传感器噪声；
+- 故障与降级；
+- 实时硬件测试；
+- HIL；
+- 真实电芯验证。
+
+### 7.13 不要覆盖未提交工作区
+
+当前工作区包含完整 Level 3/3P 证据链。任何清理、重置、切换或拉取前必须先核对并保存。
+
+### 7.14 不要把行尾提示当成内容修改
+
+Windows 下可能出现 LF/CRLF 提示。当前 Level 1S 中文报告在 `git status` 中显示修改，但文本 diff 为空，可能只是行尾状态。不要未经核对将其混入 Level 3/3P 提交。
+
+### 7.15 不要自动提交所有日志和PPT预览
+
+工作区有旧运行日志、PPT渲染目录和 `.inspect.ndjson`。提交前决定哪些属于正式证据，避免把临时预览和大批无关文件混入实验提交。
+
+---
+
+## 8. 新对话启动检查
+
+进入项目后先执行：
 
 ```powershell
 git status --short --branch
 git log --oneline --decorate -5
-$env:PYTHONPATH=(Resolve-Path 'src').Path
-& 'D:\CodexData\.codex\.chatgpt-projects\g-p-6a5a0bf7034481918b38c28982065456\battery_charging_control\.venv\Scripts\python.exe' -m pytest -q
+git diff --check
 ```
 
-Phase 6B 可通过项目脚本入口重新运行，但默认应优先复用现有教师数据缓存。运行前先阅读：
+优先阅读：
 
-1. `outputs/phase6b_report.md`
-2. `outputs/metrics/phase6b_metrics.json`
-3. `docs/phase6b_dnn_failure_diagnosis.md`
-4. `data/phase6b_dnn_failure_diagnosis/error_partition_diagnostics.csv`
+1. `HANDOFF.md`
+2. `outputs/phase7a_level3_slew/PHASE7A_LEVEL3_中文实验报告.md`
+3. `outputs/phase7a_level3_slew/metrics.json`
+4. `outputs/phase7a_level3p_projection/PHASE7A_LEVEL3P_中文实验报告.md`
+5. `outputs/phase7a_level3p_projection/metrics.json`
+6. `data/phase7a_level3p_projection/projection_interventions.csv`
 
-最后，研究表述应保持克制：目前已经证明的是“纯 DNN 在本配置下没有充分逼近 MPC，输出投影能恢复斜率可行性但不能修复拟合误差”；尚未证明的是“论文方法普遍无效”或“已获得可部署的最优充电控制器”。
-# Phase 6C completion update (2026-07-21)
+检查测试环境：
 
-Phase 6B is frozen at commit `879ad0f` and remote tag `phase6b-baseline`. Phase 6C was
-completed on branch `codex/phase6c-constraint-regime-learning` without changing the
-Phase 6B 7024-sample trajectory split or 704-sample test set.
+```powershell
+$env:PYTHONPATH=(Resolve-Path 'src').Path
+python -m pytest -q
+```
 
-Phase 6C-1 completed 45 ablation runs. It exactly reproduced the Phase 6B seed-22 result
-and diagnosed generalization/data coverage as the primary limitation. All group-mean
-test NRMSE values remained above 5%, so pure network scaling was stopped.
+若系统 `python` 不是项目环境，应先查找项目已有虚拟环境或使用 Codex 工作区提供的 Python，不要随意安装或升级依赖。
 
-Phase 6C-2 added 800 accepted MPC trajectories (500 boundary-targeted and 300 DAgger),
-producing 6400 samples assigned only to Phase 6C training/new-validation sets.
+---
 
-Phase 6C-3 completed five-seed 25 °C DFN validation. Mean frozen-test / closed-loop
-NRMSE values were 5.551% / 4.969% for pure DNN, 5.522% / 5.179% for projected DNN,
-and 7.990% / 3.511% for structured-delta DNN. Every controller had 0/5 strict passing
-seeds. Therefore the paper-style pure DNN transfer did not pass, and Phase 6D must not
-run. Do not run 15/30 °C, Phase 5A perturbations, or cross-battery experiments yet.
+## 9. 给新对话的直接任务
 
-Primary artifacts: `outputs/phase6c_report.md`, `outputs/metrics/phase6c1_metrics.json`,
-`outputs/metrics/phase6c2_metrics.json`, `outputs/metrics/phase6c3_metrics.json`, and
-`docs/phase6c_constraint_regime_learning.md`.
+建议新对话按以下顺序工作：
 
-## Phase 6R completion update (2026-07-21)
+1. 完成核心结论图、项目总总结和 HANDOFF 文档提交；
+2. 运行完整测试并推送 `codex/phase7a-level3-slew-constraint`；
+3. 将 Phase 7A PR 合并到 `main`；
+4. 从最新 `main` 新建独立 Phase 7B-0 分支；
+5. Phase 7B-0 只做冻结 ANN＋投影在 25 ℃ DFN 上的跨模型闭环，不加入温度和扰动；
+6. 若仅 DFN 电压失败，优先进入电压感知安全层或有限迭代 MPC 修正，不重新扩大 pure ANN。
 
-Phase 6R corrected the teacher/control timing mismatch by re-solving MPC at every 5 s
-state and retaining only the first action. The new dataset has 1776 samples from 222
-accepted trajectories with a trajectory-isolated 1232/272/272 train/validation/test
-split. Independent rolling-teacher consistency passed with a maximum difference of 0 A.
+当前最需要保护的研究结论是：
 
-Across seeds 22/42/73, frozen-test mean NRMSE was 1.257% for five-state pure DNN,
-1.990% for full-state pure DNN, and 3.092% for the full-state feasible-interval DNN;
-all had 0/3 passing seeds. Mean 25 C reduced closed-loop NRMSE was 2.624%, 2.625%, and
-2.536%, respectively. Representative DFN NRMSE was 3.361%, 3.032%, and 3.339%, with
-charge-time gaps of about 6%--8%. The feasible-interval controller removed serious
-current/slew violations but did not repair imitation accuracy.
-
-Phase 6R therefore failed its frozen acceptance contract. Keep
-`proceed_to_phase6d=false`: do not run Phase 6D, 15/30 C, Phase 5A perturbations, or
-cross-battery validation for the pure-DNN route. The next planned stage is Phase 5B-0,
-which establishes the nominal/oracle MPC feasibility envelope before ANN v3 training.
-See `docs/phase6r_corrected_policy_distillation.md`, `outputs/phase6r_report.md`, and
-`docs/phase5b0_mpc_feasibility_plan.md`.
-
-## Phase 5B-0 completion update (2026-07-22)
-
-Phase 5B-0 completed the frozen 69-scenario Phase 5A reduced-model feasibility envelope.
-It produced 138 controller runs: nominal MPC and parameter-oracle MPC for every scenario.
-The oracle knew scenario capacity/electro-thermal parameters but shared the nominal MPC's
-noisy state-estimation sequence; it did not receive perfect state measurements.
-
-The complete teacher contract required true target completion, true physical safety,
-optimizer success fraction at least 95%, and zero fallback. Nominal MPC was fully feasible
-on 5/69 scenarios; oracle MPC on 1/69. Completion fractions were 86.96% and 85.51%, while
-physical-safety fractions were 7.25% and 1.45%. The scenario classes were 35
-teacher-and-ANN-infeasible, 5 teacher-and-ANN-feasible, and 29 unresolved cases where the
-Phase 5A safety-layer ANN appeared feasible but both unfiltered MPC teachers failed.
-There were no nominal-failed/oracle-feasible cases.
-
-This means most Phase 5A failures cannot yet be attributed to ANN imitation error. Use
-the 5-scenario nominal teacher mask for Phase 5B-1, separately diagnose the 35 teacher-
-infeasible cases, and treat the 29 unresolved cases as safety-layer/hybrid-controller
-evidence. Do not run cross-battery experiments or claim pure ANN replacement success.
-
-Primary outputs: `outputs/metrics/phase5b0_metrics.json`,
-`data/phase5b_mpc_feasibility/scenario_feasibility_table.csv`,
-`data/phase5b_mpc_feasibility/teacher_feasible_scenario_mask.csv`,
-`docs/phase5b0_mpc_feasibility_envelope.md`, and
-`notebooks/10_phase5b0_mpc_feasibility_executed.ipynb`.
-
-## Phase 5B-0.5 completion update (2026-07-22)
-
-Do not start Phase 5B-1. The 15-scenario representative recovery recheck completed all
-30 nominal/oracle controller runs. The slew-safe fallback achieved zero non-conflict
-fallback slew violations, and the three failure classes are now auditable. The nominal
-25 C scenario was fully feasible for both controller variants.
-
-The representative gate nevertheless failed. Nominal recovery was fully feasible on
-2/15 scenarios versus 5/15 for the matched Phase 5B-0 baseline (gain -3). Oracle recovery
-was feasible on 1/15 versus 1/15 at baseline (gain 0), so oracle remained weaker than
-nominal recovery. Across both controllers there were 2647 prediction-domain-infeasible
-decisions and 1031 hard-safety/slew conflicts, but zero ordinary-fallback slew violations.
-No numerical-failure case had a fully feasible retained candidate.
-
-Therefore do not run the full 69-scenario recovery recheck and do not enter Phase 5B-1.
-The next diagnostic should reconcile Phase 5B-0's feasibility definition with the stricter
-recovery audit and check consistency between prediction limits and the 4.2 V / 35 C hard
-safety thresholds. Primary outputs are `outputs/metrics/phase5b05_metrics.json`,
-`data/phase5b05_mpc_recovery/recovery_run_summary.csv`,
-`data/phase5b05_mpc_recovery/recovery_controller_summary.csv`,
-`outputs/phase5b05_report.md`, and
-`notebooks/11_phase5b05_mpc_recovery_executed.ipynb`.
-
-## Phase 5B-0.6 completion update (2026-07-22)
-
-Phase 5B-0.6 strictly replayed `nominal`, `lhs_008`, `lhs_012`, `lhs_029`, and
-`lhs_056` with paired original/recovery MPC. Each pair used the same random innovation
-sequence, initial state, scenario parameters, frozen control-update schedule, and 3600 s
-cutoff. No ANN was trained and the 69-scenario sweep was not run.
-
-Under the corrected paired contract both original MPC and recovery MPC were feasible on
-all 5/5 scenarios. Their trajectory currents and all diagnostic slacks matched to floating-
-point precision; maximum braking-current deficit was 0 A. The earlier 3/5 recovery result
-was an audit artifact caused by using the wrong random seed/scenario index and not reusing
-the Phase 5B-0 cutoff and target-current cap logic.
-
-Do not train a new ANN or run all 69 scenarios yet. The corrected audit supports revising
-the recovery contract and adding prospective braking diagnostics before deciding whether
-Phase 5B-1 is justified; preserve the 4.2 V, 35 C, and 2 A/5 s safety limits.
-Primary artifacts are `data/phase5b06_contract_audit/`,
-`outputs/metrics/phase5b06_metrics.json`, `outputs/phase5b06_report.md`, and
-`notebooks/12_phase5b06_contract_audit_executed.ipynb`.
-
-## Phase 5B-0.6 修正合同下 15 场景复评完成（2026-07-22）
-
-已按修正合同完成 15 个代表场景、30 条原始 MPC/Recovery MPC 配对轨迹。场景由冻结代表表自动选取：5 个原始教师可行、5 个 unresolved、5 个教师与 ANN 均不可行。两种控制器共享 Phase 5B-0 的随机种子、完整场景索引、噪声序列、初始状态、模型参数、控制更新时间、目标电流 cap 与轨迹截止规则。
-
-统一可行性字段为 `operational_feasible`。结果为：原始教师可行组 Recovery 5/5，unresolved 0/5，教师与 ANN 均不可行组 0/5，总计 5/15。第一层“无回归”通过；第二层“恢复能力”失败。`shifted_previous_feasible`、`projected_ann_sequence` 和 `conservative_slew_down` 实际使用次数均为 0；困难场景出现 1067 次 emergency、750 次预测域不可行、317 次硬安全—斜率冲突，emergency 未计为恢复成功。
-
-因此 Recovery 没有扩大可行域。停止 pure ANN 完整替代和全压力域模仿路线；后续应转向“ANN 提供 MPC 初值、参考电流或活跃约束预测，MPC 负责硬约束与安全修正”的混合控制。ANN 直接输出仅限已验证可行域。不要在该结论下继续训练 pure ANN 或直接运行完整 69 场景。
-
-主要产物：`data/phase5b06_contract_audit/paired_summary.csv`、`data/phase5b06_contract_audit/feasibility_counts.csv`、`outputs/metrics/phase5b06_metrics.json`、`outputs/phase5b06_report.md`、`notebooks/13_phase5b06_corrected_15scenario_executed.ipynb`。
+> Level 3/3P 构成了一组严格的失败—修复证据：pure DNN 已经学会 MPC 策略，但缺少硬约束保证；最小解析投影只修改 0.3596% 的风险动作，就在几乎不损害性能的情况下恢复严格可行性。
