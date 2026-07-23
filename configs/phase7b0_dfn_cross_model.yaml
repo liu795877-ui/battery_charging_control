@@ -1,0 +1,37 @@
+study:
+  name: phase7b0_level3p_25c_chen2020_dfn_cross_model_audit
+
+sources:
+  level3_config: configs/phase7a_level3_slew.yaml
+  level3p_config: configs/phase7a_level3p_projection.yaml
+  closed_loop_initial_states: data/phase7a_level3_slew/closed_loop_initial_states.csv
+  model_directory: outputs/phase7a_level3_slew/models
+  frozen_artifacts:
+    configs/phase7a_level3_slew.yaml: 7ebd8b44cf9c65e81199366131f0518bad35e5b70564ff5e806980c5e974349e
+    configs/phase7a_level3p_projection.yaml: 35d96b4265e1efcf9901da7b50ac1b4f72b42c6f8720609e4da2dc47539a01f4
+    src/battery_fast_charge/phase7a_level3_model.py: 0f183ee3769a853eca77379daa159b1382d20ff6f6e3d211fd439773383b228b
+    src/battery_fast_charge/phase7a_level3p_runner.py: eb94b4df75bead457b93ba48bcdeae44543fe3881a70a31695825cd3d0a78f01
+    data/phase7a_level3_slew/closed_loop_initial_states.csv: 8a62cb6b5db34c875ce50dd4d743bb296bea4b962fbd40940c16ba52cfc116bd
+    outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_22.npz: 1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65
+    outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_42.npz: 2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d
+    outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_73.npz: f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9
+    outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_101.npz: b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba
+    outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_137.npz: 053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0
+
+dfn:
+  parameter_set: Chen2020
+  temperature_c: 25.0
+  upper_voltage_cutoff_v: 5.0
+  physical_voltage_limit_v: 4.20
+  voltage_tolerance_v: 1.0e-6
+  target_soc_tolerance: 5.0e-4
+  maximum_steps: 420
+
+diagnostics:
+  early_taper_soc_threshold: 0.74
+  early_taper_current_threshold_a: 5.0
+  oscillation_delta_threshold_a: 0.25
+
+output:
+  data_directory: data/phase7b0_dfn_cross_model
+  result_directory: outputs/phase7b0_dfn_cross_model

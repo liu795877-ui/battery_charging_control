@@ -1030,7 +1030,7 @@ Level 3P 没有重新训练网络，也没有改变数据、MPC、初态、模�
 - `outputs/phase7a_core_conclusion/phase7a_level2_level3_level3p_core_conclusion.tiff`
 - `outputs/phase7a_core_conclusion/source_data.csv`
 
-## 30. 下一阶段：Phase 7B-0 跨模型验证
+## 30. Phase 7B-0：25 ℃ DFN 跨模型验证结果
 
 Phase 7B-0 不属于 Level 4。它不增加温度状态、温度约束、参数扰动或新 ANN，只改变闭环被控对象：
 
@@ -1040,6 +1040,29 @@ $$
 \text{冻结 ANN＋投影}\rightarrow\text{25 ℃ Chen2020 DFN}.
 $$
 
-必须继续冻结 Level 3 五个网络、Level 3P 投影公式、2RC 控制器输入、MPC 参数与约束、初始 SOC、目标 SOC、5 s 采样周期和五个随机种子。Phase 7B-0 首先检查输入约束是否仍严格满足，再检查 DFN 电压、SOC 到达、异常提前降流、闭环振荡、NRMSE、时间偏差和在线加速。
+本阶段继续冻结 Level 3 五个网络、Level 3P 投影公式、2RC 控制器输入、MPC 参数与约束、12 个初始状态、目标 SOC、5 s 采样周期和五个随机种子。冻结哈希 10/10 匹配，没有重新训练 ANN，也没有新增教师数据。共完成 12 条 MPC→DFN 基线和 60 条 ANN＋投影→DFN 轨迹。
 
-如果电流和斜率继续安全但 DFN 电压越界，应将失败归因于跨模型状态约束失配，并优先研究一步电压可行性检查或有限迭代 MPC 修正，而不是扩大 pure ANN。
+| 指标 | 结果 | 门槛 | 判定 |
+|---|---:|---:|---|
+| 五种子平均电流 NRMSE | 0.2282%–0.3382% | <1% | 通过 |
+| 最大平均离散充电时间偏差 | 0.8690% | <2% | 通过 |
+| 目标到达率 | 100% | 100% | 通过 |
+| 最大电流越界 | 0 A | 0 | 通过 |
+| 最大斜率越界 | $4.44\times10^{-16}$ A | 0 | 浮点误差，视为通过 |
+| 最大单步电流变化 | 2.000000 A | ≤2 A | 通过 |
+| 最低在线控制器加速 | 545.3× | >100× | 通过 |
+| 电流方向反转 | 0 | 无异常振荡 | 通过 |
+| MPC→DFN 最大电压 | 4.214054 V | ≤4.20 V | 失败 |
+| ANN＋投影→DFN 最大电压 | 4.216401 V | ≤4.20 V | 失败 |
+
+Level 3P 投影在 DFN 上继续严格保证电流和斜率，五种子仍保持高精度、100% 到达和零振荡。唯一失败项是 DFN 电压安全，最大越界 16.401 mV。由于冻结的 2RC-MPC 基线在 DFN 上也越界 14.054 mV，失败应归因于 2RC 电压预测与 DFN 端电压之间的跨模型状态约束失配，而不是 ANN 拟合退化。
+
+Phase 7B-0 因此不进入多温度、参数扰动或跨电池验证。下一步应保持 ANN 与输入投影冻结，单独验证一步电压可行性检查；若仍不足，再采用 ANN 候选加有限迭代 MPC 安全修正。
+
+主要证据：
+
+- `outputs/phase7b0_dfn_cross_model/PHASE7B0_中文实验报告.md`
+- `outputs/phase7b0_dfn_cross_model/metrics.json`
+- `data/phase7b0_dfn_cross_model/five_seed_metrics.csv`
+- `data/phase7b0_dfn_cross_model/trajectory_diagnostics.csv`
+- `data/phase7b0_dfn_cross_model/closed_loop_trajectories.csv`
