@@ -1,0 +1,95 @@
+{
+  "domain": "regression",
+  "baseline": {
+    "mpc_maximum_voltage_v": 4.21405427723081,
+    "ann_maximum_voltage_v": 4.216401066999804,
+    "mpc_voltage_violation_v": 0.014054277230809653,
+    "ann_voltage_violation_v": 0.016401066999804037
+  },
+  "schemes": {
+    "baseline": {
+      "mpc": {
+        "target_reach_fraction": 1.0,
+        "maximum_voltage_v": 4.21405427723081,
+        "maximum_voltage_violation_v": 0.014054277230809653,
+        "maximum_current_step_a": 2.000000000000004,
+        "maximum_slew_violation_a": 3.9968028886505635e-15,
+        "empty_interval_count": 0,
+        "voltage_intervention_fraction": 0.0,
+        "maximum_current_correction_a": 0.0
+      }
+    },
+    "fixed_margin": {
+      "mpc": {
+        "target_reach_fraction": 1.0,
+        "maximum_voltage_v": 4.191331883952114,
+        "maximum_voltage_violation_v": 0.0,
+        "maximum_current_step_a": 2.0000000000000004,
+        "maximum_slew_violation_a": 4.440892098500626e-16,
+        "empty_interval_count": 0,
+        "voltage_intervention_fraction": 0.5444287729196051,
+        "maximum_current_correction_a": 0.6930706408436227
+      }
+    },
+    "residual_guard": {
+      "mpc": {
+        "target_reach_fraction": 1.0,
+        "maximum_voltage_v": 4.189448533642241,
+        "maximum_voltage_violation_v": 0.0,
+        "maximum_current_step_a": 2.0000000000000004,
+        "maximum_slew_violation_a": 4.440892098500626e-16,
+        "empty_interval_count": 0,
+        "voltage_intervention_fraction": 0.41201716738197425,
+        "maximum_current_correction_a": 0.7198069449504443
+      }
+    }
+  },
+  "scheme_impacts": {
+    "fixed_margin": {
+      "mean_charge_time_loss_fraction_vs_baseline": 0.06224372269254568,
+      "maximum_charge_time_loss_fraction_vs_baseline": 0.07526881720430108,
+      "mean_cumulative_charge_change_ah": 8.716858563111796e-06,
+      "maximum_absolute_cumulative_charge_change_ah": 9.835690126544073e-05
+    },
+    "residual_guard": {
+      "mean_charge_time_loss_fraction_vs_baseline": 0.04686984660756778,
+      "maximum_charge_time_loss_fraction_vs_baseline": 0.057034220532319393,
+      "mean_cumulative_charge_change_ah": 1.8477447997291136e-06,
+      "maximum_absolute_cumulative_charge_change_ah": 9.873632643907134e-05
+    }
+  },
+  "residual_guard": {
+    "current_nrmse_min": 0.0012758361277216254,
+    "current_nrmse_max": 0.00152981678535438,
+    "maximum_charge_time_gap_fraction": 0.009134860243842984,
+    "minimum_target_reach_fraction": 1.0,
+    "maximum_ann_voltage_v": 4.189534091240877,
+    "maximum_mpc_voltage_v": 4.189448533642241,
+    "maximum_current_step_a": 2.0000000000000004,
+    "minimum_speedup": 253.5172074335539,
+    "intervention_fraction_min": 0.40886524822695036,
+    "intervention_fraction_max": 0.4150197628458498,
+    "maximum_current_correction_a": 0.8786920086598995,
+    "mean_active_current_correction_a": 0.5066686252038806,
+    "first_intervention_soc": 0.6364829679175434,
+    "mean_charge_time_loss_fraction_vs_baseline": 0.04686984660756778,
+    "maximum_charge_time_loss_fraction_vs_baseline": 0.057034220532319393,
+    "mean_cumulative_charge_change_ah": 1.8477447997291136e-06,
+    "maximum_absolute_cumulative_charge_change_ah": 9.873632643907134e-05
+  },
+  "decision": {
+    "checks": {
+      "mpc_voltage_safe": true,
+      "ann_all_seed_voltage_safe": true,
+      "zero_current_violation": true,
+      "zero_slew_violation": true,
+      "current_nrmse_below_1_percent": true,
+      "charge_time_gap_below_2_percent": true,
+      "target_reach_100_percent": true,
+      "speedup_above_100": true,
+      "zero_oscillation": true,
+      "zero_empty_voltage_slew_intervals": true
+    },
+    "success": true
+  }
+}

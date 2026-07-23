@@ -1066,3 +1066,46 @@ Phase 7B-0 因此不进入多温度、参数扰动或跨电池验证。下一步
 - `data/phase7b0_dfn_cross_model/five_seed_metrics.csv`
 - `data/phase7b0_dfn_cross_model/trajectory_diagnostics.csv`
 - `data/phase7b0_dfn_cross_model/closed_loop_trajectories.csv`
+
+## 31. Phase 7B-1：25 ℃ DFN 电压感知安全层
+
+Phase 7B-1 保持 Level 3P 五个 ANN、MPC、2RC 模型、5 s 采样、电流/斜率投影和教师数据全部冻结。新增模块只根据当前 DFN 测量电压与 2RC 预测电压的残差，对下一步 2RC 电压预测进行修正，并通过一维二分搜索求最大安全电流。
+
+Phase 7B-1A 对 Phase 7B-0 的 72 条轨迹、16,024 个控制步进行了预注册审计。最大正向电压残差为 29.117 mV，P95/P99 为 27.093/28.672 mV，最大单步正向增长为 11.306 mV。以该最大增长作为冻结裕量时，电压上限与 2 A/步斜率下界之间的最小可行余量为 0.840 A，空区间为 0，因此授权进入一步安全层，不需要预先启用短时域安全 MPC。
+
+Phase 7B-1B/1C 先回归原有 12 个初态，再验证 24 个在安全层实现前冻结的独立初态。确认集 SHA-256 为 `738ae9eb52e2d7edbd598f9a2231e595743da920a9ae1b884ff8e5b5d5ecaab5`。
+
+| 指标 | 12 初态回归 | 24 初态确认 | 门槛 |
+|---|---:|---:|---:|
+| 安全 ANN 最高 DFN 电压 | 4.189534 V | 4.189463 V | ≤4.200001 V |
+| 安全 MPC 最高 DFN 电压 | 4.189449 V | 4.189389 V | ≤4.200001 V |
+| 五种子平均电流 NRMSE | 0.1276%–0.1530% | 0.1785%–0.2086% | <1% |
+| 最大平均充电时间偏差 | 0.9135% | 0.9975% | <2% |
+| 目标到达率 | 100% | 100% | 100% |
+| 最大单步电流变化 | 2.000000 A | 2.000000 A | ≤2 A |
+| 最低在线加速 | 253.5× | 170.9× | >100× |
+| 电压—斜率空区间 | 0 | 0 | 0 |
+| 闭环振荡 | 0 | 0 | 0 |
+
+最终架构在 25 ℃ Chen2020 DFN 回归集和独立确认集上严格通过：
+
+\[
+\boxed{
+\text{ANN策略}
++
+\text{电流/斜率投影}
++
+\text{在线电压残差安全层}
+}
+\]
+
+安全层的代价是约 41% 的控制步发生介入，最大电流修正约 0.879 A，相对无安全层基线平均增加约 4.69% 的充电时间。该代价不影响“安全 ANN 相对安全 MPC 的时间偏差小于 2%”这一预注册门槛，但说明最大残差增长裕量仍较保守。为保护独立证据，本次确认集不得用于后续裕量调节。
+
+主要证据：
+
+- `outputs/phase7b1a_voltage_mismatch/PHASE7B1A_中文实验报告.md`
+- `outputs/phase7b1a_voltage_mismatch/metrics.json`
+- `outputs/phase7b1b_voltage_safety/PHASE7B1_中文实验报告.md`
+- `outputs/phase7b1b_voltage_safety/metrics.json`
+- `data/phase7b1b_voltage_safety/regression_five_seed_metrics.csv`
+- `data/phase7b1b_voltage_safety/confirmation_five_seed_metrics.csv`

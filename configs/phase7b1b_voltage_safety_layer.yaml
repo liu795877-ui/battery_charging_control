@@ -1,0 +1,35 @@
+study:
+  name: phase7b1b_25c_dfn_voltage_aware_safety_layer
+
+sources:
+  phase7b0_config: configs/phase7b0_dfn_cross_model.yaml
+  level3_config: configs/phase7a_level3_slew.yaml
+  regression_initial_states: data/phase7a_level3_slew/closed_loop_initial_states.csv
+  regression_baseline_trajectories: data/phase7b0_dfn_cross_model/closed_loop_trajectories.csv
+  confirmation_initial_states: data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv
+  phase7b1a_metrics: outputs/phase7b1a_voltage_mismatch/metrics.json
+  model_directory: outputs/phase7a_level3_slew/models
+  frozen_artifacts:
+    configs/phase7b1a_voltage_mismatch_audit.yaml: d98f5d2b2beeadca601df564b3251ec514fe3752c9d81aeaf06b4d3eeb893acf
+    src/battery_fast_charge/phase7b1a_runner.py: 121345717c0a5d92302029a85dd8450ede2375149d112847a039378560325bd1
+    outputs/phase7b1a_voltage_mismatch/metrics.json: 5ac5f63a4ab54263514da2b930aa4c9a710f531c609fbeb6d5b4d45d608e9e8a
+    data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv: 738ae9eb52e2d7edbd598f9a2231e595743da920a9ae1b884ff8e5b5d5ecaab5
+    data/phase7b1a_voltage_mismatch/confirmation_freeze.json: 27a29ab6c42d929ff8fd616738bd88460f738cd3f494870083a16ed79977743e
+
+safety:
+  voltage_limit_v: 4.20
+  voltage_tolerance_v: 1.0e-6
+  residual_growth_guard_v: 0.011305522502741638
+  diagnostic_fixed_margin_v: 0.039977927362943075
+  current_search_tolerance_a: 1.0e-10
+  empty_interval_tolerance_a: 1.0e-9
+  intervention_tolerance_a: 1.0e-12
+
+validation:
+  oscillation_delta_threshold_a: 0.25
+  maximum_workers: 3
+  run_fixed_margin_on_regression_only: true
+
+output:
+  data_directory: data/phase7b1b_voltage_safety
+  result_directory: outputs/phase7b1b_voltage_safety

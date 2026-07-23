@@ -1,0 +1,77 @@
+{
+  "domain": "confirmation",
+  "baseline": {
+    "mpc_maximum_voltage_v": 4.214049651661823,
+    "ann_maximum_voltage_v": 4.216394677169111,
+    "mpc_voltage_violation_v": 0.014049651661823148,
+    "ann_voltage_violation_v": 0.016394677169111027
+  },
+  "schemes": {
+    "baseline": {
+      "mpc": {
+        "target_reach_fraction": 1.0,
+        "maximum_voltage_v": 4.214049651661823,
+        "maximum_voltage_violation_v": 0.014049651661823148,
+        "maximum_current_step_a": 2.000000000000001,
+        "maximum_slew_violation_a": 8.881784197001252e-16,
+        "empty_interval_count": 0,
+        "voltage_intervention_fraction": 0.0,
+        "maximum_current_correction_a": 7.105427357601002e-15
+      }
+    },
+    "residual_guard": {
+      "mpc": {
+        "target_reach_fraction": 1.0,
+        "maximum_voltage_v": 4.1893890758608325,
+        "maximum_voltage_violation_v": 0.0,
+        "maximum_current_step_a": 2.000000000000001,
+        "maximum_slew_violation_a": 8.881784197001252e-16,
+        "empty_interval_count": 0,
+        "voltage_intervention_fraction": 0.4136947218259629,
+        "maximum_current_correction_a": 0.7201827050640777
+      }
+    }
+  },
+  "scheme_impacts": {
+    "residual_guard": {
+      "mean_charge_time_loss_fraction_vs_baseline": 0.04686263723924531,
+      "maximum_charge_time_loss_fraction_vs_baseline": 0.057034220532319393,
+      "mean_cumulative_charge_change_ah": -4.559706670817475e-06,
+      "maximum_absolute_cumulative_charge_change_ah": 0.00012522618578366797
+    }
+  },
+  "residual_guard": {
+    "current_nrmse_min": 0.0017848572930540445,
+    "current_nrmse_max": 0.002086160128233494,
+    "maximum_charge_time_gap_fraction": 0.009974926641684536,
+    "minimum_target_reach_fraction": 1.0,
+    "maximum_ann_voltage_v": 4.189463012123127,
+    "maximum_mpc_voltage_v": 4.1893890758608325,
+    "maximum_current_step_a": 2.000000000000001,
+    "minimum_speedup": 170.89368026470734,
+    "intervention_fraction_min": 0.41021562389536936,
+    "intervention_fraction_max": 0.4160100286532951,
+    "maximum_current_correction_a": 0.8791380521279439,
+    "mean_active_current_correction_a": 0.5116398561303628,
+    "first_intervention_soc": 0.63546062154657,
+    "mean_charge_time_loss_fraction_vs_baseline": 0.04686263723924531,
+    "maximum_charge_time_loss_fraction_vs_baseline": 0.057034220532319393,
+    "mean_cumulative_charge_change_ah": -4.559706670817475e-06,
+    "maximum_absolute_cumulative_charge_change_ah": 0.00012522618578366797
+  },
+  "decision": {
+    "checks": {
+      "mpc_voltage_safe": true,
+      "ann_all_seed_voltage_safe": true,
+      "zero_current_violation": true,
+      "zero_slew_violation": true,
+      "current_nrmse_below_1_percent": true,
+      "charge_time_gap_below_2_percent": true,
+      "target_reach_100_percent": true,
+      "speedup_above_100": true,
+      "zero_oscillation": true,
+      "zero_empty_voltage_slew_intervals": true
+    },
+    "success": true
+  }
+}
