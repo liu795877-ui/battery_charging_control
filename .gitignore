@@ -35,6 +35,7 @@ data/phase7b0_dfn_cross_model/runs/
 outputs/phase7b0_full_run.stdout.log
 outputs/phase7b0_full_run.stderr.log
 data/phase7b1b_voltage_safety/runs/
+data/phase7c_multitemperature/runs/
 outputs/phase7b1b_regression.stdout.log
 outputs/phase7b1b_regression.stderr.log
 outputs/phase7b1b_regression.pid
