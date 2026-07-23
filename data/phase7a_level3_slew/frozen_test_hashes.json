@@ -1,0 +1,14 @@
+{
+  "test": {
+    "path": "global_frozen_test.csv",
+    "sha256": "484b71df5f3afe8dfcf33f4202a608f69d7292c1411621a9e7f05d343730c390",
+    "trajectory_count": 36,
+    "sample_count": 288
+  },
+  "terminal_test": {
+    "path": "terminal_frozen_test.csv",
+    "sha256": "7ba4a2359016a3549997bc3f892a492ed55f77e872fe3db0b17af8fd4df8be9f",
+    "trajectory_count": 20,
+    "sample_count": 480
+  }
+}

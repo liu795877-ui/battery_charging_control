@@ -1,0 +1,53 @@
+study:
+  name: phase7a_level3_2rc_slew_pure_dnn
+
+sources:
+  level2_config: configs/phase7a_level2_2rc.yaml
+  identified_parameters: outputs/metrics/phase2_identified_parameters.json
+
+model:
+  nominal_capacity_ah: 5.0
+  sample_period_s: 5.0
+  r0_ohm: 0.021340978270853076
+  r1_ohm: 0.009118293930560397
+  tau1_s: 17.243601604669564
+  r2_ohm: 0.01556708277104299
+  tau2_s: 150.50538774940563
+  ocv_curve: data/phase2/ocv_curve.csv
+
+constraint:
+  maximum_current_step_a: 2.0
+  previous_current_bounds_a: [0.0, 10.0]
+
+data:
+  global_domain:
+    trajectory_count: 240
+    trajectory_steps: 8
+    train_trajectory_count: 168
+    validation_trajectory_count: 36
+    test_trajectory_count: 36
+    soc_bounds: [0.10, 0.799]
+    v1_bounds_v: [0.0, 0.09]
+    v2_bounds_v: [0.0, 0.15]
+    soc_sampling_power: 1.0
+  terminal_domain:
+    trajectory_count: 160
+    trajectory_steps: 24
+    train_trajectory_count: 120
+    validation_trajectory_count: 20
+    test_trajectory_count: 20
+    soc_bounds: [0.74, 0.799]
+    v1_bounds_v: [0.0, 0.09]
+    v2_bounds_v: [0.0, 0.15]
+    soc_sampling_power: 0.5
+  initial_voltage_margin_v: 0.005
+  random_seed: 20260724
+  audit_state_count: 100
+  warm_starts_per_state: 15
+  closed_loop_trajectory_count: 12
+  closed_loop_soc_bounds: [0.45, 0.70]
+  closed_loop_v1_bounds_v: [0.0, 0.06]
+  closed_loop_v2_bounds_v: [0.0, 0.09]
+  maximum_closed_loop_steps: 420
+  minimum_low_current_label_count: 100
+  low_current_threshold_a: 0.25

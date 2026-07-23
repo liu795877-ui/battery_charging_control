@@ -1,0 +1,343 @@
+{
+  "study_name": "phase7a_level3_2rc_slew_pure_dnn",
+  "configuration": {
+    "study_name": "phase7a_level3_2rc_slew_pure_dnn",
+    "source_level2_config": "configs/phase7a_level2_2rc.yaml",
+    "source_identified_parameters": "outputs/metrics/phase2_identified_parameters.json",
+    "model": {
+      "nominal_capacity_ah": 5.0,
+      "sample_period_s": 5.0,
+      "r0_ohm": 0.021340978270853076,
+      "r1_ohm": 0.009118293930560397,
+      "tau1_s": 17.243601604669564,
+      "r2_ohm": 0.01556708277104299,
+      "tau2_s": 150.50538774940563,
+      "ocv_curve": "data/phase2/ocv_curve.csv"
+    },
+    "constraint": {
+      "maximum_current_step_a": 2.0,
+      "previous_current_bounds_a": [
+        0.0,
+        10.0
+      ]
+    },
+    "data": {
+      "global_domain": {
+        "trajectory_count": 240,
+        "trajectory_steps": 8,
+        "train_trajectory_count": 168,
+        "validation_trajectory_count": 36,
+        "test_trajectory_count": 36,
+        "soc_bounds": [
+          0.1,
+          0.799
+        ],
+        "v1_bounds_v": [
+          0.0,
+          0.09
+        ],
+        "v2_bounds_v": [
+          0.0,
+          0.15
+        ],
+        "soc_sampling_power": 1.0
+      },
+      "terminal_domain": {
+        "trajectory_count": 160,
+        "trajectory_steps": 24,
+        "train_trajectory_count": 120,
+        "validation_trajectory_count": 20,
+        "test_trajectory_count": 20,
+        "soc_bounds": [
+          0.74,
+          0.799
+        ],
+        "v1_bounds_v": [
+          0.0,
+          0.09
+        ],
+        "v2_bounds_v": [
+          0.0,
+          0.15
+        ],
+        "soc_sampling_power": 0.5
+      },
+      "initial_voltage_margin_v": 0.005,
+      "random_seed": 20260724,
+      "audit_state_count": 100,
+      "warm_starts_per_state": 15,
+      "closed_loop_trajectory_count": 12,
+      "closed_loop_soc_bounds": [
+        0.45,
+        0.7
+      ],
+      "closed_loop_v1_bounds_v": [
+        0.0,
+        0.06
+      ],
+      "closed_loop_v2_bounds_v": [
+        0.0,
+        0.09
+      ],
+      "maximum_closed_loop_steps": 420,
+      "minimum_low_current_label_count": 100,
+      "low_current_threshold_a": 0.25
+    }
+  },
+  "inherited_level2_configuration": {
+    "study_name": "phase7a_level2_project_2rc_pure_dnn",
+    "source_level1_config": "configs/phase7a_level1_1rc.yaml",
+    "source_identified_parameters": "outputs/metrics/phase2_identified_parameters.json",
+    "model": {
+      "nominal_capacity_ah": 5.0,
+      "sample_period_s": 5.0,
+      "r0_ohm": 0.021340978270853076,
+      "r1_ohm": 0.009118293930560397,
+      "tau1_s": 17.243601604669564,
+      "r2_ohm": 0.01556708277104299,
+      "tau2_s": 150.50538774940563,
+      "ocv_curve": "data/phase2/ocv_curve.csv"
+    },
+    "data": {
+      "global_domain": {
+        "trajectory_count": 240,
+        "trajectory_steps": 8,
+        "train_trajectory_count": 168,
+        "validation_trajectory_count": 36,
+        "test_trajectory_count": 36,
+        "soc_bounds": [
+          0.1,
+          0.799
+        ],
+        "v1_bounds_v": [
+          0.0,
+          0.09
+        ],
+        "v2_bounds_v": [
+          0.0,
+          0.15
+        ],
+        "soc_sampling_power": 1.0
+      },
+      "terminal_domain": {
+        "trajectory_count": 160,
+        "trajectory_steps": 24,
+        "train_trajectory_count": 120,
+        "validation_trajectory_count": 20,
+        "test_trajectory_count": 20,
+        "soc_bounds": [
+          0.74,
+          0.799
+        ],
+        "v1_bounds_v": [
+          0.0,
+          0.09
+        ],
+        "v2_bounds_v": [
+          0.0,
+          0.15
+        ],
+        "soc_sampling_power": 0.5
+      },
+      "initial_voltage_margin_v": 0.005,
+      "random_seed": 20260723,
+      "audit_state_count": 100,
+      "warm_starts_per_state": 15,
+      "closed_loop_trajectory_count": 12,
+      "closed_loop_soc_bounds": [
+        0.45,
+        0.7
+      ],
+      "closed_loop_v1_bounds_v": [
+        0.0,
+        0.06
+      ],
+      "closed_loop_v2_bounds_v": [
+        0.0,
+        0.09
+      ],
+      "maximum_closed_loop_steps": 420,
+      "minimum_low_current_label_count": 100,
+      "low_current_threshold_a": 0.25
+    }
+  },
+  "inherited_level1_configuration": {
+    "study_name": "phase7a_level1_project_1rc_pure_dnn",
+    "model": {
+      "nominal_capacity_ah": 5.0,
+      "sample_period_s": 5.0,
+      "r0_ohm": 0.021340978270853076,
+      "r1_ohm": 0.009118293930560397,
+      "tau1_s": 17.243601604669564,
+      "ocv_curve": "data/phase2/ocv_curve.csv"
+    },
+    "mpc": {
+      "prediction_horizon_steps": 60,
+      "control_block_steps": 20,
+      "target_soc": 0.8,
+      "current_bounds_a": [
+        0.0,
+        10.0
+      ],
+      "terminal_voltage_max_v": 4.2,
+      "soc_tracking_weight": 1.0,
+      "terminal_soc_weight": 20.0,
+      "current_smoothness_weight": 0.0001,
+      "optimizer_max_iterations": 150,
+      "optimizer_ftol": 1e-09,
+      "constraint_tolerance": 1e-06
+    },
+    "data": {
+      "trajectory_count": 240,
+      "trajectory_steps": 8,
+      "train_fraction": 0.7,
+      "validation_fraction": 0.15,
+      "soc_bounds": [
+        0.1,
+        0.75
+      ],
+      "polarization_bounds_v": [
+        0.0,
+        0.08
+      ],
+      "random_seed": 20260722,
+      "audit_state_count": 100,
+      "warm_starts_per_state": 15,
+      "closed_loop_trajectory_count": 12,
+      "closed_loop_soc_bounds": [
+        0.45,
+        0.7
+      ],
+      "maximum_closed_loop_steps": 420
+    },
+    "network": {
+      "hidden_layer_sizes": [
+        32,
+        32,
+        16
+      ],
+      "activation": "tanh",
+      "regularization_alpha": 0.001,
+      "initialization_seeds": [
+        22,
+        42,
+        73,
+        101,
+        137
+      ],
+      "maximum_iterations": 2500,
+      "convergence_tolerance": 1e-08,
+      "learning_rate_init": 0.001,
+      "no_improvement_iterations": 100
+    },
+    "gates": {
+      "minimum_teacher_acceptance_fraction": 0.9,
+      "maximum_multivalued_state_fraction": 0.05,
+      "maximum_near_optimal_action_range_p95_a": 0.05,
+      "relative_objective_tolerance": 0.0001,
+      "absolute_objective_tolerance": 1e-06,
+      "offline_nrmse_max": 0.01,
+      "closed_loop_current_nrmse_max": 0.01,
+      "charge_time_gap_fraction_max": 0.02,
+      "minimum_target_reach_fraction": 1.0,
+      "maximum_constraint_violation": 0.001,
+      "minimum_speedup": 100.0
+    }
+  },
+  "frozen_test_hashes": {
+    "test": {
+      "path": "global_frozen_test.csv",
+      "sha256": "484b71df5f3afe8dfcf33f4202a608f69d7292c1411621a9e7f05d343730c390",
+      "trajectory_count": 36,
+      "sample_count": 288
+    },
+    "terminal_test": {
+      "path": "terminal_frozen_test.csv",
+      "sha256": "7ba4a2359016a3549997bc3f892a492ed55f77e872fe3db0b17af8fd4df8be9f",
+      "trajectory_count": 20,
+      "sample_count": 480
+    }
+  },
+  "teacher": {
+    "attempted_trajectories": 400,
+    "accepted_trajectories": 400,
+    "acceptance_fraction": 1.0,
+    "sample_count": 5760,
+    "low_current_label_count": 183,
+    "checks": {
+      "acceptance": true,
+      "complete_accepted_trajectories": true,
+      "trajectory_split_isolation": true,
+      "low_current_coverage": true,
+      "zero_fallback": true,
+      "hard_slew_constraint": true,
+      "complete_frozen_test_domains": true
+    },
+    "success": true
+  },
+  "teacher_audit": {
+    "state_count": 100,
+    "warm_starts_per_state": 15,
+    "near_optimal_multivalued_fraction": 0.0,
+    "near_optimal_first_action_range_p95_a": 0.01608806288620334,
+    "maximum_near_optimal_first_action_range_a": 0.022572138407907616,
+    "checks": {
+      "exact_audit_contract": true,
+      "all_optimizer_success": true,
+      "all_prediction_feasible": true,
+      "zero_fallback": true,
+      "multivalued_fraction": true,
+      "action_range_p95": true
+    },
+    "success": true
+  },
+  "offline": {
+    "seed_count": 5,
+    "global_test_nrmse_min": 0.0033126687854255917,
+    "global_test_nrmse_max": 0.0052066503313115495,
+    "terminal_test_nrmse_min": 0.0032897305627255825,
+    "terminal_test_nrmse_max": 0.005073648326048046,
+    "checks": {
+      "five_global_test_seeds": true,
+      "five_terminal_test_seeds": true
+    },
+    "success": true
+  },
+  "closed_loop": {
+    "current_nrmse_min": 0.002280893295070741,
+    "current_nrmse_max": 0.0034047694353945557,
+    "maximum_charge_time_gap_fraction": 0.008690391156323104,
+    "minimum_target_reach_fraction": 1.0,
+    "maximum_voltage_violation_v": 0.0,
+    "maximum_slew_violation_a": 0.12892938058579428,
+    "maximum_current_step_a": 2.1289293805857943,
+    "minimum_speedup": 1035.2119274225595,
+    "signed_step_difference_range": [
+      -2,
+      2
+    ],
+    "maximum_absolute_cumulative_charge_error_ah": 8.59681552627636e-05,
+    "checks": {
+      "all_seed_current_nrmse": true,
+      "all_seed_charge_time_gap": true,
+      "all_seed_target_reach": true,
+      "zero_voltage_violation": true,
+      "zero_current_violation": true,
+      "zero_slew_violation": false,
+      "all_seed_speedup": true
+    },
+    "success": false
+  },
+  "decision": {
+    "checks": {
+      "teacher_determinism_passed": true,
+      "dual_offline_tests_passed": true,
+      "same_model_closed_loop_passed": false
+    },
+    "level3_success": false,
+    "proceed_to_level4": false,
+    "conclusion": "Level 3 硬斜率约束首次导致 pure DNN 闭环失败"
+  },
+  "status": "completed",
+  "success": false
+}
