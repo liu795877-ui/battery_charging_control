@@ -33,6 +33,9 @@ FEATURES = (
 
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
+    if path.suffix.lower() in {".py", ".yaml", ".yml"}:
+        digest.update(path.read_bytes().replace(b"\r\n", b"\n"))
+        return digest.hexdigest()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(block)

@@ -31,3 +31,6 @@ outputs/phase2rd_final_discrimination/stdout.log
 outputs/phase2rd_final_discrimination/stderr.log
 outputs/phase2rd_final_discrimination/process_id.txt
 outputs/phase2rd_final_discrimination/exit_code.txt
+data/phase7b0_dfn_cross_model/runs/
+outputs/phase7b0_full_run.stdout.log
+outputs/phase7b0_full_run.stderr.log
