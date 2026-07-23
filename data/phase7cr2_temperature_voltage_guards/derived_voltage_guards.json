@@ -1,0 +1,26 @@
+{
+  "formula": "max(original_25c, legacy_minimum, development_max) + margin",
+  "guards_v": {
+    "25": 0.011305522502741638,
+    "15": 0.014098037646160801,
+    "30": 0.0185518311991919
+  },
+  "temperature_records": {
+    "15": {
+      "temperature_c": 15.0,
+      "development_maximum_positive_growth_v": 0.0135980376461608,
+      "legacy_minimum_v": 0.0113871030773613,
+      "engineering_margin_v": 0.0005,
+      "final_guard_v": 0.014098037646160801
+    },
+    "30": {
+      "temperature_c": 30.0,
+      "development_maximum_positive_growth_v": 0.0180518311991919,
+      "legacy_minimum_v": 0.011305522502741638,
+      "engineering_margin_v": 0.0005,
+      "final_guard_v": 0.0185518311991919
+    }
+  },
+  "only_maintain_or_increase": true,
+  "25c_unchanged": true
+}

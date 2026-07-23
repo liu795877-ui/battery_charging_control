@@ -1,0 +1,64 @@
+{
+  "frozen_before_rollout": true,
+  "development_only": true,
+  "not_r3_confirmation": true,
+  "not_ann_teacher_data": true,
+  "ann_execution_authorized": false,
+  "files": {
+    "development_initial_states.csv": {
+      "sha256": "097ab43faf644a34a630c387f667a8c93f16fcf224932b008656234970087d43",
+      "trajectory_count": 32
+    },
+    "internal_validation_initial_states.csv": {
+      "sha256": "55c96f7fb6924d70e168d5a3cd66a618f00aae760e500fcc6b522691d2f2c342",
+      "trajectory_count": 16
+    }
+  },
+  "frozen_artifact_verification": {
+    "configs/phase7cr1_thermal_supervisor.yaml": {
+      "expected_sha256": "fbfaedae34b2d5c7e39fa7556dd5eb7e89d03c64cdf3b93f876e74b827459061",
+      "actual_sha256": "fbfaedae34b2d5c7e39fa7556dd5eb7e89d03c64cdf3b93f876e74b827459061",
+      "matched": true
+    },
+    "src/battery_fast_charge/phase7cr1_runner.py": {
+      "expected_sha256": "70f0c96ac00b76780daf56415d0b9982bc435620b623b205bb45757d2db36516",
+      "actual_sha256": "70f0c96ac00b76780daf56415d0b9982bc435620b623b205bb45757d2db36516",
+      "matched": true
+    },
+    "outputs/phase7cr1_thermal_supervisor/metrics.json": {
+      "expected_sha256": "d30a2a50e0825b4c68ec005616e741a4dd35ea34a93eb7dfb54fe247c7b104e5",
+      "actual_sha256": "d30a2a50e0825b4c68ec005616e741a4dd35ea34a93eb7dfb54fe247c7b104e5",
+      "matched": true
+    },
+    "outputs/phase7cr1_thermal_supervisor/freeze_manifest.json": {
+      "expected_sha256": "da4fdae627fa81ceab113b1c3e0df36f5161789be2b790b46d9ae15981b9ef26",
+      "actual_sha256": "da4fdae627fa81ceab113b1c3e0df36f5161789be2b790b46d9ae15981b9ef26",
+      "matched": true
+    },
+    "data/phase7cr1_thermal_supervisor/development_initial_states.csv": {
+      "expected_sha256": "20757ed88c42d5b7498a9a513ce26c011b1a84f684a5208dce65f67567c64a2a",
+      "actual_sha256": "20757ed88c42d5b7498a9a513ce26c011b1a84f684a5208dce65f67567c64a2a",
+      "matched": true
+    },
+    "configs/phase7c_multitemperature_dfn_validation.yaml": {
+      "expected_sha256": "9868c21ae18f56826b2226b4de52e35d2f6a6c449a9c1d07a1fa33dfb0c94b51",
+      "actual_sha256": "9868c21ae18f56826b2226b4de52e35d2f6a6c449a9c1d07a1fa33dfb0c94b51",
+      "matched": true
+    },
+    "outputs/phase7c_multitemperature/metrics.json": {
+      "expected_sha256": "93501baff78b19b92bb16b037b1b8d6185499ee6f1a9d887a65d2720199ecbc3",
+      "actual_sha256": "93501baff78b19b92bb16b037b1b8d6185499ee6f1a9d887a65d2720199ecbc3",
+      "matched": true
+    },
+    "data/phase7c_multitemperature/initial_states_15c.csv": {
+      "expected_sha256": "a3c19c324499d615b552266f6a14c478c597a375c58a2f951a8453acb6492f5f",
+      "actual_sha256": "a3c19c324499d615b552266f6a14c478c597a375c58a2f951a8453acb6492f5f",
+      "matched": true
+    },
+    "data/phase7c_multitemperature/initial_states_30c.csv": {
+      "expected_sha256": "b12fab1583aa0a2e5fb5a96710ec7fee28d28c7cd39f48053d8d8d38c5d7ff5e",
+      "actual_sha256": "b12fab1583aa0a2e5fb5a96710ec7fee28d28c7cd39f48053d8d8d38c5d7ff5e",
+      "matched": true
+    }
+  }
+}
