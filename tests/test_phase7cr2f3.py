@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -100,3 +102,52 @@ def test_new_data_contract_is_96_development_and_48_internal() -> None:
     assert CONFIG.section("validation_contract")[
         "expected_total_validation_trajectory_count"
     ] == 296
+
+
+def test_four_new_state_files_are_frozen_and_hashes_match() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    freeze = json.loads(
+        (data_dir / "initial_state_freeze.json").read_text(encoding="utf-8")
+    )
+    assert freeze["frozen_before_any_closed_loop_rollout"] is True
+    assert freeze["not_r3_confirmation_data"] is True
+    assert freeze["not_ann_teacher_data"] is True
+    assert len(freeze["files"]) == 4
+    for name, record in freeze["files"].items():
+        assert hashlib.sha256((data_dir / name).read_bytes()).hexdigest() == record[
+            "sha256"
+        ]
+
+
+def test_new_state_files_are_mutually_isolated_and_measured() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    names = [
+        "development_initial_states_15c.csv",
+        "development_initial_states_25c.csv",
+        "internal_validation_initial_states_15c.csv",
+        "internal_validation_initial_states_25c.csv",
+    ]
+    columns = [
+        "initial_soc",
+        "initial_polarization_1_v",
+        "initial_polarization_2_v",
+        "initial_previous_current_a",
+    ]
+    state_sets = []
+    seeds = []
+    for name in names:
+        frame = pd.read_csv(data_dir / name)
+        expected_count = 48 if name.startswith("development") else 24
+        assert len(frame) == expected_count
+        assert frame.initial_measured_residual_v.notna().all()
+        assert (frame.initial_measured_residual_v != 0.0).all()
+        assert (
+            frame.initial_state_history_contract
+            == "dfn_and_2rc_do_not_share_current_history"
+        ).all()
+        state_sets.append({tuple(row) for row in frame[columns].to_numpy()})
+        seeds.append(int(frame.design_seed.iloc[0]))
+    assert len(set(seeds)) == 4
+    for left_index, left in enumerate(state_sets):
+        for right in state_sets[left_index + 1 :]:
+            assert left.isdisjoint(right)
