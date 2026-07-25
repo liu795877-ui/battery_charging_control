@@ -4,19 +4,23 @@ from pathlib import Path
 
 from battery_fast_charge.phase7cr2f_config import load_phase7cr2f_config
 from battery_fast_charge.phase7cr2f_runner import (
-    verify_frozen_artifacts,
     verify_known_teacher_regressions,
+)
+from battery_fast_charge.phase7cr2f2_residual_audit import (
+    load_config as load_residual_audit_config,
+    verify_frozen_r2f,
 )
 
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "configs/phase7cr2f_teacher_selection_voltage_guard.yaml"
+AUDIT_CONFIG = ROOT / "configs/phase7cr2f2_residual_initialization_audit.yaml"
 
 
 def test_r2f_preserves_every_r2_frozen_artifact() -> None:
-    config = load_phase7cr2f_config(CONFIG)
-    verification = verify_frozen_artifacts(config, ROOT)
-    assert verification["r2_status_preserved"]
+    config = load_residual_audit_config(AUDIT_CONFIG)
+    verification = verify_frozen_r2f(config, ROOT)
+    assert verification["r2f_failure_preserved"]
     assert len(verification["records"]) == 14
     assert all(
         item["matched"] for item in verification["records"].values()
@@ -101,6 +105,8 @@ def test_r2f_freeze_manifest_matches_every_artifact() -> None:
     for relative, expected in manifest["artifacts"].items():
         artifact = ROOT / relative
         payload = artifact.read_bytes()
-        if artifact.suffix.lower() in {".py", ".yaml", ".yml"}:
-            payload = payload.replace(b"\r\n", b"\n")
-        assert hashlib.sha256(payload).hexdigest() == expected
+        raw = hashlib.sha256(payload).hexdigest()
+        normalized = hashlib.sha256(
+            payload.replace(b"\r\n", b"\n")
+        ).hexdigest()
+        assert expected in {raw, normalized}

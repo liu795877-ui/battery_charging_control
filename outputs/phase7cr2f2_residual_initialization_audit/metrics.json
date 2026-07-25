@@ -1,0 +1,168 @@
+{
+  "study_name": "phase7cr2f2_residual_initialization_audit",
+  "configuration": {
+    "study": {
+      "name": "phase7cr2f2_residual_initialization_audit"
+    },
+    "sources": {
+      "phase7cr2f_config": "configs/phase7cr2f_teacher_selection_voltage_guard.yaml",
+      "phase7cr2f_freeze_manifest": "outputs/phase7cr2f_teacher_selection_voltage_guard/freeze_manifest.json",
+      "phase7cr2f_freeze_manifest_sha256": "5df4eae4f839385699bc0d76ec49ba765b1d60fe93092864418544ea57bd49be",
+      "development_states": "data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv",
+      "internal_validation_states": "data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv"
+    },
+    "audit": {
+      "temperature_c": 30.0,
+      "compared_initialization_modes": [
+        "zero",
+        "measured"
+      ],
+      "short_replay_steps": 3,
+      "initial_measurement_horizon_s": 1e-09,
+      "frozen_guard_30c_v": 0.0218918472128131,
+      "maximum_workers": 3,
+      "critical_trajectory_ids": [
+        "phase7cr2f_internal_validation_30c_014",
+        "phase7cr2f_internal_validation_30c_000",
+        "phase7cr2f_development_30c_000",
+        "phase7cr2f_development_30c_020"
+      ],
+      "contracts": {
+        "dfn_initialized_from_soc_and_temperature_only": true,
+        "two_rc_polarizations_independently_sampled": true,
+        "shared_current_history_available": false,
+        "zero_initialization_documented_in_config_or_plan": false,
+        "f2_data_generation_authorized": false,
+        "r3_generation_authorized": false,
+        "ann_execution_authorized": false
+      }
+    },
+    "output": {
+      "data_directory": "data/phase7cr2f2_residual_initialization_audit",
+      "result_directory": "outputs/phase7cr2f2_residual_initialization_audit"
+    }
+  },
+  "frozen_r2f_verification": {
+    "manifest_sha256": "5df4eae4f839385699bc0d76ec49ba765b1d60fe93092864418544ea57bd49be",
+    "r2f_failure_preserved": true,
+    "records": {
+      "configs/phase7cr2f_teacher_selection_voltage_guard.yaml": {
+        "expected_sha256": "c016ce079277f9a4f2e4f762dd76bcd1cedf037503ac1767eb31e1704ac2bbdd",
+        "actual_sha256": "c016ce079277f9a4f2e4f762dd76bcd1cedf037503ac1767eb31e1704ac2bbdd",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f_teacher.py": {
+        "expected_sha256": "64379c88d1b59e9ab6e5381b3be1969e78dd0f69360e0edf5f3d1322ec035021",
+        "actual_sha256": "64379c88d1b59e9ab6e5381b3be1969e78dd0f69360e0edf5f3d1322ec035021",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f_runner.py": {
+        "expected_sha256": "997d3fc61e3f2c5ec3f62833971f034a3f3a5de7d10cb548349a5c0a96db5cfc",
+        "actual_sha256": "997d3fc61e3f2c5ec3f62833971f034a3f3a5de7d10cb548349a5c0a96db5cfc",
+        "matched": true
+      },
+      "tests/fixtures/phase7cr2_known_teacher_misselections.json": {
+        "expected_sha256": "94225024a72cb04842d8009bf3a4f4dc812c67c4fe0ae6f645578963fff8e332",
+        "actual_sha256": "94225024a72cb04842d8009bf3a4f4dc812c67c4fe0ae6f645578963fff8e332",
+        "matched": true
+      },
+      "data/phase7cr2f_teacher_selection_voltage_guard/initial_state_freeze.json": {
+        "expected_sha256": "9553c2afac01d0d7f2d24ac5b059ac33ff5c68c2634e670f96d7d555256ab25b",
+        "actual_sha256": "9553c2afac01d0d7f2d24ac5b059ac33ff5c68c2634e670f96d7d555256ab25b",
+        "matched": true
+      },
+      "data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv": {
+        "expected_sha256": "050bcd98f5a84df7cdfdc157f2621bcb7bc44fd5997effc4024db2be5b382bfd",
+        "actual_sha256": "050bcd98f5a84df7cdfdc157f2621bcb7bc44fd5997effc4024db2be5b382bfd",
+        "matched": true
+      },
+      "data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv": {
+        "expected_sha256": "fa787ea2bcb970b55daa04688e075aff625b5f76c63dd48be552d4e9cfc62399",
+        "actual_sha256": "fa787ea2bcb970b55daa04688e075aff625b5f76c63dd48be552d4e9cfc62399",
+        "matched": true
+      },
+      "data/phase7cr2f_teacher_selection_voltage_guard/frozen_voltage_guards.json": {
+        "expected_sha256": "68b320905549d4fb98486636fd5377f28b52bb45acff026fb148b8ad43db5d57",
+        "actual_sha256": "68b320905549d4fb98486636fd5377f28b52bb45acff026fb148b8ad43db5d57",
+        "matched": true
+      },
+      "data/phase7cr2f_teacher_selection_voltage_guard/development_guard_audit.csv": {
+        "expected_sha256": "b8b012b32af6088b01258d98de9015d34e1f2d2ff68889e6cbeccc85a1f5da6e",
+        "actual_sha256": "b8b012b32af6088b01258d98de9015d34e1f2d2ff68889e6cbeccc85a1f5da6e",
+        "matched": true
+      },
+      "data/phase7cr2f_teacher_selection_voltage_guard/combined_validation_trajectories.csv": {
+        "expected_sha256": "ad60ca0a22841b1f4e671ecb49a422fa888ac8add05a437b8a694add76c6f8ba",
+        "actual_sha256": "ad60ca0a22841b1f4e671ecb49a422fa888ac8add05a437b8a694add76c6f8ba",
+        "matched": true
+      },
+      "data/phase7cr2f_teacher_selection_voltage_guard/trajectory_metrics.csv": {
+        "expected_sha256": "44b18f9e970d7ff29abb35f262dc06ac60764837d4d5a5e843680a201e9f0acf",
+        "actual_sha256": "44b18f9e970d7ff29abb35f262dc06ac60764837d4d5a5e843680a201e9f0acf",
+        "matched": true
+      },
+      "outputs/phase7cr2f_teacher_selection_voltage_guard/metrics.json": {
+        "expected_sha256": "f1e1a135643281fe988febe2b6c1741d42775e67f89e4cabf201f3ce8d363de0",
+        "actual_sha256": "f1e1a135643281fe988febe2b6c1741d42775e67f89e4cabf201f3ce8d363de0",
+        "matched": true
+      },
+      "outputs/phase7cr2f_teacher_selection_voltage_guard/PHASE7C-R2F_中文实验报告.md": {
+        "expected_sha256": "b80df6c06222bb547f02133311668da44f9c107cb06224976fa0965bf4edbaf6",
+        "actual_sha256": "b80df6c06222bb547f02133311668da44f9c107cb06224976fa0965bf4edbaf6",
+        "matched": true
+      },
+      "outputs/phase7cr2f_teacher_selection_voltage_guard/phase7cr2f_summary.png": {
+        "expected_sha256": "7961c0fbbfc0e85f87be8fcf3020cee16513c0bea555e63ef2253a0473527a60",
+        "actual_sha256": "7961c0fbbfc0e85f87be8fcf3020cee16513c0bea555e63ef2253a0473527a60",
+        "matched": true
+      }
+    }
+  },
+  "state_count": 48,
+  "initial_measurement": {
+    "available_for_all_states": true,
+    "minimum_initial_residual_v": -0.1644870631948736,
+    "median_initial_residual_v": -0.11213317980049875,
+    "maximum_initial_residual_v": -0.018659283708235996,
+    "maximum_absolute_initial_residual_v": 0.1644870631948736
+  },
+  "state_history_contract": {
+    "dfn_initialized_from_soc_and_temperature_only": true,
+    "two_rc_polarizations_independently_sampled": true,
+    "shared_current_history_available": false,
+    "zero_initialization_documented_in_config_or_plan": false,
+    "f2_data_generation_authorized": false,
+    "r3_generation_authorized": false,
+    "ann_execution_authorized": false,
+    "dfn_and_2rc_share_consistent_current_history": false
+  },
+  "mode_summary": {
+    "measured": {
+      "maximum_boot_positive_growth_v": 0.03443951909904808,
+      "maximum_running_positive_growth_v": 0.011632627841344778,
+      "maximum_voltage_v": 4.089365271296632,
+      "empty_interval_count": 0
+    },
+    "zero": {
+      "maximum_boot_positive_growth_v": 0.02500152707831127,
+      "maximum_running_positive_growth_v": 0.011632627841615673,
+      "maximum_voltage_v": 4.089365271296545,
+      "empty_interval_count": 0
+    }
+  },
+  "decision": {
+    "zero_initialization_is_documented_contract": false,
+    "zero_initialization_is_implementation_default": true,
+    "freeze_residual_initialization": "measured",
+    "freeze_two_stage_guard_structure": true,
+    "boot_steps": [
+      0,
+      1
+    ],
+    "running_starts_at_step": 2,
+    "generate_f2_data": false,
+    "generate_r3": false,
+    "run_ann": false,
+    "recommendation": "冻结测量残差初始化；由于DFN与2RC没有共享电流历史，F2仍需把前两个控制步作为独立启动窗口，并在全新开发集上分别估计启动期和运行期增长界。不得把本审计当作F2验证。"
+  }
+}

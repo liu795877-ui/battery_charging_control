@@ -1,0 +1,25 @@
+{
+  "phase": "Phase 7C-R2F2 residual initialization audit",
+  "status": "diagnostic_complete",
+  "hash_policy": "SHA-256 after CRLF-to-LF normalization for text artifacts",
+  "r2f_failure_evidence_preserved": true,
+  "f2_data_generated": false,
+  "r3_initial_states_generated": false,
+  "ann_execution_authorized": false,
+  "frozen_decision": {
+    "residual_initialization": "measured",
+    "guard_structure": "boot_steps_0_1_and_running_steps_2_plus",
+    "boot_historical_minimum_v": 0.03443951909904808,
+    "running_guard_floor_v": 0.0218918472128131
+  },
+  "artifacts": {
+    "configs/phase7cr2f2_residual_initialization_audit.yaml": "1417edef1411101d080d06ae43e0cfa7af440b7c07a26795bea7907af90a95c1",
+    "src/battery_fast_charge/phase7cr2f2_residual_audit.py": "47efb47a6a4aa62ea22f5ff0b3e0b0c4428b12596b24647b2fe36f2c5d7c8e0c",
+    "src/battery_fast_charge/phase7cr2f2_residual_audit_cli.py": "baa0dc5cafc52d5671590460990b31f4791c152f1fe37a78b1fbc269e79f03aa",
+    "tests/test_phase7cr2f2_residual_audit.py": "f821b79aa12fbf750059b4cba6f553145bf71d40908ff48c54c4e9a05db4945a",
+    "data/phase7cr2f2_residual_initialization_audit/initial_voltage_audit.csv": "18db112053c2b0e78caf28d49cf188c0fa8fc89ed9787fd0785ec9639b66bd2a",
+    "data/phase7cr2f2_residual_initialization_audit/three_step_replay.csv": "4fe88f7ea86b8e2963513a0d1013be790159be2458cf8f6c0f5220ba9ac7f360",
+    "outputs/phase7cr2f2_residual_initialization_audit/metrics.json": "b1cadf7768755f1a551d05fdc4d8079845722f87ff075561277588f4112fe150",
+    "outputs/phase7cr2f2_residual_initialization_audit/PHASE7C-R2F2_残差初始化审计报告.md": "ad16ba03238d83f916730ac982f099108f719a7d5fe76c9ced5d2d6244e6cd37"
+  }
+}
