@@ -57,6 +57,7 @@ outputs/phase7cr2f_teacher_selection_voltage_guard/development_run.pid
 outputs/phase7cr2f2_residual_initialization_audit/*_run.stdout.log
 outputs/phase7cr2f2_residual_initialization_audit/*_run.stderr.log
 outputs/phase7cr2f2_residual_initialization_audit/audit_run.pid
+data/phase7cr2f2_two_stage_voltage_guard/runs/
 outputs/phase7b1b_regression.stdout.log
 outputs/phase7b1b_regression.stderr.log
 outputs/phase7b1b_regression.pid

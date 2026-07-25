@@ -1,0 +1,29 @@
+{
+  "phase": "Phase 7C-R2F2 development",
+  "status": "two_stage_guards_frozen_before_internal_validation",
+  "design": "two_stage_boot_steps_0_1_running_steps_2_plus",
+  "residual_initialization": "measured",
+  "internal_validation_used_for_tuning": false,
+  "formulas": {
+    "boot": "max(boot_historical_minimum_30c_v, development_boot_max_v) + engineering_margin_v",
+    "running": "max(running_guard_floor_30c_v, development_running_max_v + engineering_margin_v)"
+  },
+  "guards": {
+    "15": 0.014098037646160801,
+    "25": 0.011305522502741638,
+    "30": {
+      "boot_v": 0.0376479265035423,
+      "running_v": 0.0218918472128131
+    },
+    "development_boot_max_v": 0.0371479265035423,
+    "development_running_max_v": 0.0128503716496295,
+    "engineering_margin_v": 0.0005
+  },
+  "state_hashes": {
+    "development_initial_states.csv": "e5ce0c4161f84fd69c76fa4127c13b399fef350e024d5fbad1de82af0812a839",
+    "internal_validation_initial_states.csv": "84ecfc3289eae86352b95d8b84bd0c4a8900592d3258506af4772901e958f89f"
+  },
+  "development_audit_sha256": "f77e445d97d269a131ca07120159782edb3e23a0fbe42684ce6c66ecea5632ff",
+  "config_sha256": "c8d526b8d53dda6bea033fe6f18deec61a127f8fea95a88882e0080ca5714f0e",
+  "runner_sha256": "41676b0e3be2a0e2380b4c1b0a297d00d426fc3176d3ea4340358cab57d11212"
+}

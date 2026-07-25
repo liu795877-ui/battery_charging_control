@@ -1,0 +1,59 @@
+{
+  "phase": "Phase 7C-R2F2",
+  "diagnostic_role": "post_validation_strict_stop_explanation_only",
+  "used_for_guard_tuning": false,
+  "frozen_validation_result_changed": false,
+  "overall_status": "strict_stop_failed",
+  "thirty_celsius_two_stage_contract": {
+    "development_trajectory_count": 48,
+    "internal_validation_trajectory_count": 24,
+    "internal_validation_boot_maximum_positive_growth_v": 0.0350280344547773,
+    "internal_validation_running_maximum_positive_growth_v": 0.0125705497873198,
+    "boot_guard_v": 0.0376479265035423,
+    "running_guard_v": 0.0218918472128131,
+    "boot_exceedance_count": 0,
+    "running_exceedance_count": 0,
+    "internal_validation_passed": true
+  },
+  "frozen_other_temperature_regressions": {
+    "total_guard_exceedance_count": 31,
+    "15_celsius": {
+      "guard_v": 0.014098037646160801,
+      "exceedance_count": 21,
+      "maximum_positive_growth_v": 0.0366612309890537,
+      "step_distribution": {
+        "0": 21
+      }
+    },
+    "25_celsius": {
+      "guard_v": 0.011305522502741638,
+      "exceedance_count": 10,
+      "maximum_positive_growth_v": 0.026040820770421,
+      "step_distribution": {
+        "0": 8,
+        "1": 1,
+        "2": 1
+      }
+    }
+  },
+  "physical_and_solver_gates": {
+    "trajectory_count": 248,
+    "target_reach_fraction": 1.0,
+    "maximum_voltage_v": 4.189058020416925,
+    "maximum_average_temperature_c": 34.90044001152586,
+    "maximum_current_step_a": 2.000000000000001,
+    "strict_teacher_failure_count": 0,
+    "solver_failure_count": 0,
+    "prediction_infeasible_count": 0,
+    "empty_voltage_slew_count": 0,
+    "empty_thermal_slew_count": 0,
+    "sustained_oscillation_count": 0,
+    "zero_residual_initialization_count": 0
+  },
+  "decision": {
+    "retune_in_place": false,
+    "generate_r3": false,
+    "run_ann": false,
+    "new_internal_validation_downgraded_to_permanent_regression": true
+  }
+}
