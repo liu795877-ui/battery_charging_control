@@ -137,3 +137,31 @@ def test_new_state_sets_are_isolated_and_have_measured_initial_residuals() -> No
             frame.initial_state_history_contract
             == "dfn_and_2rc_do_not_share_current_history"
         ).all()
+
+
+def test_frozen_two_stage_guards_match_preregistered_formulas() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    frozen = json.loads(
+        (data_dir / "frozen_two_stage_voltage_guards.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    guards = frozen["guards"]
+    assert frozen["internal_validation_used_for_tuning"] is False
+    assert guards["30"]["boot_v"] == pytest.approx(
+        max(0.03443951909904808, guards["development_boot_max_v"])
+        + 0.0005
+    )
+    assert guards["30"]["running_v"] == pytest.approx(
+        max(0.0218918472128131, guards["development_running_max_v"] + 0.0005)
+    )
+    assert guards["30"]["boot_v"] >= 0.03493951909904808
+    assert guards["30"]["running_v"] >= 0.0218918472128131
+
+
+def test_internal_validation_has_not_started_when_guards_are_frozen() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    assert not (data_dir / "validation_started.json").exists()
+    assert not (
+        data_dir / "runs" / "validation" / "internal_validation"
+    ).exists()
