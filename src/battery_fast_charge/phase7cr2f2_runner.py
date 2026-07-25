@@ -31,7 +31,6 @@ from .phase7cr2f2_residual_audit import (
 from .phase7cr2f_config import load_phase7cr2f_config
 from .phase7cr2f_runner import (
     _strict_failure_row,
-    verify_frozen_artifacts,
     verify_known_teacher_regressions,
 )
 from .phase7cr2f_teacher import StrictTeacherSelectionError, solve_teacher_r2f
@@ -75,7 +74,31 @@ def verify_frozen_sources(
 ) -> dict[str, Any]:
     sources = config.section("sources")
     r2f = load_phase7cr2f_config(root / sources["phase7cr2f_config"])
-    r2_verification = verify_frozen_artifacts(r2f, root)
+    r2_manifest_path = root / r2f.sources["r2_freeze_manifest"]
+    r2_manifest_hash = _sha256(r2_manifest_path)
+    if r2_manifest_hash != r2f.sources["r2_freeze_manifest_sha256"]:
+        raise RuntimeError("R2 frozen manifest hash mismatch")
+    r2_manifest = json.loads(r2_manifest_path.read_text(encoding="utf-8"))
+    if r2_manifest["status"] != "strict_stop_failed":
+        raise RuntimeError("R2 failure evidence status changed")
+    r2_records: dict[str, Any] = {}
+    r2_mismatches: list[str] = []
+    for artifact, expected in r2_manifest["artifacts"].items():
+        actual_artifact, matched = _artifact_hash(root / artifact, expected)
+        r2_records[artifact] = {
+            "expected_sha256": expected,
+            "actual_sha256": actual_artifact,
+            "matched": matched,
+        }
+        if not matched:
+            r2_mismatches.append(artifact)
+    if r2_mismatches:
+        raise RuntimeError(f"R2 frozen artifacts changed: {r2_mismatches}")
+    r2_verification = {
+        "manifest_sha256": r2_manifest_hash,
+        "status_preserved": True,
+        "records": r2_records,
+    }
     audit_config = yaml.safe_load(
         (root / sources["residual_audit_config"]).read_text(encoding="utf-8")
     )
