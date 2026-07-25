@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -93,3 +95,45 @@ def test_f2_does_not_authorize_r3_or_ann() -> None:
     contract = CONFIG.section("control_contract")
     assert contract["r3_generation_authorized"] is False
     assert contract["ann_execution_authorized"] is False
+
+
+def test_new_states_are_frozen_before_rollout_and_hashes_match() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    freeze = json.loads(
+        (data_dir / "initial_state_freeze.json").read_text(encoding="utf-8")
+    )
+    assert freeze["frozen_before_any_closed_loop_rollout"] is True
+    assert freeze["not_r3_confirmation_data"] is True
+    assert freeze["not_ann_teacher_data"] is True
+    for name, record in freeze["files"].items():
+        actual = hashlib.sha256((data_dir / name).read_bytes()).hexdigest()
+        assert actual == record["sha256"]
+
+
+def test_new_state_sets_are_isolated_and_have_measured_initial_residuals() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    development = pd.read_csv(data_dir / "development_initial_states.csv")
+    internal = pd.read_csv(data_dir / "internal_validation_initial_states.csv")
+    columns = [
+        "initial_soc",
+        "initial_polarization_1_v",
+        "initial_polarization_2_v",
+        "initial_previous_current_a",
+    ]
+    assert len(development) == 48
+    assert len(internal) == 24
+    assert set(development.design_seed) == {20260811}
+    assert set(internal.design_seed) == {20260812}
+    assert set(development.design_candidate_index).isdisjoint(
+        set(internal.design_candidate_index)
+    )
+    development_states = {tuple(row) for row in development[columns].to_numpy()}
+    internal_states = {tuple(row) for row in internal[columns].to_numpy()}
+    assert development_states.isdisjoint(internal_states)
+    for frame in (development, internal):
+        assert frame.initial_measured_residual_v.notna().all()
+        assert (frame.initial_measured_residual_v != 0.0).all()
+        assert (
+            frame.initial_state_history_contract
+            == "dfn_and_2rc_do_not_share_current_history"
+        ).all()
