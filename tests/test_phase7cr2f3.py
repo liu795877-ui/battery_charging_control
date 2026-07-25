@@ -151,3 +151,41 @@ def test_new_state_files_are_mutually_isolated_and_measured() -> None:
     for left_index, left in enumerate(state_sets):
         for right in state_sets[left_index + 1 :]:
             assert left.isdisjoint(right)
+
+
+def test_frozen_guards_match_development_formulas_and_keep_30c_fixed() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    frozen = json.loads(
+        (data_dir / "frozen_temperature_two_stage_guards.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    guards = frozen["guards"]
+    maxima = frozen["development_maxima"]
+    assert frozen["internal_validation_used_for_tuning"] is False
+    assert guards["15"]["boot_v"] == pytest.approx(
+        max(0.0366612309890537, maxima["15"]["boot_v"]) + 0.0005
+    )
+    assert guards["15"]["running_v"] == pytest.approx(
+        max(0.014098037646160801, maxima["15"]["running_v"] + 0.0005)
+    )
+    assert guards["25"]["boot_v"] == pytest.approx(
+        max(0.026040820770421, maxima["25"]["boot_v"]) + 0.0005
+    )
+    assert guards["25"]["running_v"] == pytest.approx(
+        max(
+            0.011305522502741638,
+            0.0123420547282164 + 0.0005,
+            maxima["25"]["running_v"] + 0.0005,
+        )
+    )
+    assert guards["30"] == {
+        "boot_v": pytest.approx(0.0376479265035423),
+        "running_v": pytest.approx(0.0218918472128131),
+    }
+
+
+def test_internal_validation_has_not_started_at_guard_freeze() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    assert not (data_dir / "validation_started.json").exists()
+    assert not (data_dir / "runs" / "validation").exists()

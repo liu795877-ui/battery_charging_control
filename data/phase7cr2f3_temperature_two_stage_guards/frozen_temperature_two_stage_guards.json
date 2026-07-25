@@ -1,0 +1,41 @@
+{
+  "phase": "Phase 7C-R2F3 development",
+  "status": "temperature_two_stage_guards_frozen_before_internal_validation",
+  "design": "per_temperature_boot_steps_0_1_running_steps_2_plus",
+  "residual_initialization": "measured",
+  "internal_validation_used_for_tuning": false,
+  "guards": {
+    "15": {
+      "boot_v": 0.0480564686187137,
+      "running_v": 0.014098037646160801
+    },
+    "25": {
+      "boot_v": 0.0346117967629136,
+      "running_v": 0.012970762902336801
+    },
+    "30": {
+      "boot_v": 0.0376479265035423,
+      "running_v": 0.0218918472128131
+    }
+  },
+  "development_maxima": {
+    "15": {
+      "boot_v": 0.0475564686187137,
+      "running_v": 0.0113277668012434
+    },
+    "25": {
+      "boot_v": 0.0341117967629136,
+      "running_v": 0.0124707629023368
+    }
+  },
+  "engineering_margin_v": 0.0005,
+  "state_hashes": {
+    "development_initial_states_15c.csv": "7e01b3283444d33b86fd5f6a49ef618996279be6362ad11dd2e7bb7c0852c91a",
+    "development_initial_states_25c.csv": "57e8393b0a3569977e99c54e5a2ff0abbe7c1b28cb2edbd25ecc410dcfd5ad83",
+    "internal_validation_initial_states_15c.csv": "0a33accfed3e23c5eca1befde65a46ac3a8e83297b12f946ad3cdae484d603f8",
+    "internal_validation_initial_states_25c.csv": "f7cfca67dd7c00e5a11bef1378225de9e8312704a2992183bfa4a2d5941801f0"
+  },
+  "development_audit_sha256": "e05666364bfb16d0f3ffec593cbb025c60cfa89aa4c54eecdef6694612cb4906",
+  "config_sha256": "ca0edbe69192dfb437a998a6b1f5d8e8cf6e8ffeb9029bb81dba7971440c1fdf",
+  "runner_sha256": "ba03fff429fcafe66f6a8b2c5d8724646cc08b1eb4e306a237d8ecc4e3314bee"
+}
