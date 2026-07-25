@@ -1,0 +1,22 @@
+{
+  "phase": "Phase 7C-R2F2",
+  "status": "strict_stop_failed",
+  "internal_validation_used_for_retuning": false,
+  "r3_initial_states_generated": false,
+  "ann_execution_authorized": false,
+  "artifacts": {
+    "configs/phase7cr2f2_two_stage_voltage_guard.yaml": "c8d526b8d53dda6bea033fe6f18deec61a127f8fea95a88882e0080ca5714f0e",
+    "src/battery_fast_charge/phase7cr2f2_config.py": "f73feffb92daadd35d9bdeb8e3aba706c0c9a3526f7a779f1264798cbd381dd2",
+    "src/battery_fast_charge/phase7cr2f2_runner.py": "41676b0e3be2a0e2380b4c1b0a297d00d426fc3176d3ea4340358cab57d11212",
+    "src/battery_fast_charge/phase7cr2f2_cli.py": "c6232166e421af502abc15d632607e40b79a7e0c25fd77b7fa9305d56e9e0ba5",
+    "data/phase7cr2f2_two_stage_voltage_guard/initial_state_freeze.json": "ebc49a286866c4d2802e7f871897a33e3aba98e141a2a447359d5c89bd5b71b1",
+    "data/phase7cr2f2_two_stage_voltage_guard/development_initial_states.csv": "e5ce0c4161f84fd69c76fa4127c13b399fef350e024d5fbad1de82af0812a839",
+    "data/phase7cr2f2_two_stage_voltage_guard/internal_validation_initial_states.csv": "84ecfc3289eae86352b95d8b84bd0c4a8900592d3258506af4772901e958f89f",
+    "data/phase7cr2f2_two_stage_voltage_guard/frozen_two_stage_voltage_guards.json": "57aeb3f44569bee0c19c0ea2783b64c479ed0bac7fe83a339415f3484ae110f5",
+    "data/phase7cr2f2_two_stage_voltage_guard/development_guard_audit.csv": "f77e445d97d269a131ca07120159782edb3e23a0fbe42684ce6c66ecea5632ff",
+    "data/phase7cr2f2_two_stage_voltage_guard/combined_validation_trajectories.csv": "7a61171cb86b50c7694331cbe766b1e6f61f80f8873ec8a681d40d953031aa63",
+    "data/phase7cr2f2_two_stage_voltage_guard/trajectory_metrics.csv": "725ea0329ca6bf58742fd0fc30e1716f4a1626908523c74fef0b10b69300284b",
+    "outputs/phase7cr2f2_two_stage_voltage_guard/metrics.json": "6b4cf8eab4f92d15bd9894b8b3ee761b9b07f792ec679a89a04a458c9dabd52e",
+    "outputs/phase7cr2f2_two_stage_voltage_guard/PHASE7C-R2F2_中文实验报告.md": "84d38f6edf337716cf1c3a90eb7e46390e23afc321892ba30fe21ba6498837d4"
+  }
+}

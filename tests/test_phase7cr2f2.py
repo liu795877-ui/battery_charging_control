@@ -161,7 +161,59 @@ def test_frozen_two_stage_guards_match_preregistered_formulas() -> None:
 
 def test_internal_validation_has_not_started_when_guards_are_frozen() -> None:
     data_dir = ROOT / CONFIG.section("output")["data_directory"]
-    assert not (data_dir / "validation_started.json").exists()
-    assert not (
-        data_dir / "runs" / "validation" / "internal_validation"
-    ).exists()
+    started = json.loads(
+        (data_dir / "validation_started.json").read_text(encoding="utf-8")
+    )
+    frozen = data_dir / "frozen_two_stage_voltage_guards.json"
+    assert started["guards_sha256"] == hashlib.sha256(
+        frozen.read_bytes()
+    ).hexdigest()
+    assert started["internal_validation_may_not_modify_guards"] is True
+
+
+def test_one_shot_validation_is_strictly_stopped_without_r3_or_ann() -> None:
+    result_dir = ROOT / CONFIG.section("output")["result_directory"]
+    metrics = json.loads(
+        (result_dir / "metrics.json").read_text(encoding="utf-8")
+    )
+    manifest = json.loads(
+        (result_dir / "freeze_manifest.json").read_text(encoding="utf-8")
+    )
+    assert metrics["success"] is False
+    assert metrics["decision"]["freeze_full_f2_architecture"] is False
+    assert metrics["decision"]["eligible_to_design_r3_separately"] is False
+    assert metrics["decision"]["r3_initial_states_generated"] is False
+    assert metrics["decision"]["ann_run_or_training_performed"] is False
+    assert metrics["decision"]["internal_validation_used_for_retuning"] is False
+    assert manifest["status"] == "strict_stop_failed"
+    assert manifest["r3_initial_states_generated"] is False
+    assert manifest["ann_execution_authorized"] is False
+
+
+def test_new_30c_internal_validation_passes_frozen_two_stage_guard() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    trajectories = pd.read_csv(data_dir / "combined_validation_trajectories.csv")
+    internal = trajectories[trajectories.role == "internal_validation"]
+    assert internal.trajectory_id.nunique() == 24
+    assert not internal.guard_exceeded.astype(bool).any()
+    assert (internal.residual_initialization_mode == "measured").all()
+    assert internal[internal.guard_stage == "boot"].positive_residual_growth_v.max() == pytest.approx(
+        0.0350280344547773
+    )
+    assert internal[internal.guard_stage == "running"].positive_residual_growth_v.max() == pytest.approx(
+        0.0125705497873198
+    )
+
+
+def test_strict_stop_is_caused_by_frozen_15c_and_25c_guard_regressions() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    trajectories = pd.read_csv(data_dir / "combined_validation_trajectories.csv")
+    exceedances = trajectories[trajectories.guard_exceeded.astype(bool)]
+    assert len(exceedances) == 31
+    assert (exceedances.ambient_temperature_c == 15.0).sum() == 21
+    assert (exceedances.ambient_temperature_c == 25.0).sum() == 10
+    assert not (exceedances.ambient_temperature_c == 30.0).any()
+    assert (
+        exceedances[exceedances.ambient_temperature_c == 15.0].step_index
+        == 0
+    ).all()

@@ -1,0 +1,1409 @@
+{
+  "study_name": "phase7cr2f2_two_stage_voltage_guard",
+  "configuration": {
+    "study": {
+      "name": "phase7cr2f2_two_stage_voltage_guard",
+      "phase": "Phase 7C-R2F2",
+      "contract_status": "preregistered_before_new_state_generation"
+    },
+    "sources": {
+      "phase7cr2f_config": "configs/phase7cr2f_teacher_selection_voltage_guard.yaml",
+      "phase7cr2f_freeze_manifest": "outputs/phase7cr2f_teacher_selection_voltage_guard/freeze_manifest.json",
+      "phase7cr2f_freeze_manifest_sha256": "5df4eae4f839385699bc0d76ec49ba765b1d60fe93092864418544ea57bd49be",
+      "residual_audit_config": "configs/phase7cr2f2_residual_initialization_audit.yaml",
+      "residual_audit_freeze_manifest": "outputs/phase7cr2f2_residual_initialization_audit/freeze_manifest.json",
+      "residual_audit_freeze_manifest_sha256": "06f756924a490a2cb68880f1869cef1ff0bddbcf9609cc9afc3cfeae9b5f6df1",
+      "residual_audit_initial_states": "data/phase7cr2f2_residual_initialization_audit/initial_voltage_audit.csv",
+      "legacy_phase7c_states": {
+        "15": "data/phase7c_multitemperature/initial_states_15c.csv",
+        "30": "data/phase7c_multitemperature/initial_states_30c.csv"
+      },
+      "legacy_phase7cr1_states": "data/phase7cr1_thermal_supervisor/development_initial_states.csv",
+      "legacy_phase7cr2_development_states": "data/phase7cr2_temperature_voltage_guards/development_initial_states.csv",
+      "legacy_phase7cr2_internal_states": "data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv",
+      "legacy_phase7cr2f_development_states": "data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv",
+      "legacy_phase7cr2f_internal_states": "data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv",
+      "legacy_phase7b1_25c_states": "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv"
+    },
+    "control_contract": {
+      "residual_initialization": "measured",
+      "allow_zero_residual_fallback": false,
+      "initial_measurement_horizon_s": 1e-09,
+      "sample_period_s": 5.0,
+      "boot_steps": [
+        0,
+        1
+      ],
+      "running_starts_at_step": 2,
+      "initial_state_history_contract": "dfn_and_2rc_do_not_share_current_history",
+      "teacher_selection_frozen": true,
+      "thermal_supervisor_frozen": true,
+      "temperature_15c_guard_frozen": true,
+      "temperature_25c_guard_frozen": true,
+      "r3_generation_authorized": false,
+      "ann_execution_authorized": false
+    },
+    "voltage_guard": {
+      "design": "two_stage_boot_and_running",
+      "design_frozen_before_state_generation": true,
+      "guard_15c_v": 0.014098037646160801,
+      "guard_25c_v": 0.011305522502741638,
+      "boot_historical_minimum_30c_v": 0.03443951909904808,
+      "running_guard_floor_30c_v": 0.0218918472128131,
+      "engineering_margin_v": 0.0005,
+      "development_audit_boot_guard_30c_v": 0.03493951909904808,
+      "development_audit_running_guard_30c_v": 0.0218918472128131,
+      "residual_growth_tolerance_v": 1e-12,
+      "formula_boot": "max(boot_historical_minimum_30c_v, development_boot_max_v) + engineering_margin_v",
+      "formula_running": "max(running_guard_floor_30c_v, development_running_max_v + engineering_margin_v)"
+    },
+    "datasets": {
+      "temperature_c": 30.0,
+      "development_count": 48,
+      "internal_validation_count": 24,
+      "development_design_start_index": 3101,
+      "internal_validation_design_start_index": 4101,
+      "development_seed": 20260811,
+      "internal_validation_seed": 20260812,
+      "maximum_workers": 3,
+      "maximum_steps": 1800,
+      "target_soc": 0.7995,
+      "initial_voltage_margin_v": 0.005,
+      "initial_residual_extreme_threshold_v": -0.15,
+      "strata": {
+        "development": {
+          "startup_transient_stress": 24,
+          "historical_extreme_neighborhood": 12,
+          "general_high_risk": 8,
+          "global_coverage": 4
+        },
+        "internal_validation": {
+          "startup_transient_stress": 12,
+          "historical_extreme_neighborhood": 6,
+          "general_high_risk": 4,
+          "global_coverage": 2
+        }
+      },
+      "bounds": {
+        "global_coverage": {
+          "soc": [
+            0.45,
+            0.7
+          ],
+          "v1_v": [
+            0.0,
+            0.065
+          ],
+          "v2_v": [
+            0.0,
+            0.1
+          ],
+          "previous_current_a": [
+            0.0,
+            10.0
+          ]
+        },
+        "general_high_risk": {
+          "soc": [
+            0.56,
+            0.7
+          ],
+          "v1_v": [
+            0.035,
+            0.065
+          ],
+          "v2_v": [
+            0.045,
+            0.1
+          ],
+          "previous_current_a": [
+            6.0,
+            10.0
+          ]
+        },
+        "startup_transient_stress": {
+          "soc": [
+            0.55,
+            0.68
+          ],
+          "v1_v": [
+            0.045,
+            0.065
+          ],
+          "v2_v": [
+            0.055,
+            0.1
+          ],
+          "previous_current_a": [
+            7.0,
+            10.0
+          ]
+        }
+      },
+      "neighborhood_half_width": {
+        "soc": 0.015,
+        "v1_v": 0.008,
+        "v2_v": 0.012,
+        "previous_current_a": 0.75
+      },
+      "historical_centers": [
+        {
+          "source": "data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv",
+          "trajectory_id": "phase7cr2f_development_30c_017",
+          "evidence": "residual_audit_lower_bound"
+        },
+        {
+          "source": "data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv",
+          "trajectory_id": "phase7cr2f_development_30c_013",
+          "evidence": "residual_audit_boot_growth_maximum"
+        },
+        {
+          "source": "data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv",
+          "trajectory_id": "phase7cr2f_internal_validation_30c_014",
+          "evidence": "r2f_25_001527_mv_exceedance"
+        },
+        {
+          "source": "data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv",
+          "trajectory_id": "phase7cr2_internal_validation_30c_000",
+          "evidence": "r2_historical_exceedance"
+        },
+        {
+          "source": "data/phase7c_multitemperature/initial_states_30c.csv",
+          "trajectory_id": "phase7c_30c_012",
+          "evidence": "phase7c_historical_exceedance"
+        },
+        {
+          "source": "data/phase7cr1_thermal_supervisor/development_initial_states.csv",
+          "trajectory_id": "phase7cr1_dev_001",
+          "evidence": "r1_historical_exceedance"
+        }
+      ]
+    },
+    "validation_contract": {
+      "internal_validation_is_one_shot": true,
+      "internal_validation_may_not_modify_guards": true,
+      "failed_internal_validation_becomes_permanent_regression": true,
+      "rerun_development_with_frozen_guards": true,
+      "include_all_historical_regressions": true,
+      "include_25c_confirmation_as_regression_only": true
+    },
+    "gates": {
+      "maximum_voltage_v": 4.200001,
+      "maximum_average_temperature_c": 35.0,
+      "maximum_current_a": 10.0,
+      "minimum_current_a": 0.0,
+      "maximum_current_step_a": 2.0,
+      "maximum_boot_guard_exceedance_count": 0,
+      "maximum_running_guard_exceedance_count": 0,
+      "maximum_empty_interval_count": 0,
+      "maximum_solver_failure_count": 0,
+      "maximum_strict_teacher_failure_count": 0,
+      "maximum_prediction_infeasible_count": 0,
+      "maximum_sustained_oscillation_count": 0,
+      "maximum_zero_residual_initialization_count": 0,
+      "minimum_target_reach_fraction": 1.0,
+      "numerical_tolerance": 1e-09
+    },
+    "output": {
+      "data_directory": "data/phase7cr2f2_two_stage_voltage_guard",
+      "result_directory": "outputs/phase7cr2f2_two_stage_voltage_guard"
+    }
+  },
+  "frozen_source_verification": {
+    "r2": {
+      "manifest_sha256": "27e504979e40331c1fe057400662c8163f01d905093500baf5b651e629fe2b08",
+      "status_preserved": true,
+      "records": {
+        "configs/phase7cr2_temperature_voltage_guards.yaml": {
+          "expected_sha256": "3cc2b8bf4ce6bf15c74c29c8c7ee812d7beedc15fbd3121a026017b183c3d6e2",
+          "actual_sha256": "3cc2b8bf4ce6bf15c74c29c8c7ee812d7beedc15fbd3121a026017b183c3d6e2",
+          "matched": true
+        },
+        "src/battery_fast_charge/phase7cr2_runner.py": {
+          "expected_sha256": "09407db421d470d0f77ff6b01e218c493bf7a8b252386ad4b2ee54717766db60",
+          "actual_sha256": "09407db421d470d0f77ff6b01e218c493bf7a8b252386ad4b2ee54717766db60",
+          "matched": true
+        },
+        "data/phase7cr2_temperature_voltage_guards/initial_state_freeze.json": {
+          "expected_sha256": "c8350d961d7ba1729540050837a2e0a696c68fecb34559cb1364214a20790227",
+          "actual_sha256": "c8350d961d7ba1729540050837a2e0a696c68fecb34559cb1364214a20790227",
+          "matched": true
+        },
+        "data/phase7cr2_temperature_voltage_guards/development_initial_states.csv": {
+          "expected_sha256": "097ab43faf644a34a630c387f667a8c93f16fcf224932b008656234970087d43",
+          "actual_sha256": "097ab43faf644a34a630c387f667a8c93f16fcf224932b008656234970087d43",
+          "matched": true
+        },
+        "data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv": {
+          "expected_sha256": "55c96f7fb6924d70e168d5a3cd66a618f00aae760e500fcc6b522691d2f2c342",
+          "actual_sha256": "55c96f7fb6924d70e168d5a3cd66a618f00aae760e500fcc6b522691d2f2c342",
+          "matched": true
+        },
+        "data/phase7cr2_temperature_voltage_guards/derived_voltage_guards.json": {
+          "expected_sha256": "dfdc7664cb4e7878dcd25ffe5ea936f24c479582ec10bb644ea4d5c4b8032fed",
+          "actual_sha256": "dfdc7664cb4e7878dcd25ffe5ea936f24c479582ec10bb644ea4d5c4b8032fed",
+          "matched": true
+        },
+        "data/phase7cr2_temperature_voltage_guards/development_guard_audit.csv": {
+          "expected_sha256": "b0d17f71bcac119913108ed9e9a2a5abfb5bf90a1021d4f06bf828b3f8f5139d",
+          "actual_sha256": "b0d17f71bcac119913108ed9e9a2a5abfb5bf90a1021d4f06bf828b3f8f5139d",
+          "matched": true
+        },
+        "data/phase7cr2_temperature_voltage_guards/combined_validation_trajectories.csv": {
+          "expected_sha256": "b635aa04b4b52813270c848769133c0bff9e7e553cb360e716b1587c3769f9f3",
+          "actual_sha256": "b635aa04b4b52813270c848769133c0bff9e7e553cb360e716b1587c3769f9f3",
+          "matched": true
+        },
+        "data/phase7cr2_temperature_voltage_guards/trajectory_metrics.csv": {
+          "expected_sha256": "2c0661fc55d46e0efd19b026c049e2e3f2bcf3a9b8f92e3fedba706424e9a797",
+          "actual_sha256": "2c0661fc55d46e0efd19b026c049e2e3f2bcf3a9b8f92e3fedba706424e9a797",
+          "matched": true
+        },
+        "outputs/phase7cr2_temperature_voltage_guards/metrics.json": {
+          "expected_sha256": "fa2d71da0a579782fb0c06b4c816f91b44181b90dc89abbf5e105a1d73d41759",
+          "actual_sha256": "fa2d71da0a579782fb0c06b4c816f91b44181b90dc89abbf5e105a1d73d41759",
+          "matched": true
+        },
+        "outputs/phase7cr2_temperature_voltage_guards/PHASE7C-R2_中文实验报告.md": {
+          "expected_sha256": "f9a640f213da204c19d2f6814176c88cef148d969443f29b79680881a6008c87",
+          "actual_sha256": "f9a640f213da204c19d2f6814176c88cef148d969443f29b79680881a6008c87",
+          "matched": true
+        },
+        "outputs/phase7cr2_temperature_voltage_guards/phase7cr2_summary.png": {
+          "expected_sha256": "e54724880c8613a2dda1435a5018513ade5bfe8d790bfeddb6bb3355d865b02b",
+          "actual_sha256": "e54724880c8613a2dda1435a5018513ade5bfe8d790bfeddb6bb3355d865b02b",
+          "matched": true
+        }
+      }
+    },
+    "r2f": {
+      "manifest_sha256": "5df4eae4f839385699bc0d76ec49ba765b1d60fe93092864418544ea57bd49be",
+      "r2f_failure_preserved": true,
+      "records": {
+        "configs/phase7cr2f_teacher_selection_voltage_guard.yaml": {
+          "expected_sha256": "c016ce079277f9a4f2e4f762dd76bcd1cedf037503ac1767eb31e1704ac2bbdd",
+          "actual_sha256": "c016ce079277f9a4f2e4f762dd76bcd1cedf037503ac1767eb31e1704ac2bbdd",
+          "matched": true
+        },
+        "src/battery_fast_charge/phase7cr2f_teacher.py": {
+          "expected_sha256": "64379c88d1b59e9ab6e5381b3be1969e78dd0f69360e0edf5f3d1322ec035021",
+          "actual_sha256": "64379c88d1b59e9ab6e5381b3be1969e78dd0f69360e0edf5f3d1322ec035021",
+          "matched": true
+        },
+        "src/battery_fast_charge/phase7cr2f_runner.py": {
+          "expected_sha256": "997d3fc61e3f2c5ec3f62833971f034a3f3a5de7d10cb548349a5c0a96db5cfc",
+          "actual_sha256": "997d3fc61e3f2c5ec3f62833971f034a3f3a5de7d10cb548349a5c0a96db5cfc",
+          "matched": true
+        },
+        "tests/fixtures/phase7cr2_known_teacher_misselections.json": {
+          "expected_sha256": "94225024a72cb04842d8009bf3a4f4dc812c67c4fe0ae6f645578963fff8e332",
+          "actual_sha256": "94225024a72cb04842d8009bf3a4f4dc812c67c4fe0ae6f645578963fff8e332",
+          "matched": true
+        },
+        "data/phase7cr2f_teacher_selection_voltage_guard/initial_state_freeze.json": {
+          "expected_sha256": "9553c2afac01d0d7f2d24ac5b059ac33ff5c68c2634e670f96d7d555256ab25b",
+          "actual_sha256": "9553c2afac01d0d7f2d24ac5b059ac33ff5c68c2634e670f96d7d555256ab25b",
+          "matched": true
+        },
+        "data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv": {
+          "expected_sha256": "050bcd98f5a84df7cdfdc157f2621bcb7bc44fd5997effc4024db2be5b382bfd",
+          "actual_sha256": "050bcd98f5a84df7cdfdc157f2621bcb7bc44fd5997effc4024db2be5b382bfd",
+          "matched": true
+        },
+        "data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv": {
+          "expected_sha256": "fa787ea2bcb970b55daa04688e075aff625b5f76c63dd48be552d4e9cfc62399",
+          "actual_sha256": "fa787ea2bcb970b55daa04688e075aff625b5f76c63dd48be552d4e9cfc62399",
+          "matched": true
+        },
+        "data/phase7cr2f_teacher_selection_voltage_guard/frozen_voltage_guards.json": {
+          "expected_sha256": "68b320905549d4fb98486636fd5377f28b52bb45acff026fb148b8ad43db5d57",
+          "actual_sha256": "68b320905549d4fb98486636fd5377f28b52bb45acff026fb148b8ad43db5d57",
+          "matched": true
+        },
+        "data/phase7cr2f_teacher_selection_voltage_guard/development_guard_audit.csv": {
+          "expected_sha256": "b8b012b32af6088b01258d98de9015d34e1f2d2ff68889e6cbeccc85a1f5da6e",
+          "actual_sha256": "b8b012b32af6088b01258d98de9015d34e1f2d2ff68889e6cbeccc85a1f5da6e",
+          "matched": true
+        },
+        "data/phase7cr2f_teacher_selection_voltage_guard/combined_validation_trajectories.csv": {
+          "expected_sha256": "ad60ca0a22841b1f4e671ecb49a422fa888ac8add05a437b8a694add76c6f8ba",
+          "actual_sha256": "ad60ca0a22841b1f4e671ecb49a422fa888ac8add05a437b8a694add76c6f8ba",
+          "matched": true
+        },
+        "data/phase7cr2f_teacher_selection_voltage_guard/trajectory_metrics.csv": {
+          "expected_sha256": "44b18f9e970d7ff29abb35f262dc06ac60764837d4d5a5e843680a201e9f0acf",
+          "actual_sha256": "44b18f9e970d7ff29abb35f262dc06ac60764837d4d5a5e843680a201e9f0acf",
+          "matched": true
+        },
+        "outputs/phase7cr2f_teacher_selection_voltage_guard/metrics.json": {
+          "expected_sha256": "f1e1a135643281fe988febe2b6c1741d42775e67f89e4cabf201f3ce8d363de0",
+          "actual_sha256": "f1e1a135643281fe988febe2b6c1741d42775e67f89e4cabf201f3ce8d363de0",
+          "matched": true
+        },
+        "outputs/phase7cr2f_teacher_selection_voltage_guard/PHASE7C-R2F_中文实验报告.md": {
+          "expected_sha256": "b80df6c06222bb547f02133311668da44f9c107cb06224976fa0965bf4edbaf6",
+          "actual_sha256": "b80df6c06222bb547f02133311668da44f9c107cb06224976fa0965bf4edbaf6",
+          "matched": true
+        },
+        "outputs/phase7cr2f_teacher_selection_voltage_guard/phase7cr2f_summary.png": {
+          "expected_sha256": "7961c0fbbfc0e85f87be8fcf3020cee16513c0bea555e63ef2253a0473527a60",
+          "actual_sha256": "7961c0fbbfc0e85f87be8fcf3020cee16513c0bea555e63ef2253a0473527a60",
+          "matched": true
+        }
+      }
+    },
+    "residual_audit": {
+      "manifest_sha256": "06f756924a490a2cb68880f1869cef1ff0bddbcf9609cc9afc3cfeae9b5f6df1",
+      "records": {
+        "configs/phase7cr2f2_residual_initialization_audit.yaml": {
+          "expected_sha256": "1417edef1411101d080d06ae43e0cfa7af440b7c07a26795bea7907af90a95c1",
+          "actual_sha256": "1417edef1411101d080d06ae43e0cfa7af440b7c07a26795bea7907af90a95c1",
+          "matched": true
+        },
+        "src/battery_fast_charge/phase7cr2f2_residual_audit.py": {
+          "expected_sha256": "47efb47a6a4aa62ea22f5ff0b3e0b0c4428b12596b24647b2fe36f2c5d7c8e0c",
+          "actual_sha256": "47efb47a6a4aa62ea22f5ff0b3e0b0c4428b12596b24647b2fe36f2c5d7c8e0c",
+          "matched": true
+        },
+        "src/battery_fast_charge/phase7cr2f2_residual_audit_cli.py": {
+          "expected_sha256": "baa0dc5cafc52d5671590460990b31f4791c152f1fe37a78b1fbc269e79f03aa",
+          "actual_sha256": "baa0dc5cafc52d5671590460990b31f4791c152f1fe37a78b1fbc269e79f03aa",
+          "matched": true
+        },
+        "tests/test_phase7cr2f2_residual_audit.py": {
+          "expected_sha256": "f821b79aa12fbf750059b4cba6f553145bf71d40908ff48c54c4e9a05db4945a",
+          "actual_sha256": "f821b79aa12fbf750059b4cba6f553145bf71d40908ff48c54c4e9a05db4945a",
+          "matched": true
+        },
+        "data/phase7cr2f2_residual_initialization_audit/initial_voltage_audit.csv": {
+          "expected_sha256": "18db112053c2b0e78caf28d49cf188c0fa8fc89ed9787fd0785ec9639b66bd2a",
+          "actual_sha256": "18db112053c2b0e78caf28d49cf188c0fa8fc89ed9787fd0785ec9639b66bd2a",
+          "matched": true
+        },
+        "data/phase7cr2f2_residual_initialization_audit/three_step_replay.csv": {
+          "expected_sha256": "4fe88f7ea86b8e2963513a0d1013be790159be2458cf8f6c0f5220ba9ac7f360",
+          "actual_sha256": "4fe88f7ea86b8e2963513a0d1013be790159be2458cf8f6c0f5220ba9ac7f360",
+          "matched": true
+        },
+        "outputs/phase7cr2f2_residual_initialization_audit/metrics.json": {
+          "expected_sha256": "b1cadf7768755f1a551d05fdc4d8079845722f87ff075561277588f4112fe150",
+          "actual_sha256": "b1cadf7768755f1a551d05fdc4d8079845722f87ff075561277588f4112fe150",
+          "matched": true
+        },
+        "outputs/phase7cr2f2_residual_initialization_audit/PHASE7C-R2F2_残差初始化审计报告.md": {
+          "expected_sha256": "ad16ba03238d83f916730ac982f099108f719a7d5fe76c9ced5d2d6244e6cd37",
+          "actual_sha256": "ad16ba03238d83f916730ac982f099108f719a7d5fe76c9ced5d2d6244e6cd37",
+          "matched": true
+        }
+      }
+    }
+  },
+  "initial_state_freeze": {
+    "phase": "Phase 7C-R2F2",
+    "status": "initial_states_frozen_before_any_closed_loop_rollout",
+    "frozen_before_any_closed_loop_rollout": true,
+    "development_internal_isolation": true,
+    "not_r3_confirmation_data": true,
+    "not_ann_teacher_data": true,
+    "initial_state_history_contract": "dfn_and_2rc_do_not_share_current_history",
+    "config_sha256": "c8d526b8d53dda6bea033fe6f18deec61a127f8fea95a88882e0080ca5714f0e",
+    "files": {
+      "development_initial_states.csv": {
+        "sha256": "e5ce0c4161f84fd69c76fa4127c13b399fef350e024d5fbad1de82af0812a839",
+        "trajectory_count": 48,
+        "strata_counts": {
+          "startup_transient_stress": 24,
+          "historical_extreme_neighborhood": 12,
+          "general_high_risk": 8,
+          "global_coverage": 4
+        },
+        "minimum_initial_residual_v": -0.17853705706915868,
+        "extreme_initial_residual_count": 18,
+        "design_seed": 20260811,
+        "minimum_design_index": 3103,
+        "maximum_design_index": 3173
+      },
+      "internal_validation_initial_states.csv": {
+        "sha256": "84ecfc3289eae86352b95d8b84bd0c4a8900592d3258506af4772901e958f89f",
+        "trajectory_count": 24,
+        "strata_counts": {
+          "startup_transient_stress": 12,
+          "historical_extreme_neighborhood": 6,
+          "general_high_risk": 4,
+          "global_coverage": 2
+        },
+        "minimum_initial_residual_v": -0.17712355183070505,
+        "extreme_initial_residual_count": 11,
+        "design_seed": 20260812,
+        "minimum_design_index": 4103,
+        "maximum_design_index": 4135
+      }
+    },
+    "frozen_source_verification": {
+      "r2": {
+        "manifest_sha256": "27e504979e40331c1fe057400662c8163f01d905093500baf5b651e629fe2b08",
+        "status_preserved": true,
+        "records": {
+          "configs/phase7cr2_temperature_voltage_guards.yaml": {
+            "expected_sha256": "3cc2b8bf4ce6bf15c74c29c8c7ee812d7beedc15fbd3121a026017b183c3d6e2",
+            "actual_sha256": "3cc2b8bf4ce6bf15c74c29c8c7ee812d7beedc15fbd3121a026017b183c3d6e2",
+            "matched": true
+          },
+          "src/battery_fast_charge/phase7cr2_runner.py": {
+            "expected_sha256": "09407db421d470d0f77ff6b01e218c493bf7a8b252386ad4b2ee54717766db60",
+            "actual_sha256": "09407db421d470d0f77ff6b01e218c493bf7a8b252386ad4b2ee54717766db60",
+            "matched": true
+          },
+          "data/phase7cr2_temperature_voltage_guards/initial_state_freeze.json": {
+            "expected_sha256": "c8350d961d7ba1729540050837a2e0a696c68fecb34559cb1364214a20790227",
+            "actual_sha256": "c8350d961d7ba1729540050837a2e0a696c68fecb34559cb1364214a20790227",
+            "matched": true
+          },
+          "data/phase7cr2_temperature_voltage_guards/development_initial_states.csv": {
+            "expected_sha256": "097ab43faf644a34a630c387f667a8c93f16fcf224932b008656234970087d43",
+            "actual_sha256": "097ab43faf644a34a630c387f667a8c93f16fcf224932b008656234970087d43",
+            "matched": true
+          },
+          "data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv": {
+            "expected_sha256": "55c96f7fb6924d70e168d5a3cd66a618f00aae760e500fcc6b522691d2f2c342",
+            "actual_sha256": "55c96f7fb6924d70e168d5a3cd66a618f00aae760e500fcc6b522691d2f2c342",
+            "matched": true
+          },
+          "data/phase7cr2_temperature_voltage_guards/derived_voltage_guards.json": {
+            "expected_sha256": "dfdc7664cb4e7878dcd25ffe5ea936f24c479582ec10bb644ea4d5c4b8032fed",
+            "actual_sha256": "dfdc7664cb4e7878dcd25ffe5ea936f24c479582ec10bb644ea4d5c4b8032fed",
+            "matched": true
+          },
+          "data/phase7cr2_temperature_voltage_guards/development_guard_audit.csv": {
+            "expected_sha256": "b0d17f71bcac119913108ed9e9a2a5abfb5bf90a1021d4f06bf828b3f8f5139d",
+            "actual_sha256": "b0d17f71bcac119913108ed9e9a2a5abfb5bf90a1021d4f06bf828b3f8f5139d",
+            "matched": true
+          },
+          "data/phase7cr2_temperature_voltage_guards/combined_validation_trajectories.csv": {
+            "expected_sha256": "b635aa04b4b52813270c848769133c0bff9e7e553cb360e716b1587c3769f9f3",
+            "actual_sha256": "b635aa04b4b52813270c848769133c0bff9e7e553cb360e716b1587c3769f9f3",
+            "matched": true
+          },
+          "data/phase7cr2_temperature_voltage_guards/trajectory_metrics.csv": {
+            "expected_sha256": "2c0661fc55d46e0efd19b026c049e2e3f2bcf3a9b8f92e3fedba706424e9a797",
+            "actual_sha256": "2c0661fc55d46e0efd19b026c049e2e3f2bcf3a9b8f92e3fedba706424e9a797",
+            "matched": true
+          },
+          "outputs/phase7cr2_temperature_voltage_guards/metrics.json": {
+            "expected_sha256": "fa2d71da0a579782fb0c06b4c816f91b44181b90dc89abbf5e105a1d73d41759",
+            "actual_sha256": "fa2d71da0a579782fb0c06b4c816f91b44181b90dc89abbf5e105a1d73d41759",
+            "matched": true
+          },
+          "outputs/phase7cr2_temperature_voltage_guards/PHASE7C-R2_中文实验报告.md": {
+            "expected_sha256": "f9a640f213da204c19d2f6814176c88cef148d969443f29b79680881a6008c87",
+            "actual_sha256": "f9a640f213da204c19d2f6814176c88cef148d969443f29b79680881a6008c87",
+            "matched": true
+          },
+          "outputs/phase7cr2_temperature_voltage_guards/phase7cr2_summary.png": {
+            "expected_sha256": "e54724880c8613a2dda1435a5018513ade5bfe8d790bfeddb6bb3355d865b02b",
+            "actual_sha256": "e54724880c8613a2dda1435a5018513ade5bfe8d790bfeddb6bb3355d865b02b",
+            "matched": true
+          }
+        }
+      },
+      "r2f": {
+        "manifest_sha256": "5df4eae4f839385699bc0d76ec49ba765b1d60fe93092864418544ea57bd49be",
+        "r2f_failure_preserved": true,
+        "records": {
+          "configs/phase7cr2f_teacher_selection_voltage_guard.yaml": {
+            "expected_sha256": "c016ce079277f9a4f2e4f762dd76bcd1cedf037503ac1767eb31e1704ac2bbdd",
+            "actual_sha256": "c016ce079277f9a4f2e4f762dd76bcd1cedf037503ac1767eb31e1704ac2bbdd",
+            "matched": true
+          },
+          "src/battery_fast_charge/phase7cr2f_teacher.py": {
+            "expected_sha256": "64379c88d1b59e9ab6e5381b3be1969e78dd0f69360e0edf5f3d1322ec035021",
+            "actual_sha256": "64379c88d1b59e9ab6e5381b3be1969e78dd0f69360e0edf5f3d1322ec035021",
+            "matched": true
+          },
+          "src/battery_fast_charge/phase7cr2f_runner.py": {
+            "expected_sha256": "997d3fc61e3f2c5ec3f62833971f034a3f3a5de7d10cb548349a5c0a96db5cfc",
+            "actual_sha256": "997d3fc61e3f2c5ec3f62833971f034a3f3a5de7d10cb548349a5c0a96db5cfc",
+            "matched": true
+          },
+          "tests/fixtures/phase7cr2_known_teacher_misselections.json": {
+            "expected_sha256": "94225024a72cb04842d8009bf3a4f4dc812c67c4fe0ae6f645578963fff8e332",
+            "actual_sha256": "94225024a72cb04842d8009bf3a4f4dc812c67c4fe0ae6f645578963fff8e332",
+            "matched": true
+          },
+          "data/phase7cr2f_teacher_selection_voltage_guard/initial_state_freeze.json": {
+            "expected_sha256": "9553c2afac01d0d7f2d24ac5b059ac33ff5c68c2634e670f96d7d555256ab25b",
+            "actual_sha256": "9553c2afac01d0d7f2d24ac5b059ac33ff5c68c2634e670f96d7d555256ab25b",
+            "matched": true
+          },
+          "data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv": {
+            "expected_sha256": "050bcd98f5a84df7cdfdc157f2621bcb7bc44fd5997effc4024db2be5b382bfd",
+            "actual_sha256": "050bcd98f5a84df7cdfdc157f2621bcb7bc44fd5997effc4024db2be5b382bfd",
+            "matched": true
+          },
+          "data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv": {
+            "expected_sha256": "fa787ea2bcb970b55daa04688e075aff625b5f76c63dd48be552d4e9cfc62399",
+            "actual_sha256": "fa787ea2bcb970b55daa04688e075aff625b5f76c63dd48be552d4e9cfc62399",
+            "matched": true
+          },
+          "data/phase7cr2f_teacher_selection_voltage_guard/frozen_voltage_guards.json": {
+            "expected_sha256": "68b320905549d4fb98486636fd5377f28b52bb45acff026fb148b8ad43db5d57",
+            "actual_sha256": "68b320905549d4fb98486636fd5377f28b52bb45acff026fb148b8ad43db5d57",
+            "matched": true
+          },
+          "data/phase7cr2f_teacher_selection_voltage_guard/development_guard_audit.csv": {
+            "expected_sha256": "b8b012b32af6088b01258d98de9015d34e1f2d2ff68889e6cbeccc85a1f5da6e",
+            "actual_sha256": "b8b012b32af6088b01258d98de9015d34e1f2d2ff68889e6cbeccc85a1f5da6e",
+            "matched": true
+          },
+          "data/phase7cr2f_teacher_selection_voltage_guard/combined_validation_trajectories.csv": {
+            "expected_sha256": "ad60ca0a22841b1f4e671ecb49a422fa888ac8add05a437b8a694add76c6f8ba",
+            "actual_sha256": "ad60ca0a22841b1f4e671ecb49a422fa888ac8add05a437b8a694add76c6f8ba",
+            "matched": true
+          },
+          "data/phase7cr2f_teacher_selection_voltage_guard/trajectory_metrics.csv": {
+            "expected_sha256": "44b18f9e970d7ff29abb35f262dc06ac60764837d4d5a5e843680a201e9f0acf",
+            "actual_sha256": "44b18f9e970d7ff29abb35f262dc06ac60764837d4d5a5e843680a201e9f0acf",
+            "matched": true
+          },
+          "outputs/phase7cr2f_teacher_selection_voltage_guard/metrics.json": {
+            "expected_sha256": "f1e1a135643281fe988febe2b6c1741d42775e67f89e4cabf201f3ce8d363de0",
+            "actual_sha256": "f1e1a135643281fe988febe2b6c1741d42775e67f89e4cabf201f3ce8d363de0",
+            "matched": true
+          },
+          "outputs/phase7cr2f_teacher_selection_voltage_guard/PHASE7C-R2F_中文实验报告.md": {
+            "expected_sha256": "b80df6c06222bb547f02133311668da44f9c107cb06224976fa0965bf4edbaf6",
+            "actual_sha256": "b80df6c06222bb547f02133311668da44f9c107cb06224976fa0965bf4edbaf6",
+            "matched": true
+          },
+          "outputs/phase7cr2f_teacher_selection_voltage_guard/phase7cr2f_summary.png": {
+            "expected_sha256": "7961c0fbbfc0e85f87be8fcf3020cee16513c0bea555e63ef2253a0473527a60",
+            "actual_sha256": "7961c0fbbfc0e85f87be8fcf3020cee16513c0bea555e63ef2253a0473527a60",
+            "matched": true
+          }
+        }
+      },
+      "residual_audit": {
+        "manifest_sha256": "06f756924a490a2cb68880f1869cef1ff0bddbcf9609cc9afc3cfeae9b5f6df1",
+        "records": {
+          "configs/phase7cr2f2_residual_initialization_audit.yaml": {
+            "expected_sha256": "1417edef1411101d080d06ae43e0cfa7af440b7c07a26795bea7907af90a95c1",
+            "actual_sha256": "1417edef1411101d080d06ae43e0cfa7af440b7c07a26795bea7907af90a95c1",
+            "matched": true
+          },
+          "src/battery_fast_charge/phase7cr2f2_residual_audit.py": {
+            "expected_sha256": "47efb47a6a4aa62ea22f5ff0b3e0b0c4428b12596b24647b2fe36f2c5d7c8e0c",
+            "actual_sha256": "47efb47a6a4aa62ea22f5ff0b3e0b0c4428b12596b24647b2fe36f2c5d7c8e0c",
+            "matched": true
+          },
+          "src/battery_fast_charge/phase7cr2f2_residual_audit_cli.py": {
+            "expected_sha256": "baa0dc5cafc52d5671590460990b31f4791c152f1fe37a78b1fbc269e79f03aa",
+            "actual_sha256": "baa0dc5cafc52d5671590460990b31f4791c152f1fe37a78b1fbc269e79f03aa",
+            "matched": true
+          },
+          "tests/test_phase7cr2f2_residual_audit.py": {
+            "expected_sha256": "f821b79aa12fbf750059b4cba6f553145bf71d40908ff48c54c4e9a05db4945a",
+            "actual_sha256": "f821b79aa12fbf750059b4cba6f553145bf71d40908ff48c54c4e9a05db4945a",
+            "matched": true
+          },
+          "data/phase7cr2f2_residual_initialization_audit/initial_voltage_audit.csv": {
+            "expected_sha256": "18db112053c2b0e78caf28d49cf188c0fa8fc89ed9787fd0785ec9639b66bd2a",
+            "actual_sha256": "18db112053c2b0e78caf28d49cf188c0fa8fc89ed9787fd0785ec9639b66bd2a",
+            "matched": true
+          },
+          "data/phase7cr2f2_residual_initialization_audit/three_step_replay.csv": {
+            "expected_sha256": "4fe88f7ea86b8e2963513a0d1013be790159be2458cf8f6c0f5220ba9ac7f360",
+            "actual_sha256": "4fe88f7ea86b8e2963513a0d1013be790159be2458cf8f6c0f5220ba9ac7f360",
+            "matched": true
+          },
+          "outputs/phase7cr2f2_residual_initialization_audit/metrics.json": {
+            "expected_sha256": "b1cadf7768755f1a551d05fdc4d8079845722f87ff075561277588f4112fe150",
+            "actual_sha256": "b1cadf7768755f1a551d05fdc4d8079845722f87ff075561277588f4112fe150",
+            "matched": true
+          },
+          "outputs/phase7cr2f2_residual_initialization_audit/PHASE7C-R2F2_残差初始化审计报告.md": {
+            "expected_sha256": "ad16ba03238d83f916730ac982f099108f719a7d5fe76c9ced5d2d6244e6cd37",
+            "actual_sha256": "ad16ba03238d83f916730ac982f099108f719a7d5fe76c9ced5d2d6244e6cd37",
+            "matched": true
+          }
+        }
+      }
+    }
+  },
+  "frozen_guard_contract": {
+    "phase": "Phase 7C-R2F2 development",
+    "status": "two_stage_guards_frozen_before_internal_validation",
+    "design": "two_stage_boot_steps_0_1_running_steps_2_plus",
+    "residual_initialization": "measured",
+    "internal_validation_used_for_tuning": false,
+    "formulas": {
+      "boot": "max(boot_historical_minimum_30c_v, development_boot_max_v) + engineering_margin_v",
+      "running": "max(running_guard_floor_30c_v, development_running_max_v + engineering_margin_v)"
+    },
+    "guards": {
+      "15": 0.014098037646160801,
+      "25": 0.011305522502741638,
+      "30": {
+        "boot_v": 0.0376479265035423,
+        "running_v": 0.0218918472128131
+      },
+      "development_boot_max_v": 0.0371479265035423,
+      "development_running_max_v": 0.0128503716496295,
+      "engineering_margin_v": 0.0005
+    },
+    "state_hashes": {
+      "development_initial_states.csv": "e5ce0c4161f84fd69c76fa4127c13b399fef350e024d5fbad1de82af0812a839",
+      "internal_validation_initial_states.csv": "84ecfc3289eae86352b95d8b84bd0c4a8900592d3258506af4772901e958f89f"
+    },
+    "development_audit_sha256": "f77e445d97d269a131ca07120159782edb3e23a0fbe42684ce6c66ecea5632ff",
+    "config_sha256": "c8d526b8d53dda6bea033fe6f18deec61a127f8fea95a88882e0080ca5714f0e",
+    "runner_sha256": "41676b0e3be2a0e2380b4c1b0a297d00d426fc3176d3ea4340358cab57d11212"
+  },
+  "teacher_selection_regression": {
+    "case_count": 2,
+    "records": [
+      {
+        "case_id": "r2_development_30c_step_70",
+        "selected_branch": "default",
+        "expected_branch": "default",
+        "passed": true
+      },
+      {
+        "case_id": "r2_internal_validation_30c_step_46",
+        "selected_branch": "default",
+        "expected_branch": "default",
+        "passed": true
+      }
+    ],
+    "all_passed": true
+  },
+  "r2f_25_001527_mv_regression_covered": true,
+  "role_results": {
+    "development_frozen_guard": {
+      "30": {
+        "summary": {
+          "trajectory_count": 48,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.1785198357430495,
+          "maximum_temperature_c": 34.90044001152586,
+          "maximum_current_step_a": 2.0,
+          "maximum_positive_residual_growth_v": 0.0371479265035263,
+          "guard_exceedance_count": 0,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            825.0,
+            2075.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.014457831325301205,
+            0.24848484848484848
+          ],
+          "thermal_intervention_fraction_range": [
+            0.0,
+            0.8048192771084337
+          ],
+          "both_layers_fraction_range": [
+            0.0,
+            0.20574162679425836
+          ],
+          "maximum_voltage_correction_a": 0.3063433413373784,
+          "maximum_thermal_correction_a": 3.211900031485252,
+          "teacher_retry_count": 2096,
+          "alternative_selected_count": 914,
+          "total_thermal_supervisor_time_s": 5.9507800002023306
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": true,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": true
+      }
+    },
+    "internal_validation": {
+      "30": {
+        "summary": {
+          "trajectory_count": 24,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.178469882439957,
+          "maximum_temperature_c": 34.87899680239053,
+          "maximum_current_step_a": 2.0,
+          "maximum_positive_residual_growth_v": 0.0350280344547773,
+          "guard_exceedance_count": 0,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            810.0,
+            1665.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.05405405405405406,
+            0.2839506172839506
+          ],
+          "thermal_intervention_fraction_range": [
+            0.1657142857142857,
+            0.7567567567567568
+          ],
+          "both_layers_fraction_range": [
+            0.0,
+            0.19902912621359223
+          ],
+          "maximum_voltage_correction_a": 0.2944844680630685,
+          "maximum_thermal_correction_a": 3.3915749144274407,
+          "teacher_retry_count": 957,
+          "alternative_selected_count": 414,
+          "total_thermal_supervisor_time_s": 2.9163404999923586
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": true,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": true
+      }
+    },
+    "legacy_phase7b1_25c": {
+      "25": {
+        "summary": {
+          "trajectory_count": 24,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.189058020416925,
+          "maximum_temperature_c": 34.8299898741094,
+          "maximum_current_step_a": 2.0000000000000004,
+          "maximum_positive_residual_growth_v": 0.026040820770421,
+          "guard_exceedance_count": 10,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            770.0,
+            1555.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.15755627009646303,
+            0.31862745098039214
+          ],
+          "thermal_intervention_fraction_range": [
+            0.0,
+            0.5691318327974276
+          ],
+          "both_layers_fraction_range": [
+            0.0,
+            0.007067137809187279
+          ],
+          "maximum_voltage_correction_a": 0.250879894325712,
+          "maximum_thermal_correction_a": 2.054434235487797,
+          "teacher_retry_count": 121,
+          "alternative_selected_count": 47,
+          "total_thermal_supervisor_time_s": 2.1073307997355126
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": false,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": false
+      }
+    },
+    "legacy_phase7c": {
+      "15": {
+        "summary": {
+          "trajectory_count": 24,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.187275120748813,
+          "maximum_temperature_c": 29.062158271283465,
+          "maximum_current_step_a": 2.000000000000001,
+          "maximum_positive_residual_growth_v": 0.0366612309890537,
+          "guard_exceedance_count": 6,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            810.0,
+            1450.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.4,
+            0.5345622119815668
+          ],
+          "thermal_intervention_fraction_range": [
+            0.0,
+            0.0
+          ],
+          "both_layers_fraction_range": [
+            0.0,
+            0.0
+          ],
+          "maximum_voltage_correction_a": 0.8889631228929464,
+          "maximum_thermal_correction_a": 0.0,
+          "teacher_retry_count": 54,
+          "alternative_selected_count": 23,
+          "total_thermal_supervisor_time_s": 1.732231300396675
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": false,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": false
+      },
+      "30": {
+        "summary": {
+          "trajectory_count": 24,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.178474711819838,
+          "maximum_temperature_c": 34.900423430917385,
+          "maximum_current_step_a": 2.0000000000000004,
+          "maximum_positive_residual_growth_v": 0.0304373098935775,
+          "guard_exceedance_count": 0,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            770.0,
+            2135.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.00936768149882904,
+            0.27167630057803466
+          ],
+          "thermal_intervention_fraction_range": [
+            0.0,
+            0.810304449648712
+          ],
+          "both_layers_fraction_range": [
+            0.0,
+            0.2169811320754717
+          ],
+          "maximum_voltage_correction_a": 0.3328219734762743,
+          "maximum_thermal_correction_a": 3.999999999999999,
+          "teacher_retry_count": 2461,
+          "alternative_selected_count": 1056,
+          "total_thermal_supervisor_time_s": 3.612801499948198
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": true,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": true
+      }
+    },
+    "legacy_phase7cr1": {
+      "30": {
+        "summary": {
+          "trajectory_count": 8,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.1783109398906,
+          "maximum_temperature_c": 34.90041936396017,
+          "maximum_current_step_a": 2.0,
+          "maximum_positive_residual_growth_v": 0.0333937029841222,
+          "guard_exceedance_count": 0,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            875.0,
+            2050.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.01707317073170732,
+            0.25142857142857145
+          ],
+          "thermal_intervention_fraction_range": [
+            0.30857142857142855,
+            0.8
+          ],
+          "both_layers_fraction_range": [
+            0.01707317073170732,
+            0.16115702479338842
+          ],
+          "maximum_voltage_correction_a": 0.3164783104698427,
+          "maximum_thermal_correction_a": 3.895034848687788,
+          "teacher_retry_count": 822,
+          "alternative_selected_count": 326,
+          "total_thermal_supervisor_time_s": 1.1470900000348356
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": true,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": true
+      }
+    },
+    "legacy_phase7cr2_development": {
+      "15": {
+        "summary": {
+          "trajectory_count": 16,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.187256517181154,
+          "maximum_temperature_c": 28.737732254271123,
+          "maximum_current_step_a": 2.000000000000001,
+          "maximum_positive_residual_growth_v": 0.0346733547642039,
+          "guard_exceedance_count": 9,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            845.0,
+            1435.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.40418118466898956,
+            0.5186915887850467
+          ],
+          "thermal_intervention_fraction_range": [
+            0.0,
+            0.0
+          ],
+          "both_layers_fraction_range": [
+            0.0,
+            0.0
+          ],
+          "maximum_voltage_correction_a": 0.8721624520800728,
+          "maximum_thermal_correction_a": 0.0,
+          "teacher_retry_count": 16,
+          "alternative_selected_count": 10,
+          "total_thermal_supervisor_time_s": 1.0505288000493298
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": false,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": false
+      },
+      "30": {
+        "summary": {
+          "trajectory_count": 16,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.178511695189028,
+          "maximum_temperature_c": 34.90041873984245,
+          "maximum_current_step_a": 2.0,
+          "maximum_positive_residual_growth_v": 0.0296359633986842,
+          "guard_exceedance_count": 0,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            800.0,
+            2095.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.011933174224343675,
+            0.23232323232323232
+          ],
+          "thermal_intervention_fraction_range": [
+            0.0,
+            0.8066825775656324
+          ],
+          "both_layers_fraction_range": [
+            0.0,
+            0.1990521327014218
+          ],
+          "maximum_voltage_correction_a": 0.3128562667733101,
+          "maximum_thermal_correction_a": 4.0,
+          "teacher_retry_count": 844,
+          "alternative_selected_count": 360,
+          "total_thermal_supervisor_time_s": 1.983552800200219
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": true,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": true
+      }
+    },
+    "legacy_phase7cr2_internal": {
+      "15": {
+        "summary": {
+          "trajectory_count": 8,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.187136138289947,
+          "maximum_temperature_c": 28.02264201887777,
+          "maximum_current_step_a": 2.0,
+          "maximum_positive_residual_growth_v": 0.0268905250855455,
+          "guard_exceedance_count": 6,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            895.0,
+            1415.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.4134275618374558,
+            0.5205479452054794
+          ],
+          "thermal_intervention_fraction_range": [
+            0.0,
+            0.0
+          ],
+          "both_layers_fraction_range": [
+            0.0,
+            0.0
+          ],
+          "maximum_voltage_correction_a": 0.8684971783074307,
+          "maximum_thermal_correction_a": 0.0,
+          "teacher_retry_count": 7,
+          "alternative_selected_count": 4,
+          "total_thermal_supervisor_time_s": 0.5129758999245535
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": false,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": false
+      },
+      "30": {
+        "summary": {
+          "trajectory_count": 8,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.178494354236962,
+          "maximum_temperature_c": 34.899358972085906,
+          "maximum_current_step_a": 2.0,
+          "maximum_positive_residual_growth_v": 0.0304601921798575,
+          "guard_exceedance_count": 0,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            845.0,
+            2005.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.0199501246882793,
+            0.24864864864864866
+          ],
+          "thermal_intervention_fraction_range": [
+            0.13793103448275862,
+            0.800498753117207
+          ],
+          "both_layers_fraction_range": [
+            0.005917159763313609,
+            0.18686868686868688
+          ],
+          "maximum_voltage_correction_a": 0.3094950261810436,
+          "maximum_thermal_correction_a": 2.0373693244836737,
+          "teacher_retry_count": 376,
+          "alternative_selected_count": 156,
+          "total_thermal_supervisor_time_s": 0.9211968001763073
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": true,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": true
+      }
+    },
+    "legacy_phase7cr2f_development": {
+      "30": {
+        "summary": {
+          "trajectory_count": 32,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.178566044055877,
+          "maximum_temperature_c": 34.90003174681641,
+          "maximum_current_step_a": 2.0,
+          "maximum_positive_residual_growth_v": 0.0344395190990809,
+          "guard_exceedance_count": 0,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            815.0,
+            2025.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.01728395061728395,
+            0.2573099415204678
+          ],
+          "thermal_intervention_fraction_range": [
+            0.0,
+            0.8
+          ],
+          "both_layers_fraction_range": [
+            0.0,
+            0.20476190476190476
+          ],
+          "maximum_voltage_correction_a": 0.3079120760752269,
+          "maximum_thermal_correction_a": 3.509322313009225,
+          "teacher_retry_count": 1511,
+          "alternative_selected_count": 632,
+          "total_thermal_supervisor_time_s": 4.0553000002615285
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": true,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": true
+      }
+    },
+    "legacy_phase7cr2f_internal": {
+      "30": {
+        "summary": {
+          "trajectory_count": 16,
+          "target_reach_fraction": 1.0,
+          "maximum_voltage_v": 4.178556525075949,
+          "maximum_temperature_c": 34.89874678510938,
+          "maximum_current_step_a": 2.0,
+          "maximum_positive_residual_growth_v": 0.0330482673573873,
+          "guard_exceedance_count": 0,
+          "empty_voltage_slew_count": 0,
+          "empty_thermal_slew_count": 0,
+          "solver_failure_count": 0,
+          "prediction_infeasible_count": 0,
+          "sustained_oscillation_count": 0,
+          "charge_time_range_s": [
+            815.0,
+            1985.0
+          ],
+          "voltage_intervention_fraction_range": [
+            0.022670025188916875,
+            0.2469879518072289
+          ],
+          "thermal_intervention_fraction_range": [
+            0.0,
+            0.7984886649874056
+          ],
+          "both_layers_fraction_range": [
+            0.0,
+            0.1981981981981982
+          ],
+          "maximum_voltage_correction_a": 0.3103869576593867,
+          "maximum_thermal_correction_a": 3.3767308461968977,
+          "teacher_retry_count": 804,
+          "alternative_selected_count": 329,
+          "total_thermal_supervisor_time_s": 1.9636630999009674
+        },
+        "checks": {
+          "maximum_voltage": true,
+          "maximum_temperature": true,
+          "zero_guard_exceedance": true,
+          "current_bounds": true,
+          "slew_bound": true,
+          "zero_voltage_slew_empty": true,
+          "zero_thermal_slew_empty": true,
+          "zero_solver_failure": true,
+          "zero_prediction_infeasible": true,
+          "zero_sustained_oscillation": true,
+          "target_reach_100_percent": true,
+          "maximum_voltage_f2": true,
+          "maximum_temperature_f2": true,
+          "zero_boot_guard_exceedance": true,
+          "zero_running_guard_exceedance": true,
+          "measured_initialization_only": true,
+          "zero_strict_teacher_failure": true
+        },
+        "success": true
+      }
+    }
+  },
+  "global_summary": {
+    "trajectory_count": 248,
+    "target_reach_fraction": 1.0,
+    "maximum_voltage_v": 4.189058020416925,
+    "maximum_temperature_c": 34.90044001152586,
+    "maximum_current_step_a": 2.000000000000001,
+    "boot_guard_exceedance_count": 0,
+    "running_guard_exceedance_count": 0,
+    "strict_teacher_failure_count": 0,
+    "solver_failure_count": 0,
+    "prediction_infeasible_count": 0,
+    "empty_voltage_slew_count": 0,
+    "empty_thermal_slew_count": 0,
+    "sustained_oscillation_count": 0,
+    "zero_residual_initialization_count": 0
+  },
+  "success": false,
+  "decision": {
+    "freeze_full_f2_architecture": false,
+    "eligible_to_design_r3_separately": false,
+    "r3_initial_states_generated": false,
+    "ann_run_or_training_performed": false,
+    "internal_validation_used_for_retuning": false,
+    "internal_validation_becomes_permanent_regression": true
+  }
+}
