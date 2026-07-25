@@ -1,0 +1,97 @@
+study:
+  name: phase7cr2f_teacher_selection_and_voltage_guard
+
+sources:
+  phase7cr1_config: configs/phase7cr1_thermal_supervisor.yaml
+  phase7b1b_config: configs/phase7b1b_voltage_safety_layer.yaml
+  r2_freeze_manifest: outputs/phase7cr2_temperature_voltage_guards/freeze_manifest.json
+  r2_freeze_manifest_sha256: 27e504979e40331c1fe057400662c8163f01d905093500baf5b651e629fe2b08
+  teacher_selection_source: src/battery_fast_charge/phase7cr2f_teacher.py
+  teacher_selection_source_sha256: 64379c88d1b59e9ab6e5381b3be1969e78dd0f69360e0edf5f3d1322ec035021
+  teacher_regression_fixture: tests/fixtures/phase7cr2_known_teacher_misselections.json
+  teacher_regression_fixture_sha256: 94225024a72cb04842d8009bf3a4f4dc812c67c4fe0ae6f645578963fff8e332
+  legacy_phase7c_states:
+    15: data/phase7c_multitemperature/initial_states_15c.csv
+    30: data/phase7c_multitemperature/initial_states_30c.csv
+  legacy_phase7cr1_states: data/phase7cr1_thermal_supervisor/development_initial_states.csv
+  legacy_phase7cr2_development_states: data/phase7cr2_temperature_voltage_guards/development_initial_states.csv
+  legacy_phase7cr2_internal_states: data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv
+
+teacher_selection:
+  qualification_requires_optimizer_success: true
+  qualification_requires_prediction_feasible: true
+  objective_compared_only_among_qualified: true
+  no_qualified_candidate_is_strict_failure: true
+
+voltage_guard:
+  design: single_guard
+  design_frozen_before_internal_validation: true
+  guard_15c_v: 0.014098037646160801
+  guard_25c_v: 0.011305522502741638
+  historical_minimum_30c_v: 0.0209508831158355
+  engineering_margin_v: 0.0005
+  development_audit_guard_30c_v: 0.0209508831158355
+  residual_growth_tolerance_v: 1.0e-12
+  only_maintain_or_increase: true
+
+datasets:
+  development_count: 32
+  internal_validation_count: 16
+  development_design_start_index: 1701
+  internal_design_start_index: 2101
+  development_seed: 20260731
+  internal_validation_seed: 20260801
+  strata:
+    development:
+      general: 8
+      high_risk: 12
+      historical_neighborhood: 12
+    internal_validation:
+      general: 4
+      high_risk: 6
+      historical_neighborhood: 6
+  general_bounds:
+    soc: [0.45, 0.70]
+    v1_v: [0.0, 0.06]
+    v2_v: [0.0, 0.09]
+    previous_current_a: [0.0, 10.0]
+  high_risk_bounds:
+    soc: [0.60, 0.70]
+    v1_v: [0.03, 0.06]
+    v2_v: [0.045, 0.09]
+    previous_current_a: [6.0, 10.0]
+  historical_neighborhood_half_width:
+    soc: 0.02
+    v1_v: 0.01
+    v2_v: 0.015
+    previous_current_a: 1.0
+  historical_centers:
+    - source: data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv
+      trajectory_id: phase7cr2_internal_validation_30c_000
+    - source: data/phase7c_multitemperature/initial_states_30c.csv
+      trajectory_id: phase7c_30c_012
+    - source: data/phase7cr1_thermal_supervisor/development_initial_states.csv
+      trajectory_id: phase7cr1_dev_001
+  initial_voltage_margin_v: 0.005
+  maximum_workers: 3
+  maximum_steps: 1800
+  target_soc: 0.7995
+  temperature_c: 30.0
+
+gates:
+  maximum_voltage_v: 4.200001
+  maximum_average_temperature_c: 35.0
+  maximum_current_a: 10.0
+  minimum_current_a: 0.0
+  maximum_current_step_a: 2.0
+  maximum_guard_exceedance_count: 0
+  maximum_empty_interval_count: 0
+  maximum_solver_failure_count: 0
+  maximum_prediction_infeasible_count: 0
+  maximum_sustained_oscillation_count: 0
+  minimum_target_reach_fraction: 1.0
+  numerical_tolerance: 1.0e-9
+
+output:
+  data_directory: data/phase7cr2f_teacher_selection_voltage_guard
+  result_directory: outputs/phase7cr2f_teacher_selection_voltage_guard

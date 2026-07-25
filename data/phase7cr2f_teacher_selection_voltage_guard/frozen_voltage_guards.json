@@ -1,0 +1,18 @@
+{
+  "design": "single_guard",
+  "design_selected_before_internal_validation": true,
+  "internal_validation_used_for_tuning": false,
+  "formula": "max(historical_minimum_30c, new_development_max) + margin",
+  "guards_v": {
+    "15": 0.014098037646160801,
+    "25": 0.011305522502741638,
+    "30": 0.0218918472128131
+  },
+  "historical_minimum_30c_v": 0.0209508831158355,
+  "new_development_maximum_positive_growth_v": 0.0213918472128131,
+  "engineering_margin_v": 0.0005,
+  "new_state_hashes": {
+    "development_initial_states.csv": "050bcd98f5a84df7cdfdc157f2621bcb7bc44fd5997effc4024db2be5b382bfd",
+    "internal_validation_initial_states.csv": "fa787ea2bcb970b55daa04688e075aff625b5f76c63dd48be552d4e9cfc62399"
+  }
+}

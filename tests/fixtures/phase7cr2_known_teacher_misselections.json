@@ -1,0 +1,42 @@
+[
+  {
+    "case_id": "r2_development_30c_step_70",
+    "source_trajectory": "phase7cr2_development_30c_007",
+    "step_index": 70,
+    "default": {
+      "current_a": 5.760140927,
+      "objective_value": 2.0318743998,
+      "optimizer_success": true,
+      "prediction_feasible": true,
+      "status": "optimizer_success"
+    },
+    "alternative": {
+      "current_a": 5.760140927,
+      "objective_value": 2.0318743892,
+      "optimizer_success": false,
+      "prediction_feasible": true,
+      "status": "optimizer_failure"
+    },
+    "expected_selected_branch": "default"
+  },
+  {
+    "case_id": "r2_internal_validation_30c_step_46",
+    "source_trajectory": "phase7cr2_internal_validation_30c_003",
+    "step_index": 46,
+    "default": {
+      "current_a": 6.196598445,
+      "objective_value": 3.0719048193,
+      "optimizer_success": true,
+      "prediction_feasible": true,
+      "status": "optimizer_success"
+    },
+    "alternative": {
+      "current_a": 6.196598445,
+      "objective_value": 3.0719047971,
+      "optimizer_success": false,
+      "prediction_feasible": true,
+      "status": "optimizer_failure"
+    },
+    "expected_selected_branch": "default"
+  }
+]
