@@ -1,0 +1,26 @@
+{
+  "phase": "Phase 7C-R2F",
+  "status": "strict_stop_failed",
+  "teacher_selection_contract_repaired": true,
+  "voltage_guard_contract_passed": false,
+  "new_internal_validation_downgraded_to_history": true,
+  "internal_validation_used_for_retuning": false,
+  "r3_initial_states_generated": false,
+  "ann_execution_authorized": false,
+  "artifacts": {
+    "configs/phase7cr2f_teacher_selection_voltage_guard.yaml": "c016ce079277f9a4f2e4f762dd76bcd1cedf037503ac1767eb31e1704ac2bbdd",
+    "src/battery_fast_charge/phase7cr2f_teacher.py": "64379c88d1b59e9ab6e5381b3be1969e78dd0f69360e0edf5f3d1322ec035021",
+    "src/battery_fast_charge/phase7cr2f_runner.py": "997d3fc61e3f2c5ec3f62833971f034a3f3a5de7d10cb548349a5c0a96db5cfc",
+    "tests/fixtures/phase7cr2_known_teacher_misselections.json": "94225024a72cb04842d8009bf3a4f4dc812c67c4fe0ae6f645578963fff8e332",
+    "data/phase7cr2f_teacher_selection_voltage_guard/initial_state_freeze.json": "9553c2afac01d0d7f2d24ac5b059ac33ff5c68c2634e670f96d7d555256ab25b",
+    "data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv": "050bcd98f5a84df7cdfdc157f2621bcb7bc44fd5997effc4024db2be5b382bfd",
+    "data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv": "fa787ea2bcb970b55daa04688e075aff625b5f76c63dd48be552d4e9cfc62399",
+    "data/phase7cr2f_teacher_selection_voltage_guard/frozen_voltage_guards.json": "68b320905549d4fb98486636fd5377f28b52bb45acff026fb148b8ad43db5d57",
+    "data/phase7cr2f_teacher_selection_voltage_guard/development_guard_audit.csv": "b8b012b32af6088b01258d98de9015d34e1f2d2ff68889e6cbeccc85a1f5da6e",
+    "data/phase7cr2f_teacher_selection_voltage_guard/combined_validation_trajectories.csv": "ad60ca0a22841b1f4e671ecb49a422fa888ac8add05a437b8a694add76c6f8ba",
+    "data/phase7cr2f_teacher_selection_voltage_guard/trajectory_metrics.csv": "44b18f9e970d7ff29abb35f262dc06ac60764837d4d5a5e843680a201e9f0acf",
+    "outputs/phase7cr2f_teacher_selection_voltage_guard/metrics.json": "f1e1a135643281fe988febe2b6c1741d42775e67f89e4cabf201f3ce8d363de0",
+    "outputs/phase7cr2f_teacher_selection_voltage_guard/PHASE7C-R2F_中文实验报告.md": "b80df6c06222bb547f02133311668da44f9c107cb06224976fa0965bf4edbaf6",
+    "outputs/phase7cr2f_teacher_selection_voltage_guard/phase7cr2f_summary.png": "7961c0fbbfc0e85f87be8fcf3020cee16513c0bea555e63ef2253a0473527a60"
+  }
+}
