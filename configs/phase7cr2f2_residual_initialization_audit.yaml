@@ -1,0 +1,34 @@
+study:
+  name: phase7cr2f2_residual_initialization_audit
+
+sources:
+  phase7cr2f_config: configs/phase7cr2f_teacher_selection_voltage_guard.yaml
+  phase7cr2f_freeze_manifest: outputs/phase7cr2f_teacher_selection_voltage_guard/freeze_manifest.json
+  phase7cr2f_freeze_manifest_sha256: 5df4eae4f839385699bc0d76ec49ba765b1d60fe93092864418544ea57bd49be
+  development_states: data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv
+  internal_validation_states: data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv
+
+audit:
+  temperature_c: 30.0
+  compared_initialization_modes: [zero, measured]
+  short_replay_steps: 3
+  initial_measurement_horizon_s: 1.0e-9
+  frozen_guard_30c_v: 0.0218918472128131
+  maximum_workers: 3
+  critical_trajectory_ids:
+    - phase7cr2f_internal_validation_30c_014
+    - phase7cr2f_internal_validation_30c_000
+    - phase7cr2f_development_30c_000
+    - phase7cr2f_development_30c_020
+  contracts:
+    dfn_initialized_from_soc_and_temperature_only: true
+    two_rc_polarizations_independently_sampled: true
+    shared_current_history_available: false
+    zero_initialization_documented_in_config_or_plan: false
+    f2_data_generation_authorized: false
+    r3_generation_authorized: false
+    ann_execution_authorized: false
+
+output:
+  data_directory: data/phase7cr2f2_residual_initialization_audit
+  result_directory: outputs/phase7cr2f2_residual_initialization_audit
