@@ -1,0 +1,97 @@
+{
+  "phase": "Phase 7C-R2F5",
+  "status": "initial_states_frozen_before_any_closed_loop_rollout",
+  "frozen_before_any_closed_loop_rollout": true,
+  "development_internal_isolation": true,
+  "not_r3_confirmation_data": true,
+  "not_ann_teacher_data": true,
+  "config_sha256": "260e990e188caa7f62d2b12ca36fe08472b527bc70026a856f356c61c6ca5292",
+  "files": {
+    "development_initial_states_25c.csv": {
+      "sha256": "50c22efa83d3da849eab2bb0c80623fdc4b3f695ea65a8eca638bd9a838372f3",
+      "trajectory_count": 48,
+      "strata_counts": {
+        "startup_transient_stress": 24,
+        "historical_exceedance_neighborhood": 12,
+        "general_high_risk": 8,
+        "global_coverage": 4
+      },
+      "design_seed": 20261001,
+      "minimum_design_index": 11101,
+      "maximum_design_index": 11150,
+      "minimum_initial_residual_v": -0.17960330070738273,
+      "zero_initial_residual_count": 0
+    },
+    "internal_validation_initial_states_25c.csv": {
+      "sha256": "fb516847fa662f27577fbdaed0ab11d706c5bb2084e6a38bf661311ca2d6f3ed",
+      "trajectory_count": 24,
+      "strata_counts": {
+        "startup_transient_stress": 12,
+        "historical_exceedance_neighborhood": 6,
+        "general_high_risk": 4,
+        "global_coverage": 2
+      },
+      "design_seed": 20261002,
+      "minimum_design_index": 12101,
+      "maximum_design_index": 12124,
+      "minimum_initial_residual_v": -0.1747572284531218,
+      "zero_initial_residual_count": 0
+    }
+  },
+  "frozen_r2f4_verification": {
+    "manifest_sha256": "265d2d833b68604389b9b8d7ce714dc1cdf0c4103b9875c60a626483938f3aa0",
+    "r2f4_failure_preserved": true,
+    "records": {
+      "configs/phase7cr2f4_25c_running_guard.yaml": {
+        "expected_sha256": "63e5511747360fa5d9123f3d5ba0312da72bb511e3550423b0cddeed2b42d3e8",
+        "actual_sha256": "63e5511747360fa5d9123f3d5ba0312da72bb511e3550423b0cddeed2b42d3e8",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f4_config.py": {
+        "expected_sha256": "86f7b3db600438df4f7f86393dfe45125703fd80956142b66c3e62346cbdc4e0",
+        "actual_sha256": "86f7b3db600438df4f7f86393dfe45125703fd80956142b66c3e62346cbdc4e0",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f4_runner.py": {
+        "expected_sha256": "1674065f62adf37ff1850002a065a79772d18361e928c5660892b0ea9535c922",
+        "actual_sha256": "1674065f62adf37ff1850002a065a79772d18361e928c5660892b0ea9535c922",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f4_cli.py": {
+        "expected_sha256": "837fca4711de83707aa8ca764a4d6a6c9f98f7d307b1b2c5873bd43d5a31f1fc",
+        "actual_sha256": "837fca4711de83707aa8ca764a4d6a6c9f98f7d307b1b2c5873bd43d5a31f1fc",
+        "matched": true
+      },
+      "data/phase7cr2f4_25c_running_guard/initial_state_freeze.json": {
+        "expected_sha256": "a900486342083a56e3b25883dd7c47bbe92914bddb82278d71110b703a665ab0",
+        "actual_sha256": "a900486342083a56e3b25883dd7c47bbe92914bddb82278d71110b703a665ab0",
+        "matched": true
+      },
+      "data/phase7cr2f4_25c_running_guard/development_initial_states_25c.csv": {
+        "expected_sha256": "77ee4af966ceb6a2b4e40e280704a44d0322617bf70e622fb2970b9c05120c8b",
+        "actual_sha256": "77ee4af966ceb6a2b4e40e280704a44d0322617bf70e622fb2970b9c05120c8b",
+        "matched": true
+      },
+      "data/phase7cr2f4_25c_running_guard/internal_validation_initial_states_25c.csv": {
+        "expected_sha256": "eb8e690b6f6083968777026dced5fe58b60c98e8f87ddd982ca8178d20bc46fb",
+        "actual_sha256": "eb8e690b6f6083968777026dced5fe58b60c98e8f87ddd982ca8178d20bc46fb",
+        "matched": true
+      },
+      "data/phase7cr2f4_25c_running_guard/development_guard_audit.csv": {
+        "expected_sha256": "3673c0aa4748dbffd0b5ce7a1402fae07c51365a4ef5a1f9cd9610d6912e722d",
+        "actual_sha256": "3673c0aa4748dbffd0b5ce7a1402fae07c51365a4ef5a1f9cd9610d6912e722d",
+        "matched": true
+      },
+      "outputs/phase7cr2f4_25c_running_guard/metrics.json": {
+        "expected_sha256": "aa78d17c3ceec0331d6242d07befa827c93da6881b4fe69f9510e00341160ed5",
+        "actual_sha256": "aa78d17c3ceec0331d6242d07befa827c93da6881b4fe69f9510e00341160ed5",
+        "matched": true
+      },
+      "outputs/phase7cr2f4_25c_running_guard/PHASE7C-R2F4_开发阶段严格停止说明.md": {
+        "expected_sha256": "7973c0ee4ad62f54fd51bfe2863f660c3c8bf1d0520d3fad3a32e0067a9d5a51",
+        "actual_sha256": "7973c0ee4ad62f54fd51bfe2863f660c3c8bf1d0520d3fad3a32e0067a9d5a51",
+        "matched": true
+      }
+    }
+  }
+}

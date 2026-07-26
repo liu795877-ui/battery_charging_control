@@ -1,0 +1,23 @@
+{
+  "phase": "Phase 7C-R2F5",
+  "status": "strict_passed",
+  "internal_validation_used_for_retuning": false,
+  "r3_initial_states_generated": false,
+  "ann_execution_authorized": false,
+  "level4_entered": false,
+  "artifacts": {
+    "configs/phase7cr2f5_25c_two_stage_guards.yaml": "260e990e188caa7f62d2b12ca36fe08472b527bc70026a856f356c61c6ca5292",
+    "src/battery_fast_charge/phase7cr2f5_config.py": "018e39e0e3fb0fb339d2906c616614e3120e7e684b419d1e21a5108f213bb32f",
+    "src/battery_fast_charge/phase7cr2f5_runner.py": "2d4233ff54f032a62f00114e299e01320b9a01cbad97d65ace8f53e22f95a249",
+    "src/battery_fast_charge/phase7cr2f5_cli.py": "62d311d62e06918f49b78c709266509afe1600c659fdb37b0d204be49dcca312",
+    "data/phase7cr2f5_25c_two_stage_guards/initial_state_freeze.json": "df26f2ca606d37e5835f3a17de2e233c0f533eaf9a9f4fdf34e9600ca1c0823e",
+    "data/phase7cr2f5_25c_two_stage_guards/development_initial_states_25c.csv": "50c22efa83d3da849eab2bb0c80623fdc4b3f695ea65a8eca638bd9a838372f3",
+    "data/phase7cr2f5_25c_two_stage_guards/internal_validation_initial_states_25c.csv": "fb516847fa662f27577fbdaed0ab11d706c5bb2084e6a38bf661311ca2d6f3ed",
+    "data/phase7cr2f5_25c_two_stage_guards/frozen_25c_two_stage_guards.json": "e39bd4840399c10d38561ce92e3be31992387ec719fc9bbdc7850434eaeb5aa9",
+    "data/phase7cr2f5_25c_two_stage_guards/development_guard_audit.csv": "0edf229459268fe940651584ac49e9a61a64c57d2e7730cd82723636dbec14ba",
+    "data/phase7cr2f5_25c_two_stage_guards/combined_validation_trajectories.csv": "3b1217c9dc183fe3f238345ab6796b966c73b00352815ddbbf12ceb826af6d98",
+    "data/phase7cr2f5_25c_two_stage_guards/trajectory_metrics.csv": "65b3fa8351152e4a955fa4aedf33ce30f1e8dee8ef7d83ba7bc3dba65ebc1ccb",
+    "outputs/phase7cr2f5_25c_two_stage_guards/metrics.json": "b2a143245399b05fa458386bc737424b88b9709b4b9a98569449a0a09c90884c",
+    "outputs/phase7cr2f5_25c_two_stage_guards/PHASE7C-R2F5_中文实验报告.md": "ea64bce4a6924b70fba94e24a96ffb0ef29fb037bd00aad65931af3d963fc201"
+  }
+}
