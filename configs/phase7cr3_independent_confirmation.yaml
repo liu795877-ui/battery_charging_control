@@ -1,0 +1,69 @@
+study:
+  name: phase7cr3_independent_confirmation
+  phase: Phase 7C-R3
+  contract_status: preregistered_before_confirmation_state_generation
+sources:
+  phase7cr2f_config: configs/phase7cr2f_teacher_selection_voltage_guard.yaml
+  phase7cr2f5_manifest: outputs/phase7cr2f5_25c_two_stage_guards/freeze_manifest.json
+  phase7cr2f5_manifest_sha256: c18a5d2085acd01f15e79beddd151b8cc37b94e8ab91e61f44ea76e29ed7b208
+  phase7cr2f5_guards: data/phase7cr2f5_25c_two_stage_guards/frozen_25c_two_stage_guards.json
+  phase7cr2f5_development_states: data/phase7cr2f5_25c_two_stage_guards/development_initial_states_25c.csv
+  phase7cr2f5_internal_states: data/phase7cr2f5_25c_two_stage_guards/internal_validation_initial_states_25c.csv
+  phase7cr2f2_development_states: data/phase7cr2f2_two_stage_voltage_guard/development_initial_states.csv
+  phase7cr2f2_internal_states: data/phase7cr2f2_two_stage_voltage_guard/internal_validation_initial_states.csv
+  legacy_phase7c_states: {15: data/phase7c_multitemperature/initial_states_15c.csv, 30: data/phase7c_multitemperature/initial_states_30c.csv}
+  legacy_phase7cr1_states: data/phase7cr1_thermal_supervisor/development_initial_states.csv
+  legacy_phase7cr2_development_states: data/phase7cr2_temperature_voltage_guards/development_initial_states.csv
+  legacy_phase7cr2_internal_states: data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv
+  legacy_phase7cr2f_development_states: data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv
+  legacy_phase7cr2f_internal_states: data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv
+  legacy_phase7b1_25c_states: data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv
+control_contract:
+  residual_initialization: measured
+  allow_zero_residual_fallback: false
+  initial_measurement_horizon_s: 1.0e-9
+  boot_steps: [0, 1]
+  sample_period_s: 5.0
+  r2f5_architecture_frozen: true
+  safe_mpc_must_pass_before_ann: true
+  ann_retraining_authorized: false
+  level4_entry_authorized: false
+voltage_guard:
+  residual_growth_tolerance_v: 1.0e-12
+datasets:
+  temperatures_c: [15, 30]
+  confirmation_count_per_temperature: 24
+  maximum_workers: 3
+  maximum_steps: 1800
+  target_soc: 0.7995
+  initial_voltage_margin_v: 0.005
+  initial_residual_extreme_threshold_v: -0.100
+  designs:
+    confirmation:
+      15: {start_index: 13101, seed: 20261101}
+      30: {start_index: 14101, seed: 20261102}
+  strata:
+    confirmation: {startup_transient_stress: 12, historical_exceedance_neighborhood: 6, general_high_risk: 4, global_coverage: 2}
+  bounds:
+    global_coverage: {soc: [0.45, 0.70], v1_v: [0.0, 0.065], v2_v: [0.0, 0.10], previous_current_a: [0.0, 10.0]}
+    general_high_risk: {soc: [0.54, 0.70], v1_v: [0.035, 0.065], v2_v: [0.040, 0.10], previous_current_a: [6.0, 10.0]}
+    startup_transient_stress: {soc: [0.52, 0.69], v1_v: [0.040, 0.065], v2_v: [0.050, 0.10], previous_current_a: [7.0, 10.0]}
+  neighborhood_half_width: {soc: 0.015, v1_v: 0.008, v2_v: 0.012, previous_current_a: 0.75}
+  historical_centers:
+    15:
+      - {source: data/phase7c_multitemperature/initial_states_15c.csv, trajectory_id: phase7c_15c_006, evidence: legacy_15c_boundary}
+      - {source: data/phase7cr2_temperature_voltage_guards/development_initial_states.csv, trajectory_id: phase7cr2_development_15c_005, evidence: legacy_15c_guard_event}
+    30:
+      - {source: data/phase7c_multitemperature/initial_states_30c.csv, trajectory_id: phase7c_30c_000, evidence: legacy_30c_thermal_boundary}
+      - {source: data/phase7cr1_thermal_supervisor/development_initial_states.csv, trajectory_id: phase7cr1_dev_000, evidence: legacy_30c_thermal_development}
+gates:
+  maximum_voltage_v: 4.200001
+  maximum_average_temperature_c: 35.0
+  maximum_current_a: 10.0
+  minimum_current_a: 0.0
+  maximum_current_step_a: 2.0
+  numerical_tolerance: 1.0e-9
+  minimum_target_reach_fraction: 1.0
+output:
+  data_directory: data/phase7cr3_independent_confirmation
+  result_directory: outputs/phase7cr3_independent_confirmation
