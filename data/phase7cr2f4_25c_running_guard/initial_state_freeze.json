@@ -1,0 +1,123 @@
+{
+  "phase": "Phase 7C-R2F4",
+  "status": "initial_states_frozen_before_any_closed_loop_rollout",
+  "frozen_before_any_closed_loop_rollout": true,
+  "development_internal_isolation": true,
+  "not_r3_confirmation_data": true,
+  "not_ann_teacher_data": true,
+  "config_sha256": "63e5511747360fa5d9123f3d5ba0312da72bb511e3550423b0cddeed2b42d3e8",
+  "files": {
+    "development_initial_states_25c.csv": {
+      "sha256": "77ee4af966ceb6a2b4e40e280704a44d0322617bf70e622fb2970b9c05120c8b",
+      "trajectory_count": 48,
+      "strata_counts": {
+        "startup_transient_stress": 24,
+        "historical_exceedance_neighborhood": 12,
+        "general_high_risk": 8,
+        "global_coverage": 4
+      },
+      "design_seed": 20260901,
+      "minimum_design_index": 9101,
+      "maximum_design_index": 9150,
+      "minimum_initial_residual_v": -0.17100036418210696,
+      "extreme_initial_residual_count": 45
+    },
+    "internal_validation_initial_states_25c.csv": {
+      "sha256": "eb8e690b6f6083968777026dced5fe58b60c98e8f87ddd982ca8178d20bc46fb",
+      "trajectory_count": 24,
+      "strata_counts": {
+        "startup_transient_stress": 12,
+        "historical_exceedance_neighborhood": 6,
+        "general_high_risk": 4,
+        "global_coverage": 2
+      },
+      "design_seed": 20260902,
+      "minimum_design_index": 10101,
+      "maximum_design_index": 10125,
+      "minimum_initial_residual_v": -0.17013039655348194,
+      "extreme_initial_residual_count": 22
+    }
+  },
+  "frozen_r2f3_verification": {
+    "manifest_sha256": "9001ab0a9acaff634515da6ce4f438fcf0cb070396f6d11ec949aad1892671af",
+    "frozen_guard_sha256": "d0240f9458221bd1580b83bf13942f67fb14d88b6c1468094d280c03d2750ff8",
+    "r2f3_failure_preserved": true,
+    "records": {
+      "configs/phase7cr2f3_temperature_two_stage_guards.yaml": {
+        "expected_sha256": "ca0edbe69192dfb437a998a6b1f5d8e8cf6e8ffeb9029bb81dba7971440c1fdf",
+        "actual_sha256": "ca0edbe69192dfb437a998a6b1f5d8e8cf6e8ffeb9029bb81dba7971440c1fdf",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f3_config.py": {
+        "expected_sha256": "73e2abae71032ed5d0667b1876a9a9068e64fb63f9cfbe1d57102d4896b982f2",
+        "actual_sha256": "73e2abae71032ed5d0667b1876a9a9068e64fb63f9cfbe1d57102d4896b982f2",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f3_runner.py": {
+        "expected_sha256": "ba03fff429fcafe66f6a8b2c5d8724646cc08b1eb4e306a237d8ecc4e3314bee",
+        "actual_sha256": "ba03fff429fcafe66f6a8b2c5d8724646cc08b1eb4e306a237d8ecc4e3314bee",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f3_cli.py": {
+        "expected_sha256": "c9b14980b94eda6e8eb02d4672624749f33981b45d9193b32c264321eab7c9b7",
+        "actual_sha256": "c9b14980b94eda6e8eb02d4672624749f33981b45d9193b32c264321eab7c9b7",
+        "matched": true
+      },
+      "data/phase7cr2f3_temperature_two_stage_guards/initial_state_freeze.json": {
+        "expected_sha256": "0760971db45ac6d17c0350805da32499f4094b2ed63a397c59183ecc62b81039",
+        "actual_sha256": "0760971db45ac6d17c0350805da32499f4094b2ed63a397c59183ecc62b81039",
+        "matched": true
+      },
+      "data/phase7cr2f3_temperature_two_stage_guards/development_initial_states_15c.csv": {
+        "expected_sha256": "7e01b3283444d33b86fd5f6a49ef618996279be6362ad11dd2e7bb7c0852c91a",
+        "actual_sha256": "7e01b3283444d33b86fd5f6a49ef618996279be6362ad11dd2e7bb7c0852c91a",
+        "matched": true
+      },
+      "data/phase7cr2f3_temperature_two_stage_guards/development_initial_states_25c.csv": {
+        "expected_sha256": "57e8393b0a3569977e99c54e5a2ff0abbe7c1b28cb2edbd25ecc410dcfd5ad83",
+        "actual_sha256": "57e8393b0a3569977e99c54e5a2ff0abbe7c1b28cb2edbd25ecc410dcfd5ad83",
+        "matched": true
+      },
+      "data/phase7cr2f3_temperature_two_stage_guards/internal_validation_initial_states_15c.csv": {
+        "expected_sha256": "0a33accfed3e23c5eca1befde65a46ac3a8e83297b12f946ad3cdae484d603f8",
+        "actual_sha256": "0a33accfed3e23c5eca1befde65a46ac3a8e83297b12f946ad3cdae484d603f8",
+        "matched": true
+      },
+      "data/phase7cr2f3_temperature_two_stage_guards/internal_validation_initial_states_25c.csv": {
+        "expected_sha256": "f7cfca67dd7c00e5a11bef1378225de9e8312704a2992183bfa4a2d5941801f0",
+        "actual_sha256": "f7cfca67dd7c00e5a11bef1378225de9e8312704a2992183bfa4a2d5941801f0",
+        "matched": true
+      },
+      "data/phase7cr2f3_temperature_two_stage_guards/frozen_temperature_two_stage_guards.json": {
+        "expected_sha256": "d0240f9458221bd1580b83bf13942f67fb14d88b6c1468094d280c03d2750ff8",
+        "actual_sha256": "d0240f9458221bd1580b83bf13942f67fb14d88b6c1468094d280c03d2750ff8",
+        "matched": true
+      },
+      "data/phase7cr2f3_temperature_two_stage_guards/development_guard_audit.csv": {
+        "expected_sha256": "e05666364bfb16d0f3ffec593cbb025c60cfa89aa4c54eecdef6694612cb4906",
+        "actual_sha256": "e05666364bfb16d0f3ffec593cbb025c60cfa89aa4c54eecdef6694612cb4906",
+        "matched": true
+      },
+      "data/phase7cr2f3_temperature_two_stage_guards/combined_validation_trajectories.csv": {
+        "expected_sha256": "d8428429facea121e25262c730f02dfcc238f0bb5fba52631c79553e03451671",
+        "actual_sha256": "d8428429facea121e25262c730f02dfcc238f0bb5fba52631c79553e03451671",
+        "matched": true
+      },
+      "data/phase7cr2f3_temperature_two_stage_guards/trajectory_metrics.csv": {
+        "expected_sha256": "5efeebda44102e46e254a061aa07969c18d3388b1d5bc1decfce912de3790066",
+        "actual_sha256": "5efeebda44102e46e254a061aa07969c18d3388b1d5bc1decfce912de3790066",
+        "matched": true
+      },
+      "outputs/phase7cr2f3_temperature_two_stage_guards/metrics.json": {
+        "expected_sha256": "c630d39b301a89edf8b6f8b0129cbe18d74c34f201334e94cec4c627364fb61b",
+        "actual_sha256": "c630d39b301a89edf8b6f8b0129cbe18d74c34f201334e94cec4c627364fb61b",
+        "matched": true
+      },
+      "outputs/phase7cr2f3_temperature_two_stage_guards/PHASE7C-R2F3_中文实验报告.md": {
+        "expected_sha256": "01681d8c6a0a8e0f12b720992972d58e85d3dff6bb7f36d18ba6ead5348dd16a",
+        "actual_sha256": "01681d8c6a0a8e0f12b720992972d58e85d3dff6bb7f36d18ba6ead5348dd16a",
+        "matched": true
+      }
+    }
+  }
+}

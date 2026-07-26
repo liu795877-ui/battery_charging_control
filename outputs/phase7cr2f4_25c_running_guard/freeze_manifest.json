@@ -1,0 +1,21 @@
+{
+  "phase": "Phase 7C-R2F4",
+  "status": "strict_stop_failed_during_development",
+  "running_guard_frozen": false,
+  "internal_validation_started": false,
+  "r3_initial_states_generated": false,
+  "ann_execution_authorized": false,
+  "level4_entered": false,
+  "artifacts": {
+    "configs/phase7cr2f4_25c_running_guard.yaml": "63e5511747360fa5d9123f3d5ba0312da72bb511e3550423b0cddeed2b42d3e8",
+    "src/battery_fast_charge/phase7cr2f4_config.py": "86f7b3db600438df4f7f86393dfe45125703fd80956142b66c3e62346cbdc4e0",
+    "src/battery_fast_charge/phase7cr2f4_runner.py": "1674065f62adf37ff1850002a065a79772d18361e928c5660892b0ea9535c922",
+    "src/battery_fast_charge/phase7cr2f4_cli.py": "837fca4711de83707aa8ca764a4d6a6c9f98f7d307b1b2c5873bd43d5a31f1fc",
+    "data/phase7cr2f4_25c_running_guard/initial_state_freeze.json": "a900486342083a56e3b25883dd7c47bbe92914bddb82278d71110b703a665ab0",
+    "data/phase7cr2f4_25c_running_guard/development_initial_states_25c.csv": "77ee4af966ceb6a2b4e40e280704a44d0322617bf70e622fb2970b9c05120c8b",
+    "data/phase7cr2f4_25c_running_guard/internal_validation_initial_states_25c.csv": "eb8e690b6f6083968777026dced5fe58b60c98e8f87ddd982ca8178d20bc46fb",
+    "data/phase7cr2f4_25c_running_guard/development_guard_audit.csv": "3673c0aa4748dbffd0b5ce7a1402fae07c51365a4ef5a1f9cd9610d6912e722d",
+    "outputs/phase7cr2f4_25c_running_guard/metrics.json": "aa78d17c3ceec0331d6242d07befa827c93da6881b4fe69f9510e00341160ed5",
+    "outputs/phase7cr2f4_25c_running_guard/PHASE7C-R2F4_开发阶段严格停止说明.md": "7973c0ee4ad62f54fd51bfe2863f660c3c8bf1d0520d3fad3a32e0067a9d5a51"
+  }
+}
