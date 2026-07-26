@@ -1,0 +1,156 @@
+study:
+  name: phase7cr2f4_25c_running_guard
+  phase: Phase 7C-R2F4
+  contract_status: preregistered_before_new_state_generation
+
+sources:
+  phase7cr2f_config: configs/phase7cr2f_teacher_selection_voltage_guard.yaml
+  phase7cr2f2_config: configs/phase7cr2f2_two_stage_voltage_guard.yaml
+  phase7cr2f3_config: configs/phase7cr2f3_temperature_two_stage_guards.yaml
+  phase7cr2f3_freeze_manifest: outputs/phase7cr2f3_temperature_two_stage_guards/freeze_manifest.json
+  phase7cr2f3_freeze_manifest_sha256: 9001ab0a9acaff634515da6ce4f438fcf0cb070396f6d11ec949aad1892671af
+  phase7cr2f3_frozen_guards: data/phase7cr2f3_temperature_two_stage_guards/frozen_temperature_two_stage_guards.json
+  phase7cr2f3_frozen_guards_sha256: d0240f9458221bd1580b83bf13942f67fb14d88b6c1468094d280c03d2750ff8
+  phase7cr2f3_internal_states:
+    15: data/phase7cr2f3_temperature_two_stage_guards/internal_validation_initial_states_15c.csv
+    25: data/phase7cr2f3_temperature_two_stage_guards/internal_validation_initial_states_25c.csv
+  phase7cr2f2_development_states: data/phase7cr2f2_two_stage_voltage_guard/development_initial_states.csv
+  phase7cr2f2_internal_states: data/phase7cr2f2_two_stage_voltage_guard/internal_validation_initial_states.csv
+  legacy_phase7c_states:
+    15: data/phase7c_multitemperature/initial_states_15c.csv
+    30: data/phase7c_multitemperature/initial_states_30c.csv
+  legacy_phase7cr1_states: data/phase7cr1_thermal_supervisor/development_initial_states.csv
+  legacy_phase7cr2_development_states: data/phase7cr2_temperature_voltage_guards/development_initial_states.csv
+  legacy_phase7cr2_internal_states: data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv
+  legacy_phase7cr2f_development_states: data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv
+  legacy_phase7cr2f_internal_states: data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv
+  legacy_phase7b1_25c_states: data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv
+
+control_contract:
+  residual_initialization: measured
+  allow_zero_residual_fallback: false
+  initial_measurement_horizon_s: 1.0e-9
+  sample_period_s: 5.0
+  boot_steps: [0, 1]
+  running_starts_at_step: 2
+  initial_state_history_contract: dfn_and_2rc_do_not_share_current_history
+  only_25c_running_guard_is_developed: true
+  teacher_selection_frozen: true
+  thermal_supervisor_frozen: true
+  r3_generation_authorized: false
+  ann_execution_authorized: false
+  level4_entry_authorized: false
+
+voltage_guard:
+  design: independent_25c_running_guard_revision
+  engineering_margin_v: 0.0005
+  residual_growth_tolerance_v: 1.0e-12
+  historical_25c_running_minimum_v: 0.01361071391754
+  frozen_guards:
+    15:
+      boot_v: 0.0480564686187137
+      running_v: 0.014098037646160801
+    25:
+      boot_v: 0.0346117967629136
+      running_v: 0.012970762902336801
+    30:
+      boot_v: 0.0376479265035423
+      running_v: 0.0218918472128131
+  development_audit_guards:
+    15:
+      boot_v: 0.0480564686187137
+      running_v: 0.014098037646160801
+    25:
+      boot_v: 0.0346117967629136
+      running_v: 0.01411071391754
+    30:
+      boot_v: 0.0376479265035423
+      running_v: 0.0218918472128131
+  formula_25_running: max(r2f3_failure_minimum_v, development_25_running_max_v) + engineering_margin_v
+
+datasets:
+  temperatures_c: [25]
+  development_count: 48
+  internal_validation_count: 24
+  maximum_workers: 3
+  maximum_steps: 1800
+  target_soc: 0.7995
+  initial_voltage_margin_v: 0.005
+  initial_residual_extreme_threshold_v: -0.100
+  designs:
+    development:
+      25: {start_index: 9101, seed: 20260901}
+    internal_validation:
+      25: {start_index: 10101, seed: 20260902}
+  strata:
+    development:
+      startup_transient_stress: 24
+      historical_exceedance_neighborhood: 12
+      general_high_risk: 8
+      global_coverage: 4
+    internal_validation:
+      startup_transient_stress: 12
+      historical_exceedance_neighborhood: 6
+      general_high_risk: 4
+      global_coverage: 2
+  bounds:
+    global_coverage:
+      soc: [0.45, 0.70]
+      v1_v: [0.0, 0.065]
+      v2_v: [0.0, 0.10]
+      previous_current_a: [0.0, 10.0]
+    general_high_risk:
+      soc: [0.46, 0.65]
+      v1_v: [0.035, 0.065]
+      v2_v: [0.040, 0.10]
+      previous_current_a: [6.0, 10.0]
+    startup_transient_stress:
+      soc: [0.45, 0.62]
+      v1_v: [0.040, 0.065]
+      v2_v: [0.050, 0.10]
+      previous_current_a: [7.0, 10.0]
+  neighborhood_half_width:
+    soc: 0.015
+    v1_v: 0.008
+    v2_v: 0.012
+    previous_current_a: 0.75
+  historical_centers:
+    25:
+      - source: data/phase7cr2f3_temperature_two_stage_guards/internal_validation_initial_states_25c.csv
+        trajectory_id: phase7cr2f3_internal_validation_25c_013
+        evidence: r2f3_unique_running_exceedance
+      - source: data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv
+        trajectory_id: phase7b1_confirm_003
+        evidence: r2f2_known_running_exceedance
+      - source: data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv
+        trajectory_id: phase7b1_confirm_012
+        evidence: r2f2_maximum_boot_exceedance
+
+validation_contract:
+  internal_validation_is_one_shot: true
+  internal_validation_may_not_modify_guards: true
+  failed_internal_validation_becomes_permanent_regression: true
+  r2f3_296_trajectories_are_permanent_regression: true
+  expected_historical_regression_trajectory_count: 296
+  expected_new_internal_trajectory_count: 24
+  expected_total_validation_trajectory_count: 320
+
+gates:
+  maximum_voltage_v: 4.200001
+  maximum_average_temperature_c: 35.0
+  maximum_current_a: 10.0
+  minimum_current_a: 0.0
+  maximum_current_step_a: 2.0
+  maximum_all_temperature_guard_exceedance_count: 0
+  maximum_empty_interval_count: 0
+  maximum_solver_failure_count: 0
+  maximum_strict_teacher_failure_count: 0
+  maximum_prediction_infeasible_count: 0
+  maximum_sustained_oscillation_count: 0
+  maximum_zero_residual_initialization_count: 0
+  minimum_target_reach_fraction: 1.0
+  numerical_tolerance: 1.0e-9
+
+output:
+  data_directory: data/phase7cr2f4_25c_running_guard
+  result_directory: outputs/phase7cr2f4_25c_running_guard
