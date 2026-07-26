@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -56,3 +58,33 @@ def test_new_data_and_validation_counts_are_preregistered() -> None:
     assert validation["expected_historical_regression_trajectory_count"] == 296
     assert validation["expected_new_internal_trajectory_count"] == 24
     assert validation["expected_total_validation_trajectory_count"] == 320
+
+
+def test_new_state_files_are_frozen_isolated_and_measured() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    freeze = json.loads(
+        (data_dir / "initial_state_freeze.json").read_text(encoding="utf-8")
+    )
+    assert freeze["frozen_before_any_closed_loop_rollout"] is True
+    development = pd.read_csv(data_dir / "development_initial_states_25c.csv")
+    internal = pd.read_csv(data_dir / "internal_validation_initial_states_25c.csv")
+    assert len(development) == 48
+    assert len(internal) == 24
+    assert set(development.design_seed) == {20260901}
+    assert set(internal.design_seed) == {20260902}
+    columns = [
+        "initial_soc",
+        "initial_polarization_1_v",
+        "initial_polarization_2_v",
+        "initial_previous_current_a",
+    ]
+    development_states = {tuple(row) for row in development[columns].to_numpy()}
+    internal_states = {tuple(row) for row in internal[columns].to_numpy()}
+    assert development_states.isdisjoint(internal_states)
+    for frame in (development, internal):
+        assert frame.initial_measured_residual_v.notna().all()
+        assert (frame.initial_measured_residual_v != 0.0).all()
+    for name, record in freeze["files"].items():
+        assert hashlib.sha256((data_dir / name).read_bytes()).hexdigest() == record[
+            "sha256"
+        ]
