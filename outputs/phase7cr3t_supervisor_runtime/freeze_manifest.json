@@ -1,0 +1,21 @@
+{
+  "phase": "Phase 7C-R3T",
+  "status": "strict_stop_failed",
+  "level4_authorized": false,
+  "level4_entered": false,
+  "ann_retrained": false,
+  "artifacts": {
+    "configs/phase7cr3t_supervisor_runtime.yaml": "fc49593f803ae72ad45da293b06d5d305fea89ce53e234a294a809dfeadb0010",
+    "src/battery_fast_charge/phase7cr3t_config.py": "9b9611c873d781bab0969c7494b7dfa14eb76af7bbdb10b498be819df84ccb70",
+    "src/battery_fast_charge/phase7cr3t_thermal.py": "534e8db07c59869def6e994e35be8d436d27b74c3d3993f6c00e78d3e984eefc",
+    "src/battery_fast_charge/phase7cr3t_runner.py": "9791be5da7e5721c0b0d57a2ad709f8c2c67bfe59e0bd4ea70aecaca09c12d8b",
+    "src/battery_fast_charge/phase7cr3t_audit.py": "af1eb4718e249cfc25aa9ed90fe192eef346d1ee2464de670e294a540d8d8c8a",
+    "outputs/phase7cr3t_supervisor_runtime/equivalence_freeze.json": "caa1f8a1b362c566e9cf1b32946f86e831a307b2a3b92ed54da3fdbfc4382109",
+    "data/phase7cr3t_supervisor_runtime/optimized_confirmation_trajectories.csv": "e524674cfc0aae13081c8d919b6c3d205d172fe51847fb9c41bdcad701031271",
+    "data/phase7cr3t_supervisor_runtime/trajectory_metrics.csv": "040135d14f4812bfcf5a3608d2ca99a7456f5d29fd88d5a9c37fd0fac35ecc31",
+    "data/phase7cr3t_supervisor_runtime/seed_timing_metrics.csv": "8e5c20794d41779a6a80307d2ecc2bf63f07c92a8cd5ed5b167943d0e2d8c22f",
+    "outputs/phase7cr3t_supervisor_runtime/metrics.json": "162d447d0026103f317af75a00c56d572a86ba4575ceac137ed42c9f6f6e5f84",
+    "outputs/phase7cr3t_supervisor_runtime/strict_audit.json": "80e1454f3898fb728d2bee7386a56d1a8d790f93736bec5ea6f7de81b84127ee",
+    "outputs/phase7cr3t_supervisor_runtime/PHASE7C-R3T_严格停止报告.md": "c289b628a466bad61628f93c37d0ecaa235e4c56ff602831a7cf205a401622f1"
+  }
+}

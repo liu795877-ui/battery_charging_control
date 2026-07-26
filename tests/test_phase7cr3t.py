@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 
 import pytest
@@ -59,3 +60,34 @@ def test_full_trace_equivalence_is_frozen_before_confirmation() -> None:
     assert all(payload["checks"].values())
     assert payload["confirmation_started"] is False
     assert payload["level4_entered"] is False
+
+
+def test_r3t_confirmation_strictly_stops_only_on_cross_run_exactness() -> None:
+    result_dir = ROOT / "outputs/phase7cr3t_supervisor_runtime"
+    metrics = json.loads((result_dir / "metrics.json").read_text(encoding="utf-8"))
+    audit = json.loads((result_dir / "strict_audit.json").read_text(encoding="utf-8"))
+    assert metrics["status"] == "strict_stop_failed"
+    assert metrics["failed_checks"] == ["closed_loop_current_exact"]
+    assert metrics["checks"]["all_seed_speedups_above_100"] is True
+    assert metrics["checks"]["closed_loop_current_exact"] is False
+    assert metrics["maximum_closed_loop_current_difference_a"] == pytest.approx(
+        2.475499059073627e-06
+    )
+    assert audit["failed_checks"] == ["closed_loop_current_exact"]
+    assert audit["same_state_current_limit_difference_a"] == 0.0
+    assert audit["speed_summary"]["minimum_end_to_end_speedup"] > 100.0
+    assert audit["decision"]["level4_authorized"] is False
+    assert audit["decision"]["level4_entered"] is False
+
+
+def test_r3t_freeze_manifest_hashes_match() -> None:
+    path = ROOT / "outputs/phase7cr3t_supervisor_runtime/freeze_manifest.json"
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    assert manifest["status"] == "strict_stop_failed"
+    assert manifest["level4_authorized"] is False
+    assert manifest["level4_entered"] is False
+    for relative, expected in manifest["artifacts"].items():
+        payload = (ROOT / relative).read_bytes()
+        if Path(relative).suffix in {".py", ".yaml", ".md"}:
+            payload = payload.replace(b"\r\n", b"\n")
+        assert hashlib.sha256(payload).hexdigest() == expected

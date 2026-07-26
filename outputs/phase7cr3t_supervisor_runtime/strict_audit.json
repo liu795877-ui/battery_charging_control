@@ -1,0 +1,75 @@
+{
+  "phase": "Phase 7C-R3T strict audit",
+  "status": "strict_stop_failed",
+  "equivalence_development_passed": true,
+  "same_state_current_limit_difference_a": 0.0,
+  "confirmation_checks": {
+    "trajectory_count_240": true,
+    "all_steps_paired": true,
+    "closed_loop_current_exact": false,
+    "target_reach_100_percent": true,
+    "voltage_safe": true,
+    "temperature_safe": true,
+    "current_bounds_safe": true,
+    "slew_safe": true,
+    "zero_guard_exceedance": true,
+    "zero_empty_intervals": true,
+    "zero_prediction_infeasible": true,
+    "zero_sustained_oscillation": true,
+    "all_seed_speedups_above_100": true,
+    "mean_total_runtime_below_contract": true
+  },
+  "failed_checks": [
+    "closed_loop_current_exact"
+  ],
+  "repeatability_diagnosis": {
+    "paired_step_count": 60332,
+    "nonzero_current_difference_count": 23256,
+    "current_difference_above_1e_9_a_count": 354,
+    "current_difference_above_1e_6_a_count": 9,
+    "maximum_current_difference_a": 2.475499059073627e-06,
+    "maximum_soc_difference": 8.249783967073654e-09,
+    "maximum_temperature_difference_c": 6.572148439687453e-06,
+    "maximum_event": {
+      "seed": 101,
+      "trajectory_id": "phase7cr3_confirmation_15c_022",
+      "step_index": 58,
+      "current_difference_a": 2.475499059073627e-06,
+      "temperature_difference_c": 5.400929637744412e-06,
+      "thermal_intervened_baseline": false,
+      "thermal_intervened_optimized": false
+    }
+  },
+  "speed_summary": {
+    "minimum_end_to_end_speedup": 137.25449928290706,
+    "maximum_end_to_end_speedup": 160.61581359398303,
+    "supervisor_mean_ms_range": [
+      0.17237774916766435,
+      0.19690457616023546
+    ]
+  },
+  "physical_summary": {
+    "trajectory_count": 240,
+    "target_reach_fraction": 1.0,
+    "maximum_voltage_v": 4.186775800943208,
+    "maximum_temperature_c": 34.88298535993033,
+    "minimum_current_a": 0.0735724451902815,
+    "maximum_current_a": 9.715562737395368,
+    "maximum_current_step_a": 2.000000000000001,
+    "guard_exceedance_count": 0,
+    "empty_voltage_slew_count": 0,
+    "empty_thermal_slew_count": 0,
+    "prediction_infeasible_count": 0,
+    "sustained_oscillation_count": 0
+  },
+  "success": false,
+  "decision": {
+    "level4_authorized": false,
+    "level4_entered": false,
+    "ann_retrained": false,
+    "safety_contract_changed": false,
+    "confirmation_used_for_retuning": false,
+    "next_phase": "Phase 7C-R3T2 paired-state repeatability contract",
+    "reason": "The exact-zero cross-run current contract failed, while same-state supervisor equivalence, speed, and safety passed."
+  }
+}
