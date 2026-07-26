@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -41,3 +42,20 @@ def test_optimized_limit_matches_legacy_boundaries(
     optimized = optimized_thermal_current_limit(temperature, ambient, current, R1, braking)
     assert optimized[0] == legacy[0]
     assert optimized[1] == pytest.approx(legacy[1], abs=1.0e-12, rel=0.0)
+
+
+def test_full_trace_equivalence_is_frozen_before_confirmation() -> None:
+    path = ROOT / "outputs/phase7cr3t_supervisor_runtime/equivalence_freeze.json"
+    if not path.exists():
+        pytest.skip("R3T equivalence audit has not completed")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert payload["status"] == "optimization_frozen_before_confirmation"
+    assert payload["evaluated_trace_rows"] == 60332
+    assert payload["evaluated_supervisor_calls"] == 120664
+    assert payload["maximum_current_limit_difference_a"] == 0.0
+    assert payload["maximum_peak_temperature_difference_c"] <= 1.0e-12
+    assert payload["current_mismatch_count"] == 0
+    assert payload["microbenchmark_speedup"] > 1.0
+    assert all(payload["checks"].values())
+    assert payload["confirmation_started"] is False
+    assert payload["level4_entered"] is False
