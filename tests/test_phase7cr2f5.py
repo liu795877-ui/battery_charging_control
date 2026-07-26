@@ -118,3 +118,28 @@ def test_frozen_state_files_are_isolated_and_measurement_initialized() -> None:
         assert hashlib.sha256((data_dir / name).read_bytes()).hexdigest() == record[
             "sha256"
         ]
+
+
+def test_development_freezes_two_guards_before_validation() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    guard_path = data_dir / "frozen_25c_two_stage_guards.json"
+    if not guard_path.exists():
+        pytest.skip("R2F5 development has not completed")
+    payload = json.loads(guard_path.read_text(encoding="utf-8"))
+    assert payload["status"] == (
+        "25c_two_stage_guards_frozen_before_internal_validation"
+    )
+    assert payload["internal_validation_used_for_tuning"] is False
+    assert payload["development_25c_boot_maximum_v"] == pytest.approx(
+        0.0369372448130773
+    )
+    assert payload["development_25c_running_maximum_v"] == pytest.approx(
+        0.0137898181258897
+    )
+    assert payload["guards"]["25"]["boot_v"] == pytest.approx(
+        0.0374372448130773
+    )
+    assert payload["guards"]["25"]["running_v"] == pytest.approx(
+        0.0142898181258897
+    )
+    assert not (data_dir / "validation_started.json").exists()

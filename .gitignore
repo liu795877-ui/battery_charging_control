@@ -60,6 +60,7 @@ outputs/phase7cr2f2_residual_initialization_audit/audit_run.pid
 data/phase7cr2f2_two_stage_voltage_guard/runs/
 data/phase7cr2f3_temperature_two_stage_guards/runs/
 data/phase7cr2f4_25c_running_guard/runs/
+data/phase7cr2f5_25c_two_stage_guards/runs/
 outputs/phase7b1b_regression.stdout.log
 outputs/phase7b1b_regression.stderr.log
 outputs/phase7b1b_regression.pid
