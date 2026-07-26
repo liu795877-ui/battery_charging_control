@@ -226,15 +226,110 @@ def run_development(
         "development_audit",
         resume,
     )
+    audit_path = data_dir / "development_guard_audit.csv"
+    audit.to_csv(audit_path, index=False)
     boot_exceedances = int(
         ((audit.guard_stage == "boot") & audit.guard_exceeded.astype(bool)).sum()
     )
     if boot_exceedances:
-        raise RuntimeError(
-            "R2F4 found a boot-stage exceedance but boot guard is frozen"
+        result_dir = root / config.section("output")["result_directory"]
+        result_dir.mkdir(parents=True, exist_ok=True)
+        events = audit[
+            (audit.guard_stage == "boot")
+            & audit.guard_exceeded.astype(bool)
+        ]
+        columns = [
+            "trajectory_id",
+            "risk_stratum",
+            "step_index",
+            "soc",
+            "previous_current_a",
+            "positive_residual_growth_v",
+            "guard_v",
+            "voltage_residual_before_v",
+            "voltage_residual_after_v",
+            "terminal_voltage_v",
+            "next_temperature_c",
+        ]
+        payload = {
+            "study_name": config.study_name,
+            "stage": "development",
+            "status": "strict_stop_failed",
+            "reason": "new_25c_boot_exceedance_while_boot_guard_frozen",
+            "development_trajectory_count": int(audit.trajectory_id.nunique()),
+            "boot_exceedance_count": boot_exceedances,
+            "boot_maximum_positive_growth_v": float(
+                audit.loc[
+                    audit.guard_stage == "boot", "positive_residual_growth_v"
+                ].max()
+            ),
+            "running_maximum_positive_growth_v": float(
+                audit.loc[
+                    audit.guard_stage == "running", "positive_residual_growth_v"
+                ].max()
+            ),
+            "events": events[columns].to_dict(orient="records"),
+            "frozen_r2f3_verification": verify_frozen_r2f3(config, root),
+            "initial_state_freeze": state_freeze,
+            "decision": {
+                "running_guard_derived_or_frozen": False,
+                "internal_validation_started": False,
+                "r3_initial_states_generated": False,
+                "ann_run_or_training_performed": False,
+                "level4_entered": False,
+            },
+        }
+        metrics_path = result_dir / "metrics.json"
+        metrics_path.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
         )
-    audit_path = data_dir / "development_guard_audit.csv"
-    audit.to_csv(audit_path, index=False)
+        event = payload["events"][0]
+        report_path = result_dir / "PHASE7C-R2F4_开发阶段严格停止说明.md"
+        report_path.write_text(
+            "# Phase 7C-R2F4 开发阶段严格停止说明\n\n"
+            "R2F4只允许开发25 ℃运行裕量，但新开发集在冻结的25 ℃启动裕量下出现超越，因此必须在开发阶段停止。\n\n"
+            f"- 开发轨迹：{payload['development_trajectory_count']}条；\n"
+            f"- 启动超越：{payload['boot_exceedance_count']}次；\n"
+            f"- 最大启动增长：{1000 * payload['boot_maximum_positive_growth_v']:.6f} mV；\n"
+            f"- 冻结启动裕量：{1000 * event['guard_v']:.6f} mV；\n"
+            f"- 失败轨迹：`{event['trajectory_id']}`，控制步{event['step_index']}。\n\n"
+            "本阶段没有推导或冻结新的运行裕量，没有启动内部验证，没有生成R3、运行ANN或进入Level 4。"
+            "如继续，必须建立新的独立修订阶段，同时处理25 ℃启动与运行裕量。\n",
+            encoding="utf-8",
+        )
+        artifacts = [
+            "configs/phase7cr2f4_25c_running_guard.yaml",
+            "src/battery_fast_charge/phase7cr2f4_config.py",
+            "src/battery_fast_charge/phase7cr2f4_runner.py",
+            "src/battery_fast_charge/phase7cr2f4_cli.py",
+            "data/phase7cr2f4_25c_running_guard/initial_state_freeze.json",
+            "data/phase7cr2f4_25c_running_guard/development_initial_states_25c.csv",
+            "data/phase7cr2f4_25c_running_guard/internal_validation_initial_states_25c.csv",
+            "data/phase7cr2f4_25c_running_guard/development_guard_audit.csv",
+            "outputs/phase7cr2f4_25c_running_guard/metrics.json",
+            "outputs/phase7cr2f4_25c_running_guard/PHASE7C-R2F4_开发阶段严格停止说明.md",
+        ]
+        manifest = {
+            "phase": "Phase 7C-R2F4",
+            "status": "strict_stop_failed_during_development",
+            "running_guard_frozen": False,
+            "internal_validation_started": False,
+            "r3_initial_states_generated": False,
+            "ann_execution_authorized": False,
+            "level4_entered": False,
+            "artifacts": {
+                relative: _sha256(
+                    root / relative,
+                    Path(relative).suffix in {".py", ".yaml", ".md"},
+                )
+                for relative in artifacts
+            },
+        }
+        (result_dir / "freeze_manifest.json").write_text(
+            json.dumps(manifest, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        return payload
     derived = derive_25c_running_guard(config.section("voltage_guard"), audit)
     payload = {
         "phase": "Phase 7C-R2F4 development",

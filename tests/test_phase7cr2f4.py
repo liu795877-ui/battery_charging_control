@@ -88,3 +88,41 @@ def test_new_state_files_are_frozen_isolated_and_measured() -> None:
         assert hashlib.sha256((data_dir / name).read_bytes()).hexdigest() == record[
             "sha256"
         ]
+
+
+def test_r2f4_strictly_stops_during_development() -> None:
+    result_dir = ROOT / CONFIG.section("output")["result_directory"]
+    metrics = json.loads(
+        (result_dir / "metrics.json").read_text(encoding="utf-8")
+    )
+    manifest = json.loads(
+        (result_dir / "freeze_manifest.json").read_text(encoding="utf-8")
+    )
+    assert metrics["stage"] == "development"
+    assert metrics["status"] == "strict_stop_failed"
+    assert metrics["reason"] == "new_25c_boot_exceedance_while_boot_guard_frozen"
+    assert metrics["boot_exceedance_count"] == 1
+    assert metrics["decision"]["running_guard_derived_or_frozen"] is False
+    assert metrics["decision"]["internal_validation_started"] is False
+    assert manifest["status"] == "strict_stop_failed_during_development"
+    assert manifest["running_guard_frozen"] is False
+    assert manifest["internal_validation_started"] is False
+    assert manifest["level4_entered"] is False
+
+
+def test_single_boot_failure_is_frozen_and_validation_never_started() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    result_dir = ROOT / CONFIG.section("output")["result_directory"]
+    metrics = json.loads(
+        (result_dir / "metrics.json").read_text(encoding="utf-8")
+    )
+    assert len(metrics["events"]) == 1
+    event = metrics["events"][0]
+    assert event["trajectory_id"] == "phase7cr2f4_development_25c_010"
+    assert event["step_index"] == 0
+    assert event["positive_residual_growth_v"] == pytest.approx(
+        0.0358591351352006
+    )
+    assert event["guard_v"] == pytest.approx(0.0346117967629136)
+    assert not (data_dir / "frozen_25c_running_guard.json").exists()
+    assert not (data_dir / "validation_started.json").exists()
