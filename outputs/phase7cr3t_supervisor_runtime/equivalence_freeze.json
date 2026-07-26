@@ -1,0 +1,45 @@
+{
+  "phase": "Phase 7C-R3T equivalence development",
+  "status": "optimization_frozen_before_confirmation",
+  "evaluated_trace_rows": 60332,
+  "evaluated_supervisor_calls": 120664,
+  "maximum_current_limit_difference_a": 0.0,
+  "maximum_peak_temperature_difference_c": 5.684341886080802e-14,
+  "current_mismatch_count": 0,
+  "old_supervisor_benchmark_s": 15.994325999548892,
+  "optimized_supervisor_benchmark_s": 0.8749826006460353,
+  "microbenchmark_speedup": 18.279593203041557,
+  "checks": {
+    "all_r3_steps_and_both_modes_audited": true,
+    "current_limit_exact": true,
+    "peak_temperature_equivalent": true,
+    "optimized_microbenchmark_faster": true
+  },
+  "success": true,
+  "source_verification": {
+    "records": {
+      "outputs/phase7cr3_independent_confirmation/freeze_manifest.json": {
+        "expected": "026c9a6f4e0bc2205e86b6ecbdfce673e1eff513ca588e7d37827a391c631ca1",
+        "actual": "026c9a6f4e0bc2205e86b6ecbdfce673e1eff513ca588e7d37827a391c631ca1",
+        "matched": true
+      },
+      "outputs/phase7cr3_independent_confirmation/strict_audit.json": {
+        "expected": "59e42cfe6d90fa1a8dd8209989fa46aa2bc7fefa83cd1c4fbcf6038765f0743e",
+        "actual": "59e42cfe6d90fa1a8dd8209989fa46aa2bc7fefa83cd1c4fbcf6038765f0743e",
+        "matched": true
+      },
+      "data/phase7cr3_independent_confirmation/ann_confirmation_trajectories.csv": {
+        "expected": "a9b96fd7ec13b93ab2f72538639bf3f69afe690bbb9f73d7f9648a016ebddeb8",
+        "actual": "a9b96fd7ec13b93ab2f72538639bf3f69afe690bbb9f73d7f9648a016ebddeb8",
+        "matched": true
+      }
+    },
+    "r3_failed_checks": [
+      "speedup_above_100"
+    ]
+  },
+  "config_sha256": "fc49593f803ae72ad45da293b06d5d305fea89ce53e234a294a809dfeadb0010",
+  "implementation_sha256": "534e8db07c59869def6e994e35be8d436d27b74c3d3993f6c00e78d3e984eefc",
+  "confirmation_started": false,
+  "level4_entered": false
+}

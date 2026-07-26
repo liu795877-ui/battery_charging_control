@@ -1,0 +1,150 @@
+{
+  "phase": "Phase 7C-R3T",
+  "status": "strict_stop_failed",
+  "equivalence_freeze": {
+    "phase": "Phase 7C-R3T equivalence development",
+    "status": "optimization_frozen_before_confirmation",
+    "evaluated_trace_rows": 60332,
+    "evaluated_supervisor_calls": 120664,
+    "maximum_current_limit_difference_a": 0.0,
+    "maximum_peak_temperature_difference_c": 5.684341886080802e-14,
+    "current_mismatch_count": 0,
+    "old_supervisor_benchmark_s": 15.994325999548892,
+    "optimized_supervisor_benchmark_s": 0.8749826006460353,
+    "microbenchmark_speedup": 18.279593203041557,
+    "checks": {
+      "all_r3_steps_and_both_modes_audited": true,
+      "current_limit_exact": true,
+      "peak_temperature_equivalent": true,
+      "optimized_microbenchmark_faster": true
+    },
+    "success": true,
+    "source_verification": {
+      "records": {
+        "outputs/phase7cr3_independent_confirmation/freeze_manifest.json": {
+          "expected": "026c9a6f4e0bc2205e86b6ecbdfce673e1eff513ca588e7d37827a391c631ca1",
+          "actual": "026c9a6f4e0bc2205e86b6ecbdfce673e1eff513ca588e7d37827a391c631ca1",
+          "matched": true
+        },
+        "outputs/phase7cr3_independent_confirmation/strict_audit.json": {
+          "expected": "59e42cfe6d90fa1a8dd8209989fa46aa2bc7fefa83cd1c4fbcf6038765f0743e",
+          "actual": "59e42cfe6d90fa1a8dd8209989fa46aa2bc7fefa83cd1c4fbcf6038765f0743e",
+          "matched": true
+        },
+        "data/phase7cr3_independent_confirmation/ann_confirmation_trajectories.csv": {
+          "expected": "a9b96fd7ec13b93ab2f72538639bf3f69afe690bbb9f73d7f9648a016ebddeb8",
+          "actual": "a9b96fd7ec13b93ab2f72538639bf3f69afe690bbb9f73d7f9648a016ebddeb8",
+          "matched": true
+        }
+      },
+      "r3_failed_checks": [
+        "speedup_above_100"
+      ]
+    },
+    "config_sha256": "fc49593f803ae72ad45da293b06d5d305fea89ce53e234a294a809dfeadb0010",
+    "implementation_sha256": "534e8db07c59869def6e994e35be8d436d27b74c3d3993f6c00e78d3e984eefc",
+    "confirmation_started": false,
+    "level4_entered": false
+  },
+  "physical_summary": {
+    "trajectory_count": 240,
+    "target_reach_fraction": 1.0,
+    "maximum_voltage_v": 4.186775800943208,
+    "maximum_temperature_c": 34.88298535993033,
+    "minimum_current_a": 0.0735724451902815,
+    "maximum_current_a": 9.715562737395368,
+    "maximum_current_step_a": 2.000000000000001,
+    "guard_exceedance_count": 0,
+    "empty_voltage_slew_count": 0,
+    "empty_thermal_slew_count": 0,
+    "prediction_infeasible_count": 0,
+    "sustained_oscillation_count": 0
+  },
+  "maximum_closed_loop_current_difference_a": 2.475499059073627e-06,
+  "seed_timing_metrics": [
+    {
+      "seed": 22,
+      "ann_candidate_mean_ms": 0.08882480826575237,
+      "supervisor_mean_ms": 0.17291804765375793,
+      "ann_total_mean_ms": 0.2617428559195103,
+      "end_to_end_speedup": 159.96351218110883
+    },
+    {
+      "seed": 42,
+      "ann_candidate_mean_ms": 0.08920001642875622,
+      "supervisor_mean_ms": 0.1735639259040373,
+      "ann_total_mean_ms": 0.26276394233279343,
+      "end_to_end_speedup": 159.34190265790298
+    },
+    {
+      "seed": 73,
+      "ann_candidate_mean_ms": 0.08830210286134724,
+      "supervisor_mean_ms": 0.17237774916766435,
+      "ann_total_mean_ms": 0.26067985202901156,
+      "end_to_end_speedup": 160.61581359398303
+    },
+    {
+      "seed": 101,
+      "ann_candidate_mean_ms": 0.09031881714051436,
+      "supervisor_mean_ms": 0.17514077467574357,
+      "ann_total_mean_ms": 0.26545959181625794,
+      "end_to_end_speedup": 157.7238412623617
+    },
+    {
+      "seed": 137,
+      "ann_candidate_mean_ms": 0.10814412344485631,
+      "supervisor_mean_ms": 0.19690457616023546,
+      "ann_total_mean_ms": 0.3050486996050918,
+      "end_to_end_speedup": 137.25449928290706
+    }
+  ],
+  "checks": {
+    "trajectory_count_240": true,
+    "all_steps_paired": true,
+    "closed_loop_current_exact": false,
+    "target_reach_100_percent": true,
+    "voltage_safe": true,
+    "temperature_safe": true,
+    "current_bounds_safe": true,
+    "slew_safe": true,
+    "zero_guard_exceedance": true,
+    "zero_empty_intervals": true,
+    "zero_prediction_infeasible": true,
+    "zero_sustained_oscillation": true,
+    "all_seed_speedups_above_100": true,
+    "mean_total_runtime_below_contract": true
+  },
+  "failed_checks": [
+    "closed_loop_current_exact"
+  ],
+  "frozen_model_hashes": {
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_22.npz": {
+      "expected": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65",
+      "actual": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_42.npz": {
+      "expected": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d",
+      "actual": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_73.npz": {
+      "expected": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9",
+      "actual": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_101.npz": {
+      "expected": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba",
+      "actual": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_137.npz": {
+      "expected": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0",
+      "actual": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0"
+    }
+  },
+  "success": false,
+  "decision": {
+    "level4_authorized": false,
+    "level4_entered": false,
+    "ann_retrained": false,
+    "safety_contract_changed": false,
+    "confirmation_used_for_retuning": false
+  }
+}

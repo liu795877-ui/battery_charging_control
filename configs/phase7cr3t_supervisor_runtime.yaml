@@ -1,0 +1,40 @@
+study:
+  name: phase7cr3t_supervisor_runtime
+  phase: Phase 7C-R3T
+  contract_status: preregistered_before_equivalence_audit
+
+sources:
+  phase7cr3_config: configs/phase7cr3_independent_confirmation.yaml
+  phase7cr3_freeze_manifest: outputs/phase7cr3_independent_confirmation/freeze_manifest.json
+  phase7cr3_freeze_manifest_sha256: 026c9a6f4e0bc2205e86b6ecbdfce673e1eff513ca588e7d37827a391c631ca1
+  phase7cr3_strict_audit: outputs/phase7cr3_independent_confirmation/strict_audit.json
+  phase7cr3_strict_audit_sha256: 59e42cfe6d90fa1a8dd8209989fa46aa2bc7fefa83cd1c4fbcf6038765f0743e
+  phase7cr3_ann_traces: data/phase7cr3_independent_confirmation/ann_confirmation_trajectories.csv
+  phase7cr3_ann_traces_sha256: a9b96fd7ec13b93ab2f72538639bf3f69afe690bbb9f73d7f9648a016ebddeb8
+  phase7cr1_config: configs/phase7cr1_thermal_supervisor.yaml
+
+optimization_contract:
+  scope: shared_thermal_supervisor_runtime_only
+  ann_retraining_authorized: false
+  voltage_guard_change_authorized: false
+  thermal_model_change_authorized: false
+  control_output_change_authorized: false
+  confirmation_used_for_parameter_tuning: false
+  old_r3_traces_role: equivalence_and_runtime_development_only
+  maximum_current_limit_difference_a: 0.0
+  maximum_peak_temperature_difference_c: 1.0e-12
+  maximum_closed_loop_current_difference_a: 0.0
+  minimum_end_to_end_speedup: 100.0
+  frozen_mpc_total_mean_ms: 41.8693065211988
+  maximum_ann_total_mean_ms: 0.418693065211988
+  level4_entry_authorized: false
+
+execution:
+  seeds: [22, 42, 73, 101, 137]
+  maximum_workers: 3
+  expected_trajectory_count: 240
+  benchmark_repetitions: 5
+
+output:
+  data_directory: data/phase7cr3t_supervisor_runtime
+  result_directory: outputs/phase7cr3t_supervisor_runtime
