@@ -1,0 +1,68 @@
+{
+  "phase": "Phase 7C-R2F3",
+  "diagnostic_role": "post_validation_strict_stop_explanation_only",
+  "used_for_guard_tuning": false,
+  "frozen_validation_result_changed": false,
+  "overall_status": "strict_stop_failed",
+  "guard_exceedance_counts": {
+    "15": {"boot": 0, "running": 0, "total": 0},
+    "25": {"boot": 0, "running": 1, "total": 1},
+    "30": {"boot": 0, "running": 0, "total": 0},
+    "all_temperatures": {"boot": 0, "running": 1, "total": 1}
+  },
+  "single_failure_event": {
+    "role": "internal_validation",
+    "trajectory_id": "phase7cr2f3_internal_validation_25c_013",
+    "risk_stratum": "historical_exceedance_neighborhood",
+    "ambient_temperature_c": 25.0,
+    "step_index": 2,
+    "guard_stage": "running",
+    "soc": 0.4816270306,
+    "temperature_c": 25.3245447613,
+    "previous_current_a": 8.0834960938,
+    "candidate_current_a": 9.8002938572,
+    "applied_current_a": 8.0340576172,
+    "positive_residual_growth_v": 0.01361071391754,
+    "frozen_guard_v": 0.012970762902336801,
+    "excess_over_guard_v": 0.000639951015203199,
+    "voltage_residual_before_v": -0.1215551055,
+    "voltage_residual_after_v": -0.1079443916,
+    "terminal_voltage_v": 3.9581465958,
+    "next_temperature_c": 25.4932345555
+  },
+  "internal_validation_summary": {
+    "15": {
+      "trajectory_count": 24,
+      "boot_maximum_positive_growth_v": 0.045281039266988,
+      "running_maximum_positive_growth_v": 0.0116759227267166,
+      "guard_exceedance_count": 0
+    },
+    "25": {
+      "trajectory_count": 24,
+      "boot_maximum_positive_growth_v": 0.0341430824499671,
+      "running_maximum_positive_growth_v": 0.01361071391754,
+      "guard_exceedance_count": 1
+    }
+  },
+  "physical_and_solver_gates": {
+    "trajectory_count": 296,
+    "target_reach_fraction": 1.0,
+    "maximum_voltage_v": 4.187515872670053,
+    "maximum_average_temperature_c": 34.90044001152461,
+    "maximum_current_step_a": 2.000000000000001,
+    "strict_teacher_failure_count": 0,
+    "solver_failure_count": 0,
+    "prediction_infeasible_count": 0,
+    "empty_voltage_slew_count": 0,
+    "empty_thermal_slew_count": 0,
+    "sustained_oscillation_count": 0,
+    "zero_residual_initialization_count": 0
+  },
+  "decision": {
+    "retune_in_place": false,
+    "generate_r3": false,
+    "run_ann": false,
+    "enter_level4": false,
+    "new_internal_validation_downgraded_to_permanent_regression": true
+  }
+}

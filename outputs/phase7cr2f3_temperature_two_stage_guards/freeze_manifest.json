@@ -1,0 +1,24 @@
+{
+  "phase": "Phase 7C-R2F3",
+  "status": "strict_stop_failed",
+  "internal_validation_used_for_retuning": false,
+  "r3_initial_states_generated": false,
+  "ann_execution_authorized": false,
+  "artifacts": {
+    "configs/phase7cr2f3_temperature_two_stage_guards.yaml": "ca0edbe69192dfb437a998a6b1f5d8e8cf6e8ffeb9029bb81dba7971440c1fdf",
+    "src/battery_fast_charge/phase7cr2f3_config.py": "73e2abae71032ed5d0667b1876a9a9068e64fb63f9cfbe1d57102d4896b982f2",
+    "src/battery_fast_charge/phase7cr2f3_runner.py": "ba03fff429fcafe66f6a8b2c5d8724646cc08b1eb4e306a237d8ecc4e3314bee",
+    "src/battery_fast_charge/phase7cr2f3_cli.py": "c9b14980b94eda6e8eb02d4672624749f33981b45d9193b32c264321eab7c9b7",
+    "data/phase7cr2f3_temperature_two_stage_guards/initial_state_freeze.json": "0760971db45ac6d17c0350805da32499f4094b2ed63a397c59183ecc62b81039",
+    "data/phase7cr2f3_temperature_two_stage_guards/development_initial_states_15c.csv": "7e01b3283444d33b86fd5f6a49ef618996279be6362ad11dd2e7bb7c0852c91a",
+    "data/phase7cr2f3_temperature_two_stage_guards/development_initial_states_25c.csv": "57e8393b0a3569977e99c54e5a2ff0abbe7c1b28cb2edbd25ecc410dcfd5ad83",
+    "data/phase7cr2f3_temperature_two_stage_guards/internal_validation_initial_states_15c.csv": "0a33accfed3e23c5eca1befde65a46ac3a8e83297b12f946ad3cdae484d603f8",
+    "data/phase7cr2f3_temperature_two_stage_guards/internal_validation_initial_states_25c.csv": "f7cfca67dd7c00e5a11bef1378225de9e8312704a2992183bfa4a2d5941801f0",
+    "data/phase7cr2f3_temperature_two_stage_guards/frozen_temperature_two_stage_guards.json": "d0240f9458221bd1580b83bf13942f67fb14d88b6c1468094d280c03d2750ff8",
+    "data/phase7cr2f3_temperature_two_stage_guards/development_guard_audit.csv": "e05666364bfb16d0f3ffec593cbb025c60cfa89aa4c54eecdef6694612cb4906",
+    "data/phase7cr2f3_temperature_two_stage_guards/combined_validation_trajectories.csv": "d8428429facea121e25262c730f02dfcc238f0bb5fba52631c79553e03451671",
+    "data/phase7cr2f3_temperature_two_stage_guards/trajectory_metrics.csv": "5efeebda44102e46e254a061aa07969c18d3388b1d5bc1decfce912de3790066",
+    "outputs/phase7cr2f3_temperature_two_stage_guards/metrics.json": "c630d39b301a89edf8b6f8b0129cbe18d74c34f201334e94cec4c627364fb61b",
+    "outputs/phase7cr2f3_temperature_two_stage_guards/PHASE7C-R2F3_中文实验报告.md": "01681d8c6a0a8e0f12b720992972d58e85d3dff6bb7f36d18ba6ead5348dd16a"
+  }
+}

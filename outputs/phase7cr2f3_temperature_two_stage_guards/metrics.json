@@ -1,0 +1,606 @@
+{
+  "study_name": "phase7cr2f3_temperature_two_stage_guards",
+  "configuration": {
+    "study": {
+      "name": "phase7cr2f3_temperature_two_stage_guards",
+      "phase": "Phase 7C-R2F3",
+      "contract_status": "preregistered_before_new_state_generation"
+    },
+    "sources": {
+      "phase7cr2f_config": "configs/phase7cr2f_teacher_selection_voltage_guard.yaml",
+      "phase7cr2f2_config": "configs/phase7cr2f2_two_stage_voltage_guard.yaml",
+      "phase7cr2f2_freeze_manifest": "outputs/phase7cr2f2_two_stage_voltage_guard/freeze_manifest.json",
+      "phase7cr2f2_freeze_manifest_sha256": "62b361f43ed4a51d6c6aea17accb70f1aa2924bdce7006bf288ae464280755a7",
+      "phase7cr2f2_development_states": "data/phase7cr2f2_two_stage_voltage_guard/development_initial_states.csv",
+      "phase7cr2f2_internal_states": "data/phase7cr2f2_two_stage_voltage_guard/internal_validation_initial_states.csv",
+      "phase7cr2f2_frozen_guards": "data/phase7cr2f2_two_stage_voltage_guard/frozen_two_stage_voltage_guards.json",
+      "phase7cr2f2_frozen_guards_sha256": "57aeb3f44569bee0c19c0ea2783b64c479ed0bac7fe83a339415f3484ae110f5",
+      "legacy_phase7c_states": {
+        "15": "data/phase7c_multitemperature/initial_states_15c.csv",
+        "30": "data/phase7c_multitemperature/initial_states_30c.csv"
+      },
+      "legacy_phase7cr1_states": "data/phase7cr1_thermal_supervisor/development_initial_states.csv",
+      "legacy_phase7cr2_development_states": "data/phase7cr2_temperature_voltage_guards/development_initial_states.csv",
+      "legacy_phase7cr2_internal_states": "data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv",
+      "legacy_phase7cr2f_development_states": "data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv",
+      "legacy_phase7cr2f_internal_states": "data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv",
+      "legacy_phase7b1_25c_states": "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv"
+    },
+    "control_contract": {
+      "residual_initialization": "measured",
+      "allow_zero_residual_fallback": false,
+      "initial_measurement_horizon_s": 1e-09,
+      "sample_period_s": 5.0,
+      "boot_steps": [
+        0,
+        1
+      ],
+      "running_starts_at_step": 2,
+      "initial_state_history_contract": "dfn_and_2rc_do_not_share_current_history",
+      "teacher_selection_frozen": true,
+      "thermal_supervisor_frozen": true,
+      "temperature_30c_architecture_and_guards_frozen": true,
+      "r3_generation_authorized": false,
+      "ann_execution_authorized": false
+    },
+    "voltage_guard": {
+      "design": "per_temperature_two_stage_boot_and_running",
+      "design_frozen_before_state_generation": true,
+      "engineering_margin_v": 0.0005,
+      "residual_growth_tolerance_v": 1e-12,
+      "historical_limits": {
+        "15": {
+          "boot_v": 0.0366612309890537,
+          "running_floor_v": 0.014098037646160801
+        },
+        "25": {
+          "boot_v": 0.026040820770421,
+          "previous_guard_v": 0.011305522502741638,
+          "known_running_growth_v": 0.0123420547282164
+        },
+        "30": {
+          "boot_v": 0.0376479265035423,
+          "running_v": 0.0218918472128131
+        }
+      },
+      "development_audit_guards": {
+        "15": {
+          "boot_v": 0.0371612309890537,
+          "running_v": 0.014098037646160801
+        },
+        "25": {
+          "boot_v": 0.026540820770421,
+          "running_v": 0.0128420547282164
+        },
+        "30": {
+          "boot_v": 0.0376479265035423,
+          "running_v": 0.0218918472128131
+        }
+      },
+      "formula_15_boot": "max(historical_15_boot_v, development_15_boot_max_v) + engineering_margin_v",
+      "formula_15_running": "max(historical_15_running_floor_v, development_15_running_max_v + engineering_margin_v)",
+      "formula_25_boot": "max(historical_25_boot_v, development_25_boot_max_v) + engineering_margin_v",
+      "formula_25_running": "max(previous_25_guard_v, known_25_running_growth_v + engineering_margin_v, development_25_running_max_v + engineering_margin_v)",
+      "frozen_30_guard_source": "data/phase7cr2f2_two_stage_voltage_guard/frozen_two_stage_voltage_guards.json"
+    },
+    "datasets": {
+      "development_count_per_temperature": 48,
+      "internal_validation_count_per_temperature": 24,
+      "temperatures_c": [
+        15,
+        25
+      ],
+      "maximum_workers": 3,
+      "maximum_steps": 1800,
+      "target_soc": 0.7995,
+      "initial_voltage_margin_v": 0.005,
+      "initial_residual_extreme_threshold_v": -0.1,
+      "designs": {
+        "development": {
+          "15": {
+            "start_index": 5101,
+            "seed": 20260821
+          },
+          "25": {
+            "start_index": 6101,
+            "seed": 20260822
+          }
+        },
+        "internal_validation": {
+          "15": {
+            "start_index": 7101,
+            "seed": 20260823
+          },
+          "25": {
+            "start_index": 8101,
+            "seed": 20260824
+          }
+        }
+      },
+      "strata": {
+        "development": {
+          "startup_transient_stress": 24,
+          "historical_exceedance_neighborhood": 12,
+          "general_high_risk": 8,
+          "global_coverage": 4
+        },
+        "internal_validation": {
+          "startup_transient_stress": 12,
+          "historical_exceedance_neighborhood": 6,
+          "general_high_risk": 4,
+          "global_coverage": 2
+        }
+      },
+      "bounds": {
+        "global_coverage": {
+          "soc": [
+            0.45,
+            0.7
+          ],
+          "v1_v": [
+            0.0,
+            0.065
+          ],
+          "v2_v": [
+            0.0,
+            0.1
+          ],
+          "previous_current_a": [
+            0.0,
+            10.0
+          ]
+        },
+        "general_high_risk": {
+          "soc": [
+            0.54,
+            0.7
+          ],
+          "v1_v": [
+            0.035,
+            0.065
+          ],
+          "v2_v": [
+            0.04,
+            0.1
+          ],
+          "previous_current_a": [
+            6.0,
+            10.0
+          ]
+        },
+        "startup_transient_stress": {
+          "soc": [
+            0.52,
+            0.69
+          ],
+          "v1_v": [
+            0.04,
+            0.065
+          ],
+          "v2_v": [
+            0.05,
+            0.1
+          ],
+          "previous_current_a": [
+            7.0,
+            10.0
+          ]
+        }
+      },
+      "neighborhood_half_width": {
+        "soc": 0.015,
+        "v1_v": 0.008,
+        "v2_v": 0.012,
+        "previous_current_a": 0.75
+      },
+      "historical_centers": {
+        "15": [
+          {
+            "source": "data/phase7c_multitemperature/initial_states_15c.csv",
+            "trajectory_id": "phase7c_15c_006",
+            "evidence": "r2f2_15c_maximum_boot_exceedance"
+          },
+          {
+            "source": "data/phase7cr2_temperature_voltage_guards/development_initial_states.csv",
+            "trajectory_id": "phase7cr2_development_15c_005",
+            "evidence": "r2f2_15c_development_exceedance"
+          },
+          {
+            "source": "data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv",
+            "trajectory_id": "phase7cr2_internal_validation_15c_000",
+            "evidence": "r2f2_15c_internal_exceedance"
+          }
+        ],
+        "25": [
+          {
+            "source": "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv",
+            "trajectory_id": "phase7b1_confirm_012",
+            "evidence": "r2f2_25c_maximum_boot_exceedance"
+          },
+          {
+            "source": "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv",
+            "trajectory_id": "phase7b1_confirm_003",
+            "evidence": "r2f2_25c_known_running_exceedance"
+          },
+          {
+            "source": "data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv",
+            "trajectory_id": "phase7b1_confirm_015",
+            "evidence": "r2f2_25c_running_neighborhood"
+          }
+        ]
+      }
+    },
+    "validation_contract": {
+      "internal_validation_is_one_shot": true,
+      "internal_validation_may_not_modify_guards": true,
+      "failed_internal_validation_becomes_permanent_regression": true,
+      "new_development_not_counted_as_independent_validation": true,
+      "phase7cr2f2_248_trajectories_are_permanent_regression": true,
+      "phase7cr2f2_30c_internal_is_not_new_validation": true,
+      "expected_new_internal_trajectory_count": 48,
+      "expected_historical_regression_trajectory_count": 248,
+      "expected_total_validation_trajectory_count": 296
+    },
+    "gates": {
+      "maximum_voltage_v": 4.200001,
+      "maximum_average_temperature_c": 35.0,
+      "maximum_current_a": 10.0,
+      "minimum_current_a": 0.0,
+      "maximum_current_step_a": 2.0,
+      "maximum_per_temperature_boot_guard_exceedance_count": 0,
+      "maximum_per_temperature_running_guard_exceedance_count": 0,
+      "maximum_all_temperature_guard_exceedance_count": 0,
+      "maximum_empty_interval_count": 0,
+      "maximum_solver_failure_count": 0,
+      "maximum_strict_teacher_failure_count": 0,
+      "maximum_prediction_infeasible_count": 0,
+      "maximum_sustained_oscillation_count": 0,
+      "maximum_zero_residual_initialization_count": 0,
+      "minimum_target_reach_fraction": 1.0,
+      "numerical_tolerance": 1e-09
+    },
+    "output": {
+      "data_directory": "data/phase7cr2f3_temperature_two_stage_guards",
+      "result_directory": "outputs/phase7cr2f3_temperature_two_stage_guards"
+    }
+  },
+  "frozen_r2f2_verification": {
+    "manifest_sha256": "62b361f43ed4a51d6c6aea17accb70f1aa2924bdce7006bf288ae464280755a7",
+    "frozen_guard_sha256": "57aeb3f44569bee0c19c0ea2783b64c479ed0bac7fe83a339415f3484ae110f5",
+    "r2f2_failure_preserved": true,
+    "records": {
+      "configs/phase7cr2f2_two_stage_voltage_guard.yaml": {
+        "expected_sha256": "c8d526b8d53dda6bea033fe6f18deec61a127f8fea95a88882e0080ca5714f0e",
+        "actual_sha256": "c8d526b8d53dda6bea033fe6f18deec61a127f8fea95a88882e0080ca5714f0e",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f2_config.py": {
+        "expected_sha256": "f73feffb92daadd35d9bdeb8e3aba706c0c9a3526f7a779f1264798cbd381dd2",
+        "actual_sha256": "f73feffb92daadd35d9bdeb8e3aba706c0c9a3526f7a779f1264798cbd381dd2",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f2_runner.py": {
+        "expected_sha256": "41676b0e3be2a0e2380b4c1b0a297d00d426fc3176d3ea4340358cab57d11212",
+        "actual_sha256": "41676b0e3be2a0e2380b4c1b0a297d00d426fc3176d3ea4340358cab57d11212",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr2f2_cli.py": {
+        "expected_sha256": "c6232166e421af502abc15d632607e40b79a7e0c25fd77b7fa9305d56e9e0ba5",
+        "actual_sha256": "c6232166e421af502abc15d632607e40b79a7e0c25fd77b7fa9305d56e9e0ba5",
+        "matched": true
+      },
+      "data/phase7cr2f2_two_stage_voltage_guard/initial_state_freeze.json": {
+        "expected_sha256": "ebc49a286866c4d2802e7f871897a33e3aba98e141a2a447359d5c89bd5b71b1",
+        "actual_sha256": "ebc49a286866c4d2802e7f871897a33e3aba98e141a2a447359d5c89bd5b71b1",
+        "matched": true
+      },
+      "data/phase7cr2f2_two_stage_voltage_guard/development_initial_states.csv": {
+        "expected_sha256": "e5ce0c4161f84fd69c76fa4127c13b399fef350e024d5fbad1de82af0812a839",
+        "actual_sha256": "e5ce0c4161f84fd69c76fa4127c13b399fef350e024d5fbad1de82af0812a839",
+        "matched": true
+      },
+      "data/phase7cr2f2_two_stage_voltage_guard/internal_validation_initial_states.csv": {
+        "expected_sha256": "84ecfc3289eae86352b95d8b84bd0c4a8900592d3258506af4772901e958f89f",
+        "actual_sha256": "84ecfc3289eae86352b95d8b84bd0c4a8900592d3258506af4772901e958f89f",
+        "matched": true
+      },
+      "data/phase7cr2f2_two_stage_voltage_guard/frozen_two_stage_voltage_guards.json": {
+        "expected_sha256": "57aeb3f44569bee0c19c0ea2783b64c479ed0bac7fe83a339415f3484ae110f5",
+        "actual_sha256": "57aeb3f44569bee0c19c0ea2783b64c479ed0bac7fe83a339415f3484ae110f5",
+        "matched": true
+      },
+      "data/phase7cr2f2_two_stage_voltage_guard/development_guard_audit.csv": {
+        "expected_sha256": "f77e445d97d269a131ca07120159782edb3e23a0fbe42684ce6c66ecea5632ff",
+        "actual_sha256": "f77e445d97d269a131ca07120159782edb3e23a0fbe42684ce6c66ecea5632ff",
+        "matched": true
+      },
+      "data/phase7cr2f2_two_stage_voltage_guard/combined_validation_trajectories.csv": {
+        "expected_sha256": "7a61171cb86b50c7694331cbe766b1e6f61f80f8873ec8a681d40d953031aa63",
+        "actual_sha256": "7a61171cb86b50c7694331cbe766b1e6f61f80f8873ec8a681d40d953031aa63",
+        "matched": true
+      },
+      "data/phase7cr2f2_two_stage_voltage_guard/trajectory_metrics.csv": {
+        "expected_sha256": "725ea0329ca6bf58742fd0fc30e1716f4a1626908523c74fef0b10b69300284b",
+        "actual_sha256": "725ea0329ca6bf58742fd0fc30e1716f4a1626908523c74fef0b10b69300284b",
+        "matched": true
+      },
+      "outputs/phase7cr2f2_two_stage_voltage_guard/metrics.json": {
+        "expected_sha256": "6b4cf8eab4f92d15bd9894b8b3ee761b9b07f792ec679a89a04a458c9dabd52e",
+        "actual_sha256": "6b4cf8eab4f92d15bd9894b8b3ee761b9b07f792ec679a89a04a458c9dabd52e",
+        "matched": true
+      },
+      "outputs/phase7cr2f2_two_stage_voltage_guard/PHASE7C-R2F2_中文实验报告.md": {
+        "expected_sha256": "84d38f6edf337716cf1c3a90eb7e46390e23afc321892ba30fe21ba6498837d4",
+        "actual_sha256": "84d38f6edf337716cf1c3a90eb7e46390e23afc321892ba30fe21ba6498837d4",
+        "matched": true
+      }
+    }
+  },
+  "initial_state_freeze": {
+    "phase": "Phase 7C-R2F3",
+    "status": "initial_states_frozen_before_any_closed_loop_rollout",
+    "frozen_before_any_closed_loop_rollout": true,
+    "development_internal_isolation": true,
+    "not_r3_confirmation_data": true,
+    "not_ann_teacher_data": true,
+    "initial_state_history_contract": "dfn_and_2rc_do_not_share_current_history",
+    "config_sha256": "ca0edbe69192dfb437a998a6b1f5d8e8cf6e8ffeb9029bb81dba7971440c1fdf",
+    "files": {
+      "development_initial_states_15c.csv": {
+        "sha256": "7e01b3283444d33b86fd5f6a49ef618996279be6362ad11dd2e7bb7c0852c91a",
+        "trajectory_count": 48,
+        "strata_counts": {
+          "startup_transient_stress": 24,
+          "historical_exceedance_neighborhood": 12,
+          "general_high_risk": 8,
+          "global_coverage": 4
+        },
+        "design_seed": 20260821,
+        "minimum_design_index": 5101,
+        "maximum_design_index": 5164,
+        "minimum_initial_residual_v": -0.14518383662249423,
+        "extreme_initial_residual_count": 20
+      },
+      "development_initial_states_25c.csv": {
+        "sha256": "57e8393b0a3569977e99c54e5a2ff0abbe7c1b28cb2edbd25ecc410dcfd5ad83",
+        "trajectory_count": 48,
+        "strata_counts": {
+          "startup_transient_stress": 24,
+          "historical_exceedance_neighborhood": 12,
+          "general_high_risk": 8,
+          "global_coverage": 4
+        },
+        "design_seed": 20260822,
+        "minimum_design_index": 6101,
+        "maximum_design_index": 6161,
+        "minimum_initial_residual_v": -0.1649767870019878,
+        "extreme_initial_residual_count": 38
+      },
+      "internal_validation_initial_states_15c.csv": {
+        "sha256": "0a33accfed3e23c5eca1befde65a46ac3a8e83297b12f946ad3cdae484d603f8",
+        "trajectory_count": 24,
+        "strata_counts": {
+          "startup_transient_stress": 12,
+          "historical_exceedance_neighborhood": 6,
+          "general_high_risk": 4,
+          "global_coverage": 2
+        },
+        "design_seed": 20260823,
+        "minimum_design_index": 7101,
+        "maximum_design_index": 7130,
+        "minimum_initial_residual_v": -0.15120614261376897,
+        "extreme_initial_residual_count": 12
+      },
+      "internal_validation_initial_states_25c.csv": {
+        "sha256": "f7cfca67dd7c00e5a11bef1378225de9e8312704a2992183bfa4a2d5941801f0",
+        "trajectory_count": 24,
+        "strata_counts": {
+          "startup_transient_stress": 12,
+          "historical_exceedance_neighborhood": 6,
+          "general_high_risk": 4,
+          "global_coverage": 2
+        },
+        "design_seed": 20260824,
+        "minimum_design_index": 8101,
+        "maximum_design_index": 8127,
+        "minimum_initial_residual_v": -0.16339026145050894,
+        "extreme_initial_residual_count": 21
+      }
+    },
+    "frozen_r2f2_verification": {
+      "manifest_sha256": "62b361f43ed4a51d6c6aea17accb70f1aa2924bdce7006bf288ae464280755a7",
+      "frozen_guard_sha256": "57aeb3f44569bee0c19c0ea2783b64c479ed0bac7fe83a339415f3484ae110f5",
+      "r2f2_failure_preserved": true,
+      "records": {
+        "configs/phase7cr2f2_two_stage_voltage_guard.yaml": {
+          "expected_sha256": "c8d526b8d53dda6bea033fe6f18deec61a127f8fea95a88882e0080ca5714f0e",
+          "actual_sha256": "c8d526b8d53dda6bea033fe6f18deec61a127f8fea95a88882e0080ca5714f0e",
+          "matched": true
+        },
+        "src/battery_fast_charge/phase7cr2f2_config.py": {
+          "expected_sha256": "f73feffb92daadd35d9bdeb8e3aba706c0c9a3526f7a779f1264798cbd381dd2",
+          "actual_sha256": "f73feffb92daadd35d9bdeb8e3aba706c0c9a3526f7a779f1264798cbd381dd2",
+          "matched": true
+        },
+        "src/battery_fast_charge/phase7cr2f2_runner.py": {
+          "expected_sha256": "41676b0e3be2a0e2380b4c1b0a297d00d426fc3176d3ea4340358cab57d11212",
+          "actual_sha256": "41676b0e3be2a0e2380b4c1b0a297d00d426fc3176d3ea4340358cab57d11212",
+          "matched": true
+        },
+        "src/battery_fast_charge/phase7cr2f2_cli.py": {
+          "expected_sha256": "c6232166e421af502abc15d632607e40b79a7e0c25fd77b7fa9305d56e9e0ba5",
+          "actual_sha256": "c6232166e421af502abc15d632607e40b79a7e0c25fd77b7fa9305d56e9e0ba5",
+          "matched": true
+        },
+        "data/phase7cr2f2_two_stage_voltage_guard/initial_state_freeze.json": {
+          "expected_sha256": "ebc49a286866c4d2802e7f871897a33e3aba98e141a2a447359d5c89bd5b71b1",
+          "actual_sha256": "ebc49a286866c4d2802e7f871897a33e3aba98e141a2a447359d5c89bd5b71b1",
+          "matched": true
+        },
+        "data/phase7cr2f2_two_stage_voltage_guard/development_initial_states.csv": {
+          "expected_sha256": "e5ce0c4161f84fd69c76fa4127c13b399fef350e024d5fbad1de82af0812a839",
+          "actual_sha256": "e5ce0c4161f84fd69c76fa4127c13b399fef350e024d5fbad1de82af0812a839",
+          "matched": true
+        },
+        "data/phase7cr2f2_two_stage_voltage_guard/internal_validation_initial_states.csv": {
+          "expected_sha256": "84ecfc3289eae86352b95d8b84bd0c4a8900592d3258506af4772901e958f89f",
+          "actual_sha256": "84ecfc3289eae86352b95d8b84bd0c4a8900592d3258506af4772901e958f89f",
+          "matched": true
+        },
+        "data/phase7cr2f2_two_stage_voltage_guard/frozen_two_stage_voltage_guards.json": {
+          "expected_sha256": "57aeb3f44569bee0c19c0ea2783b64c479ed0bac7fe83a339415f3484ae110f5",
+          "actual_sha256": "57aeb3f44569bee0c19c0ea2783b64c479ed0bac7fe83a339415f3484ae110f5",
+          "matched": true
+        },
+        "data/phase7cr2f2_two_stage_voltage_guard/development_guard_audit.csv": {
+          "expected_sha256": "f77e445d97d269a131ca07120159782edb3e23a0fbe42684ce6c66ecea5632ff",
+          "actual_sha256": "f77e445d97d269a131ca07120159782edb3e23a0fbe42684ce6c66ecea5632ff",
+          "matched": true
+        },
+        "data/phase7cr2f2_two_stage_voltage_guard/combined_validation_trajectories.csv": {
+          "expected_sha256": "7a61171cb86b50c7694331cbe766b1e6f61f80f8873ec8a681d40d953031aa63",
+          "actual_sha256": "7a61171cb86b50c7694331cbe766b1e6f61f80f8873ec8a681d40d953031aa63",
+          "matched": true
+        },
+        "data/phase7cr2f2_two_stage_voltage_guard/trajectory_metrics.csv": {
+          "expected_sha256": "725ea0329ca6bf58742fd0fc30e1716f4a1626908523c74fef0b10b69300284b",
+          "actual_sha256": "725ea0329ca6bf58742fd0fc30e1716f4a1626908523c74fef0b10b69300284b",
+          "matched": true
+        },
+        "outputs/phase7cr2f2_two_stage_voltage_guard/metrics.json": {
+          "expected_sha256": "6b4cf8eab4f92d15bd9894b8b3ee761b9b07f792ec679a89a04a458c9dabd52e",
+          "actual_sha256": "6b4cf8eab4f92d15bd9894b8b3ee761b9b07f792ec679a89a04a458c9dabd52e",
+          "matched": true
+        },
+        "outputs/phase7cr2f2_two_stage_voltage_guard/PHASE7C-R2F2_中文实验报告.md": {
+          "expected_sha256": "84d38f6edf337716cf1c3a90eb7e46390e23afc321892ba30fe21ba6498837d4",
+          "actual_sha256": "84d38f6edf337716cf1c3a90eb7e46390e23afc321892ba30fe21ba6498837d4",
+          "matched": true
+        }
+      }
+    }
+  },
+  "frozen_guard_contract": {
+    "phase": "Phase 7C-R2F3 development",
+    "status": "temperature_two_stage_guards_frozen_before_internal_validation",
+    "design": "per_temperature_boot_steps_0_1_running_steps_2_plus",
+    "residual_initialization": "measured",
+    "internal_validation_used_for_tuning": false,
+    "guards": {
+      "15": {
+        "boot_v": 0.0480564686187137,
+        "running_v": 0.014098037646160801
+      },
+      "25": {
+        "boot_v": 0.0346117967629136,
+        "running_v": 0.012970762902336801
+      },
+      "30": {
+        "boot_v": 0.0376479265035423,
+        "running_v": 0.0218918472128131
+      }
+    },
+    "development_maxima": {
+      "15": {
+        "boot_v": 0.0475564686187137,
+        "running_v": 0.0113277668012434
+      },
+      "25": {
+        "boot_v": 0.0341117967629136,
+        "running_v": 0.0124707629023368
+      }
+    },
+    "engineering_margin_v": 0.0005,
+    "state_hashes": {
+      "development_initial_states_15c.csv": "7e01b3283444d33b86fd5f6a49ef618996279be6362ad11dd2e7bb7c0852c91a",
+      "development_initial_states_25c.csv": "57e8393b0a3569977e99c54e5a2ff0abbe7c1b28cb2edbd25ecc410dcfd5ad83",
+      "internal_validation_initial_states_15c.csv": "0a33accfed3e23c5eca1befde65a46ac3a8e83297b12f946ad3cdae484d603f8",
+      "internal_validation_initial_states_25c.csv": "f7cfca67dd7c00e5a11bef1378225de9e8312704a2992183bfa4a2d5941801f0"
+    },
+    "development_audit_sha256": "e05666364bfb16d0f3ffec593cbb025c60cfa89aa4c54eecdef6694612cb4906",
+    "config_sha256": "ca0edbe69192dfb437a998a6b1f5d8e8cf6e8ffeb9029bb81dba7971440c1fdf",
+    "runner_sha256": "ba03fff429fcafe66f6a8b2c5d8724646cc08b1eb4e306a237d8ecc4e3314bee"
+  },
+  "teacher_selection_regression": {
+    "case_count": 2,
+    "records": [
+      {
+        "case_id": "r2_development_30c_step_70",
+        "selected_branch": "default",
+        "expected_branch": "default",
+        "passed": true
+      },
+      {
+        "case_id": "r2_internal_validation_30c_step_46",
+        "selected_branch": "default",
+        "expected_branch": "default",
+        "passed": true
+      }
+    ],
+    "all_passed": true
+  },
+  "guard_exceedance_counts": {
+    "15": {
+      "boot_exceedance_count": 0,
+      "running_exceedance_count": 0,
+      "total_exceedance_count": 0
+    },
+    "25": {
+      "boot_exceedance_count": 0,
+      "running_exceedance_count": 1,
+      "total_exceedance_count": 1
+    },
+    "30": {
+      "boot_exceedance_count": 0,
+      "running_exceedance_count": 0,
+      "total_exceedance_count": 0
+    },
+    "all_temperatures": {
+      "boot_exceedance_count": 0,
+      "running_exceedance_count": 1,
+      "total_exceedance_count": 1
+    }
+  },
+  "checks": {
+    "maximum_voltage": true,
+    "maximum_temperature": true,
+    "current_bounds": true,
+    "slew_bound": true,
+    "all_temperature_boot_guard_exceedance_zero": true,
+    "all_temperature_running_guard_exceedance_zero": false,
+    "all_temperature_total_guard_exceedance_zero": false,
+    "zero_voltage_slew_empty": true,
+    "zero_thermal_slew_empty": true,
+    "zero_solver_failure": true,
+    "zero_prediction_infeasible": true,
+    "zero_strict_teacher_failure": true,
+    "zero_sustained_oscillation": true,
+    "target_reach_100_percent": true,
+    "measured_initialization_100_percent": true
+  },
+  "global_summary": {
+    "trajectory_count": 296,
+    "new_internal_trajectory_count": 48,
+    "historical_regression_trajectory_count": 248,
+    "target_reach_fraction": 1.0,
+    "maximum_voltage_v": 4.187515872670053,
+    "maximum_temperature_c": 34.90044001152461,
+    "maximum_current_step_a": 2.000000000000001,
+    "strict_teacher_failure_count": 0,
+    "solver_failure_count": 0,
+    "prediction_infeasible_count": 0,
+    "empty_voltage_slew_count": 0,
+    "empty_thermal_slew_count": 0,
+    "sustained_oscillation_count": 0,
+    "zero_residual_initialization_count": 0
+  },
+  "success": false,
+  "decision": {
+    "freeze_full_multitemperature_architecture": false,
+    "eligible_to_design_r3_separately": false,
+    "r3_initial_states_generated": false,
+    "ann_run_or_training_performed": false,
+    "internal_validation_used_for_retuning": false,
+    "internal_validation_becomes_permanent_regression": true
+  }
+}

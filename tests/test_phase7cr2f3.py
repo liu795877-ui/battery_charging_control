@@ -187,5 +187,94 @@ def test_frozen_guards_match_development_formulas_and_keep_30c_fixed() -> None:
 
 def test_internal_validation_has_not_started_at_guard_freeze() -> None:
     data_dir = ROOT / CONFIG.section("output")["data_directory"]
-    assert not (data_dir / "validation_started.json").exists()
-    assert not (data_dir / "runs" / "validation").exists()
+    started = json.loads(
+        (data_dir / "validation_started.json").read_text(encoding="utf-8")
+    )
+    guard_path = data_dir / "frozen_temperature_two_stage_guards.json"
+    assert started["guards_sha256"] == hashlib.sha256(
+        guard_path.read_bytes()
+    ).hexdigest()
+    assert started["internal_validation_may_not_modify_guards"] is True
+
+
+def test_one_shot_validation_strictly_stops_without_r3_or_ann() -> None:
+    result_dir = ROOT / CONFIG.section("output")["result_directory"]
+    metrics = json.loads(
+        (result_dir / "metrics.json").read_text(encoding="utf-8")
+    )
+    manifest = json.loads(
+        (result_dir / "freeze_manifest.json").read_text(encoding="utf-8")
+    )
+    assert metrics["success"] is False
+    assert metrics["decision"]["freeze_full_multitemperature_architecture"] is False
+    assert metrics["decision"]["eligible_to_design_r3_separately"] is False
+    assert metrics["decision"]["r3_initial_states_generated"] is False
+    assert metrics["decision"]["ann_run_or_training_performed"] is False
+    assert metrics["decision"]["internal_validation_used_for_retuning"] is False
+    assert manifest["status"] == "strict_stop_failed"
+    assert manifest["r3_initial_states_generated"] is False
+    assert manifest["ann_execution_authorized"] is False
+
+
+def test_all_temperature_count_contract_reports_single_25c_running_failure() -> None:
+    result_dir = ROOT / CONFIG.section("output")["result_directory"]
+    metrics = json.loads(
+        (result_dir / "metrics.json").read_text(encoding="utf-8")
+    )
+    counts = metrics["guard_exceedance_counts"]
+    assert counts["15"] == {
+        "boot_exceedance_count": 0,
+        "running_exceedance_count": 0,
+        "total_exceedance_count": 0,
+    }
+    assert counts["25"] == {
+        "boot_exceedance_count": 0,
+        "running_exceedance_count": 1,
+        "total_exceedance_count": 1,
+    }
+    assert counts["30"] == {
+        "boot_exceedance_count": 0,
+        "running_exceedance_count": 0,
+        "total_exceedance_count": 0,
+    }
+    assert counts["all_temperatures"] == {
+        "boot_exceedance_count": 0,
+        "running_exceedance_count": 1,
+        "total_exceedance_count": 1,
+    }
+
+
+def test_single_failure_is_frozen_new_25c_internal_event() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    trajectories = pd.read_csv(data_dir / "combined_validation_trajectories.csv")
+    failures = trajectories[trajectories.guard_exceeded.astype(bool)]
+    assert len(failures) == 1
+    event = failures.iloc[0]
+    assert event["role"] == "internal_validation"
+    assert event["trajectory_id"] == "phase7cr2f3_internal_validation_25c_013"
+    assert event["ambient_temperature_c"] == 25.0
+    assert event["step_index"] == 2
+    assert event["guard_stage"] == "running"
+    assert event["positive_residual_growth_v"] == pytest.approx(
+        0.01361071391754
+    )
+    assert event["guard_v"] == pytest.approx(0.012970762902336801)
+
+
+def test_non_guard_gates_and_measurement_coverage_pass() -> None:
+    result_dir = ROOT / CONFIG.section("output")["result_directory"]
+    metrics = json.loads(
+        (result_dir / "metrics.json").read_text(encoding="utf-8")
+    )
+    checks = metrics["checks"]
+    failed = {name for name, value in checks.items() if not value}
+    assert failed == {
+        "all_temperature_running_guard_exceedance_zero",
+        "all_temperature_total_guard_exceedance_zero",
+    }
+    summary = metrics["global_summary"]
+    assert summary["trajectory_count"] == 296
+    assert summary["historical_regression_trajectory_count"] == 248
+    assert summary["new_internal_trajectory_count"] == 48
+    assert summary["target_reach_fraction"] == 1.0
+    assert summary["zero_residual_initialization_count"] == 0
