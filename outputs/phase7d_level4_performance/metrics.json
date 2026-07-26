@@ -1,0 +1,74 @@
+{
+  "phase": "Phase 7D-Level 4-0",
+  "status": "baseline_frozen",
+  "authorization": {
+    "metrics_sha256": "d08a8e34deb93b3f9638ceed9d20f455477a4d961504b22b6f3f31ac4c16a267",
+    "manifest_sha256": "5b7091772ff22c2efb6aa3e8ed1f479f3f7c1aff92661754dc8262b12a8b9ff7",
+    "minimum_end_to_end_speedup": 141.84646177998238,
+    "r3t2_level4_entered": false
+  },
+  "canonical_source": {
+    "repetition": "a",
+    "trajectory_metrics_sha256": "d6bc22b2c70584092c6e42d2eb19346eb4853546cc69221f8280e962657ce7c6",
+    "confirmation_used_for_tuning": false
+  },
+  "baseline_by_temperature": {
+    "15": {
+      "trajectory_count": 60,
+      "mean_charge_time_s": 1170.25,
+      "minimum_charge_time_s": 990.0,
+      "maximum_charge_time_s": 1340.0,
+      "maximum_voltage_v": 4.186789264014928,
+      "voltage_headroom_v": 0.013211735985072082,
+      "maximum_temperature_c": 25.64541393535029,
+      "temperature_headroom_c": 9.354586064649709,
+      "mean_voltage_intervention_fraction": 0.47770528078957386,
+      "maximum_voltage_intervention_fraction": 0.5164319248826291,
+      "mean_thermal_intervention_fraction": 0.0,
+      "maximum_thermal_intervention_fraction": 0.0,
+      "mean_both_layers_fraction": 0.0,
+      "maximum_voltage_correction_a": 0.9702453507637429,
+      "maximum_thermal_correction_a": 0.0501022358250651
+    },
+    "30": {
+      "trajectory_count": 60,
+      "mean_charge_time_s": 1302.5833333333333,
+      "minimum_charge_time_s": 950.0,
+      "maximum_charge_time_s": 1985.0,
+      "maximum_voltage_v": 4.17806785871494,
+      "voltage_headroom_v": 0.021933141285060742,
+      "maximum_temperature_c": 34.89810296166246,
+      "temperature_headroom_c": 0.10189703833754038,
+      "mean_voltage_intervention_fraction": 0.15622851823886613,
+      "maximum_voltage_intervention_fraction": 0.2648401826484018,
+      "mean_thermal_intervention_fraction": 0.6619737396051489,
+      "maximum_thermal_intervention_fraction": 0.7964376590330788,
+      "mean_both_layers_fraction": 0.14929436778475058,
+      "maximum_voltage_correction_a": 0.3005385460938838,
+      "maximum_thermal_correction_a": 3.5416348253192744
+    }
+  },
+  "optimization_priorities": {
+    "15c": "voltage-layer conservatism and charge-time performance",
+    "30c": "thermal-layer charge-time performance under the binding 35 C limit",
+    "primary_metric": "reduce_charge_time_without_safety_regression",
+    "intervention_rate_is_secondary_not_a_safety_replacement": true
+  },
+  "checks": {
+    "target_reach_100_percent": true,
+    "all_frozen_safety_counts_zero": true,
+    "voltage_safe": true,
+    "temperature_safe": true,
+    "level4_scope_is_audit_only": true
+  },
+  "success": true,
+  "decision": {
+    "level4_authorized": true,
+    "level4_entered": true,
+    "level4_1_authorized": true,
+    "ann_retrained": false,
+    "safety_contract_changed": false,
+    "optimization_parameters_changed": false,
+    "r3_confirmation_used_for_tuning": false
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "phase": "Phase 7D-Level 4-0",
+  "status": "baseline_frozen",
+  "level4_entered": true,
+  "level4_1_authorized": true,
+  "r3_confirmation_used_for_tuning": false,
+  "artifacts": {
+    "configs/phase7d_level4_performance.yaml": "98d2516aa68147fcb285e2de81092e7fadd1dfc8a82ae8698eeed8040687e373",
+    "pyproject.toml": "4b392957778beb8a8c26a87f9ebf4306c416ac1d7053bda58c2b13ee018d14a9",
+    "src/battery_fast_charge/phase7d_config.py": "e415b96389e16b37d721b586156d0abec12c3e4ee7e68ed805e1e1d31295ac5f",
+    "src/battery_fast_charge/phase7d_runner.py": "e8e4b36c232f0b4ebff82a948c694456bed73e14086e42b5b40ec4e756f59d4f",
+    "src/battery_fast_charge/phase7d_cli.py": "e4f85e80343ac0f231678ef54d8ccfe2f658ba42a494be26bdfc030a80fb91e8",
+    "data\\phase7cr3t2_dfn_repeatability\\trajectory_metrics.csv": "d6bc22b2c70584092c6e42d2eb19346eb4853546cc69221f8280e962657ce7c6",
+    "outputs\\phase7d_level4_performance\\metrics.json": "87b4dcaf972fc3408f34d17a5ea5b1ca33fff7d27111e31169b9d88c87ec763d",
+    "outputs\\phase7d_level4_performance\\PHASE7D_LEVEL4_0_中文实验报告.md": "1a7e109f12c729e9a40b31e351067c14ab52556bef972c258107169d1e4ae070"
+  }
+}

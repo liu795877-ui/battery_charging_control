@@ -1,0 +1,39 @@
+phase: Phase 7D-Level 4-0
+title: Frozen multi-temperature performance baseline audit
+
+entry_authorization:
+  r3t2_metrics: outputs/phase7cr3t2_dfn_repeatability/metrics.json
+  r3t2_metrics_sha256: d08a8e34deb93b3f9638ceed9d20f455477a4d961504b22b6f3f31ac4c16a267
+  r3t2_manifest: outputs/phase7cr3t2_dfn_repeatability/freeze_manifest.json
+  r3t2_manifest_sha256: 5b7091772ff22c2efb6aa3e8ed1f479f3f7c1aff92661754dc8262b12a8b9ff7
+  required_status: strict_passed
+  required_level4_authorized: true
+
+baseline:
+  trajectory_metrics: data/phase7cr3t2_dfn_repeatability/trajectory_metrics.csv
+  trajectory_metrics_sha256: d6bc22b2c70584092c6e42d2eb19346eb4853546cc69221f8280e962657ce7c6
+  canonical_repetition: a
+  temperatures_c: [15, 30]
+  expected_trajectory_count: 120
+  expected_trajectories_per_temperature: 60
+  voltage_limit_v: 4.200001
+  temperature_limit_c: 35.0
+
+level4_contract:
+  level4_entered: true
+  stage: baseline_attribution_only
+  ann_retraining_authorized: false
+  safety_contract_change_authorized: false
+  r3_confirmation_tuning_authorized: false
+  optimization_parameters_changed: false
+  primary_objective: reduce_charge_time_without_safety_regression
+  secondary_objectives:
+    - reduce_voltage_intervention_and_correction
+    - reduce_thermal_intervention_and_correction
+  next_stage: Phase 7D-Level 4-1
+  next_stage_requires_new_development_data: true
+  next_stage_requires_new_internal_validation_data: true
+
+output:
+  directory: outputs/phase7d_level4_performance
+
