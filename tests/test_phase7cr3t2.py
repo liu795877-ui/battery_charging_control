@@ -91,3 +91,27 @@ def test_new_state_files_are_frozen_before_any_rollout() -> None:
         assert hashlib.sha256((data_dir / name).read_bytes()).hexdigest() == record[
             "sha256"
         ]
+
+
+def test_repeatability_tolerances_are_frozen_before_confirmation() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    path = data_dir / "frozen_repeatability_tolerances.json"
+    if not path.exists():
+        return
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert payload["status"] == "tolerances_frozen_before_confirmation"
+    assert payload["development_summary"]["pair_count"] == 16
+    assert payload["development_summary"]["all_steps_paired"] is True
+    assert payload["development_summary"]["decision_mismatch_count"] == 0
+    assert payload["frozen_tolerances"]["current_difference_a"] == (
+        2.975499059073627e-06
+    )
+    assert payload["frozen_tolerances"]["soc_difference"] == (
+        9.249783967073655e-09
+    )
+    assert payload["frozen_tolerances"]["temperature_difference_c"] == (
+        7.572148439687453e-06
+    )
+    assert payload["confirmation_started"] is False
+    assert payload["confirmation_used_for_retuning"] is False
+    assert payload["level4_entered"] is False

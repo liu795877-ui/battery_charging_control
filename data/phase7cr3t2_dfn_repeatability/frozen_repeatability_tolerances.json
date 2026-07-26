@@ -1,0 +1,46 @@
+{
+  "phase": "Phase 7C-R3T2 development",
+  "status": "tolerances_frozen_before_confirmation",
+  "development_summary": {
+    "pair_count": 16,
+    "paired_step_count": 3943,
+    "all_steps_paired": true,
+    "maximum_current_difference_a": 7.276046432025396e-11,
+    "maximum_soc_difference": 7.149836278586008e-14,
+    "maximum_temperature_difference_c": 5.858424856342026e-12,
+    "maximum_voltage_difference_v": 2.282618538629322e-12,
+    "decision_mismatch_count": 0
+  },
+  "historical_limits": {
+    "current_difference_a": 2.475499059073627e-06,
+    "soc_difference": 8.249783967073654e-09,
+    "temperature_difference_c": 6.572148439687453e-06
+  },
+  "engineering_margins": {
+    "current_difference_a": 5e-07,
+    "soc_difference": 1e-09,
+    "temperature_difference_c": 1e-06
+  },
+  "frozen_tolerances": {
+    "current_difference_a": 2.975499059073627e-06,
+    "soc_difference": 9.249783967073655e-09,
+    "temperature_difference_c": 7.572148439687453e-06
+  },
+  "checks": {
+    "expected_pair_count": true,
+    "all_steps_paired": true,
+    "decision_signatures_identical": true
+  },
+  "success": true,
+  "state_hashes": {
+    "development_initial_states_15c.csv": "6c0ea097eba08d2007a6ed44549f3662611e755e82c3950c93fdabea43d868d8",
+    "development_initial_states_30c.csv": "bd9669a23d40c6fa37b79f7a4e25fd9a922517842cf2b6f9e4d6126065052e24",
+    "confirmation_initial_states_15c.csv": "8d01be519967f7ab1f24a0f77537057902e75ea623b420c4c3c589f42482e21d",
+    "confirmation_initial_states_30c.csv": "60db45ceb89afbcea96cdee24c40b8b952dd90b972ea3dc98220bd93bf345052"
+  },
+  "config_sha256": "a128a3e342826f48810d6e4b5f740858a075e513f3c82726d4d4fb8a1017b057",
+  "runner_sha256": "582ec4c05c54d8ce3a3673b8a531414c89af48c15e6b0ad64476f59512117457",
+  "confirmation_started": false,
+  "confirmation_used_for_retuning": false,
+  "level4_entered": false
+}
