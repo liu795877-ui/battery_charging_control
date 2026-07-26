@@ -142,4 +142,37 @@ def test_development_freezes_two_guards_before_validation() -> None:
     assert payload["guards"]["25"]["running_v"] == pytest.approx(
         0.0142898181258897
     )
-    assert not (data_dir / "validation_started.json").exists()
+    validation_started = data_dir / "validation_started.json"
+    metrics_path = ROOT / CONFIG.section("output")["result_directory"] / "metrics.json"
+    if metrics_path.exists():
+        assert validation_started.exists()
+    else:
+        assert not validation_started.exists()
+
+
+def test_r2f5_one_shot_validation_strictly_passes() -> None:
+    result_dir = ROOT / CONFIG.section("output")["result_directory"]
+    metrics_path = result_dir / "metrics.json"
+    if not metrics_path.exists():
+        pytest.skip("R2F5 one-shot validation has not completed")
+    metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+    manifest = json.loads(
+        (result_dir / "freeze_manifest.json").read_text(encoding="utf-8")
+    )
+    assert metrics["success"] is True
+    assert all(metrics["checks"].values())
+    assert metrics["global_summary"]["trajectory_count"] == 368
+    assert metrics["global_summary"]["target_reach_fraction"] == 1.0
+    assert metrics["guard_exceedance_counts"]["all_temperatures"] == {
+        "boot_exceedance_count": 0,
+        "running_exceedance_count": 0,
+        "total_exceedance_count": 0,
+    }
+    assert metrics["decision"]["eligible_to_design_r3_separately"] is True
+    assert metrics["decision"]["r3_initial_states_generated"] is False
+    assert metrics["decision"]["ann_run_or_training_performed"] is False
+    assert metrics["decision"]["level4_entered"] is False
+    assert manifest["status"] == "strict_passed"
+    assert manifest["r3_initial_states_generated"] is False
+    assert manifest["ann_execution_authorized"] is False
+    assert manifest["level4_entered"] is False

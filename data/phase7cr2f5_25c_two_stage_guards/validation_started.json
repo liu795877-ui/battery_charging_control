@@ -1,0 +1,6 @@
+{
+  "status": "one_shot_validation_started",
+  "guards_sha256": "e39bd4840399c10d38561ce92e3be31992387ec719fc9bbdc7850434eaeb5aa9",
+  "internal_state_sha256": "fb516847fa662f27577fbdaed0ab11d706c5bb2084e6a38bf661311ca2d6f3ed",
+  "internal_validation_may_not_modify_guards": true
+}
