@@ -115,3 +115,63 @@ def test_repeatability_tolerances_are_frozen_before_confirmation() -> None:
     assert payload["confirmation_started"] is False
     assert payload["confirmation_used_for_retuning"] is False
     assert payload["level4_entered"] is False
+
+
+def test_confirmation_strictly_passes_and_authorizes_level4() -> None:
+    result_dir = ROOT / CONFIG.section("output")["result_directory"]
+    metrics_path = result_dir / "metrics.json"
+    manifest_path = result_dir / "freeze_manifest.json"
+    if not metrics_path.exists() or not manifest_path.exists():
+        return
+
+    metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+    summary = metrics["confirmation_summary"]
+    physical = metrics["physical_summary"]
+    timing = metrics["timing_summary"]
+    decision = metrics["decision"]
+
+    assert metrics["status"] == "strict_passed"
+    assert metrics["success"] is True
+    assert metrics["failed_checks"] == []
+    assert summary["pair_count"] == 120
+    assert summary["all_steps_paired"] is True
+    assert summary["decision_mismatch_count"] == 0
+    assert summary["maximum_current_difference_a"] <= (
+        metrics["tolerance_freeze"]["frozen_tolerances"]["current_difference_a"]
+    )
+    assert summary["maximum_soc_difference"] <= (
+        metrics["tolerance_freeze"]["frozen_tolerances"]["soc_difference"]
+    )
+    assert summary["maximum_temperature_difference_c"] <= (
+        metrics["tolerance_freeze"]["frozen_tolerances"][
+            "temperature_difference_c"
+        ]
+    )
+    assert physical["trajectory_count"] == 240
+    assert physical["target_reach_fraction"] == 1.0
+    assert physical["maximum_voltage_v"] <= 4.200001
+    assert physical["maximum_temperature_c"] <= 35.0
+    assert physical["guard_exceedance_count"] == 0
+    assert physical["empty_voltage_slew_count"] == 0
+    assert physical["empty_thermal_slew_count"] == 0
+    assert physical["prediction_infeasible_count"] == 0
+    assert physical["sustained_oscillation_count"] == 0
+    assert timing["minimum_end_to_end_speedup"] > 100.0
+    assert decision["level4_authorized"] is True
+    assert decision["level4_entered"] is False
+    assert decision["ann_retrained"] is False
+    assert decision["safety_contract_changed"] is False
+    assert decision["confirmation_used_for_retuning"] is False
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["status"] == "strict_passed"
+    assert manifest["level4_authorized"] is True
+    assert manifest["level4_entered"] is False
+    for relative, expected in manifest["artifacts"].items():
+        path = ROOT / relative
+        assert path.exists(), relative
+        payload = path.read_bytes()
+        if path.suffix in {".py", ".yaml", ".md"}:
+            payload = payload.replace(b"\r\n", b"\n")
+        actual = hashlib.sha256(payload).hexdigest()
+        assert actual == expected, relative

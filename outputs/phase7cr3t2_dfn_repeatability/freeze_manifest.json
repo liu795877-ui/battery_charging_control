@@ -1,0 +1,21 @@
+{
+  "phase": "Phase 7C-R3T2",
+  "status": "strict_passed",
+  "level4_authorized": true,
+  "level4_entered": false,
+  "ann_retrained": false,
+  "artifacts": {
+    "configs/phase7cr3t2_dfn_repeatability.yaml": "a128a3e342826f48810d6e4b5f740858a075e513f3c82726d4d4fb8a1017b057",
+    "src/battery_fast_charge/phase7cr3t2_config.py": "5fefaedd6e1c12a277152359c865bba0266670200736f7e5ae76d8e53c300d33",
+    "src/battery_fast_charge/phase7cr3t2_runner.py": "582ec4c05c54d8ce3a3673b8a531414c89af48c15e6b0ad64476f59512117457",
+    "data/phase7cr3t2_dfn_repeatability/initial_state_freeze.json": "8593087b151ad96aa270eebed682b36263eb7fb6fefb92d0d5968a2a0b2c22d4",
+    "data/phase7cr3t2_dfn_repeatability/frozen_repeatability_tolerances.json": "f696c208f17aaa0f140aa426ce1340712f038b90e98b1b6f028415a066a99edc",
+    "data/phase7cr3t2_dfn_repeatability/confirmation_repetition_a.csv": "807278f6e241b9c0dbc01a3d9da62b885166cf695293908f30241c5fcab9dc5e",
+    "data/phase7cr3t2_dfn_repeatability/confirmation_repetition_b.csv": "351285af88ff880939428b0a97d8309f3cf6de4fc28b6528924c48f3ce3d20f3",
+    "data/phase7cr3t2_dfn_repeatability/confirmation_paired_steps.csv": "bc842be7606e2d50f20d08eab1f3a6ebc3e27119bad80cf98373d0789e9398c7",
+    "data/phase7cr3t2_dfn_repeatability/trajectory_metrics.csv": "d6bc22b2c70584092c6e42d2eb19346eb4853546cc69221f8280e962657ce7c6",
+    "data/phase7cr3t2_dfn_repeatability/timing_metrics.csv": "24f1f1a477e028572d3698e6f13a28c7d95df80392e971b80c2128135538a1b0",
+    "outputs/phase7cr3t2_dfn_repeatability/metrics.json": "d08a8e34deb93b3f9638ceed9d20f455477a4d961504b22b6f3f31ac4c16a267",
+    "outputs/phase7cr3t2_dfn_repeatability/PHASE7C-R3T2_中文实验报告.md": "6485ce3551fa578a1704854dbfe543119da9fddd6b0d2f57f5172fddd632103e"
+  }
+}
