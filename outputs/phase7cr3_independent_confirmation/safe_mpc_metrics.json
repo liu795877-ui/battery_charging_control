@@ -1,0 +1,98 @@
+{
+  "phase": "Phase 7C-R3 safe MPC",
+  "trajectory_count": 48,
+  "checks": {
+    "maximum_voltage": true,
+    "maximum_temperature": true,
+    "current_bounds": true,
+    "slew_bound": true,
+    "all_temperature_boot_guard_exceedance_zero": true,
+    "all_temperature_running_guard_exceedance_zero": true,
+    "all_temperature_total_guard_exceedance_zero": true,
+    "zero_voltage_slew_empty": true,
+    "zero_thermal_slew_empty": true,
+    "zero_solver_failure": true,
+    "zero_prediction_infeasible": true,
+    "zero_strict_teacher_failure": true,
+    "zero_sustained_oscillation": true,
+    "target_reach_100_percent": true,
+    "measured_initialization_100_percent": true
+  },
+  "guard_exceedance_counts": {
+    "15": {
+      "boot_exceedance_count": 0,
+      "running_exceedance_count": 0,
+      "total_exceedance_count": 0
+    },
+    "25": {
+      "boot_exceedance_count": 0,
+      "running_exceedance_count": 0,
+      "total_exceedance_count": 0
+    },
+    "30": {
+      "boot_exceedance_count": 0,
+      "running_exceedance_count": 0,
+      "total_exceedance_count": 0
+    },
+    "all_temperatures": {
+      "boot_exceedance_count": 0,
+      "running_exceedance_count": 0,
+      "total_exceedance_count": 0
+    }
+  },
+  "maximum_voltage_v": 4.186769174422819,
+  "maximum_temperature_c": 34.88249087168077,
+  "target_reach_fraction": 1.0,
+  "teacher_regression": {
+    "case_count": 2,
+    "records": [
+      {
+        "case_id": "r2_development_30c_step_70",
+        "selected_branch": "default",
+        "expected_branch": "default",
+        "passed": true
+      },
+      {
+        "case_id": "r2_internal_validation_30c_step_46",
+        "selected_branch": "default",
+        "expected_branch": "default",
+        "passed": true
+      }
+    ],
+    "all_passed": true
+  },
+  "success": true,
+  "decision": {
+    "frozen_ann_authorized": true,
+    "ann_executed": false,
+    "level4_entered": false
+  },
+  "state_freeze": {
+    "phase": "Phase 7C-R3",
+    "status": "frozen_before_any_confirmation_rollout",
+    "not_teacher_data": true,
+    "not_previous_validation_data": true,
+    "safe_mpc_must_pass_before_ann": true,
+    "config_sha256": "28508db55a5789f6f2af06456be9b5bfaef0e5236b1f41d92f3f83296bd6f039",
+    "files": {
+      "confirmation_initial_states_15c.csv": {
+        "sha256": "882c92af0ddb21242e9d44d5c699e83abc583b2e97766a93d5260bf1845a6802",
+        "trajectory_count": 24,
+        "temperature_c": 15,
+        "design_seed": 20261101,
+        "zero_residual_count": 0
+      },
+      "confirmation_initial_states_30c.csv": {
+        "sha256": "4dbb6fb5b7dccc565836388c3692cbb64ee04bc8fa8cbea4bf283f772bff94d5",
+        "trajectory_count": 24,
+        "temperature_c": 30,
+        "design_seed": 20261102,
+        "zero_residual_count": 0
+      }
+    },
+    "r2f5_verification": {
+      "manifest_sha256": "c18a5d2085acd01f15e79beddd151b8cc37b94e8ab91e61f44ea76e29ed7b208",
+      "status": "strict_passed"
+    }
+  }
+}

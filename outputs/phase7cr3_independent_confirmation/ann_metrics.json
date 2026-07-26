@@ -1,0 +1,123 @@
+{
+  "phase": "Phase 7C-R3 frozen ANN",
+  "trajectory_count": 240,
+  "seed_metrics": [
+    {
+      "seed": 22,
+      "mean_current_nrmse": 0.0010119873355353296,
+      "mean_charge_time_gap_fraction": 0.004816592509054522,
+      "target_reach_fraction": 1.0,
+      "maximum_voltage_v": 4.186775800943382,
+      "maximum_temperature_c": 34.882957942805945,
+      "guard_exceedance_count": 0,
+      "empty_interval_count": 0,
+      "maximum_current_step_a": 2.0000000000000004,
+      "speedup": 79.00911279678853
+    },
+    {
+      "seed": 42,
+      "mean_current_nrmse": 0.0009811177844084608,
+      "mean_charge_time_gap_fraction": 0.008209314266684899,
+      "target_reach_fraction": 1.0,
+      "maximum_voltage_v": 4.186754296577963,
+      "maximum_temperature_c": 34.88287051691731,
+      "guard_exceedance_count": 0,
+      "empty_interval_count": 0,
+      "maximum_current_step_a": 2.0,
+      "speedup": 83.80906922206252
+    },
+    {
+      "seed": 73,
+      "mean_current_nrmse": 0.0009061301225152304,
+      "mean_charge_time_gap_fraction": 0.0019155930393675328,
+      "target_reach_fraction": 1.0,
+      "maximum_voltage_v": 4.186762681101303,
+      "maximum_temperature_c": 34.8828045424724,
+      "guard_exceedance_count": 0,
+      "empty_interval_count": 0,
+      "maximum_current_step_a": 2.0,
+      "speedup": 81.23967759066119
+    },
+    {
+      "seed": 101,
+      "mean_current_nrmse": 0.001037626393460332,
+      "mean_charge_time_gap_fraction": 0.004091504776440093,
+      "target_reach_fraction": 1.0,
+      "maximum_voltage_v": 4.186766419689812,
+      "maximum_temperature_c": 34.88298535993238,
+      "guard_exceedance_count": 0,
+      "empty_interval_count": 0,
+      "maximum_current_step_a": 2.000000000000001,
+      "speedup": 80.60847807058762
+    },
+    {
+      "seed": 137,
+      "mean_current_nrmse": 0.0009129827364200236,
+      "mean_charge_time_gap_fraction": 0.00818330960664982,
+      "target_reach_fraction": 1.0,
+      "maximum_voltage_v": 4.186772172775077,
+      "maximum_temperature_c": 34.88272459751704,
+      "guard_exceedance_count": 0,
+      "empty_interval_count": 0,
+      "maximum_current_step_a": 2.0000000000000004,
+      "speedup": 72.20850411681988
+    }
+  ],
+  "checks": {
+    "current_nrmse_below_1_percent": true,
+    "charge_time_gap_below_2_percent": true,
+    "target_reach_100_percent": true,
+    "voltage_safe": true,
+    "temperature_safe": true,
+    "slew_safe": true,
+    "zero_guard_exceedance": true,
+    "zero_empty_interval": true,
+    "speedup_above_100": false
+  },
+  "success": false,
+  "frozen_model_hashes": {
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_22.npz": {
+      "expected": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65",
+      "actual": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_42.npz": {
+      "expected": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d",
+      "actual": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_73.npz": {
+      "expected": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9",
+      "actual": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_101.npz": {
+      "expected": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba",
+      "actual": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_137.npz": {
+      "expected": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0",
+      "actual": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0"
+    }
+  },
+  "r2f5_manifest_sha256": "c18a5d2085acd01f15e79beddd151b8cc37b94e8ab91e61f44ea76e29ed7b208",
+  "r3_state_hashes": {
+    "confirmation_initial_states_15c.csv": {
+      "sha256": "882c92af0ddb21242e9d44d5c699e83abc583b2e97766a93d5260bf1845a6802",
+      "trajectory_count": 24,
+      "temperature_c": 15,
+      "design_seed": 20261101,
+      "zero_residual_count": 0
+    },
+    "confirmation_initial_states_30c.csv": {
+      "sha256": "4dbb6fb5b7dccc565836388c3692cbb64ee04bc8fa8cbea4bf283f772bff94d5",
+      "trajectory_count": 24,
+      "temperature_c": 30,
+      "design_seed": 20261102,
+      "zero_residual_count": 0
+    }
+  },
+  "decision": {
+    "level4_authorized": false,
+    "level4_route": "thermal_aware_ann_repair",
+    "level4_entered": false,
+    "ann_retrained": false
+  }
+}

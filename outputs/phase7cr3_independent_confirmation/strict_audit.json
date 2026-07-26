@@ -1,0 +1,125 @@
+{
+  "phase": "Phase 7C-R3 frozen ANN strict audit",
+  "status": "strict_stop_failed",
+  "physical_summary": {
+    "trajectory_count": 240,
+    "target_reach_fraction": 1.0,
+    "minimum_current_a": 0.0735724451901029,
+    "maximum_current_a": 9.715562737395368,
+    "maximum_current_step_a": 2.000000000000001,
+    "maximum_voltage_v": 4.186775800943382,
+    "maximum_temperature_c": 34.88298535993238,
+    "guard_exceedance_count": 0,
+    "empty_voltage_slew_count": 0,
+    "empty_thermal_slew_count": 0,
+    "prediction_infeasible_count": 0,
+    "solver_failure_count": 0,
+    "sustained_oscillation_count": 0
+  },
+  "timing_decomposition": {
+    "mpc_candidate_mean_ms": 41.47896750186992,
+    "mpc_supervisor_mean_ms": 0.3903390193288803,
+    "mpc_total_mean_ms": 41.8693065211988,
+    "ann_candidate_mean_ms": 0.10236905124865471,
+    "ann_supervisor_mean_ms": 0.4265061758258013,
+    "ann_total_mean_ms": 0.528875227074456,
+    "candidate_only_speedup": 405.1905043167528,
+    "end_to_end_speedup": 79.16670015497695
+  },
+  "seed_metrics": [
+    {
+      "seed": 22,
+      "mean_current_nrmse": 0.0010119873355353296,
+      "mean_charge_time_gap_fraction": 0.004816592509054522,
+      "target_reach_fraction": 1.0,
+      "maximum_voltage_v": 4.186775800943382,
+      "maximum_temperature_c": 34.882957942805945,
+      "guard_exceedance_count": 0,
+      "empty_interval_count": 0,
+      "maximum_current_step_a": 2.0000000000000004,
+      "speedup": 79.00911279678853
+    },
+    {
+      "seed": 42,
+      "mean_current_nrmse": 0.0009811177844084608,
+      "mean_charge_time_gap_fraction": 0.008209314266684899,
+      "target_reach_fraction": 1.0,
+      "maximum_voltage_v": 4.186754296577963,
+      "maximum_temperature_c": 34.88287051691731,
+      "guard_exceedance_count": 0,
+      "empty_interval_count": 0,
+      "maximum_current_step_a": 2.0,
+      "speedup": 83.80906922206252
+    },
+    {
+      "seed": 73,
+      "mean_current_nrmse": 0.0009061301225152304,
+      "mean_charge_time_gap_fraction": 0.0019155930393675328,
+      "target_reach_fraction": 1.0,
+      "maximum_voltage_v": 4.186762681101303,
+      "maximum_temperature_c": 34.8828045424724,
+      "guard_exceedance_count": 0,
+      "empty_interval_count": 0,
+      "maximum_current_step_a": 2.0,
+      "speedup": 81.23967759066119
+    },
+    {
+      "seed": 101,
+      "mean_current_nrmse": 0.001037626393460332,
+      "mean_charge_time_gap_fraction": 0.004091504776440093,
+      "target_reach_fraction": 1.0,
+      "maximum_voltage_v": 4.186766419689812,
+      "maximum_temperature_c": 34.88298535993238,
+      "guard_exceedance_count": 0,
+      "empty_interval_count": 0,
+      "maximum_current_step_a": 2.000000000000001,
+      "speedup": 80.60847807058762
+    },
+    {
+      "seed": 137,
+      "mean_current_nrmse": 0.0009129827364200236,
+      "mean_charge_time_gap_fraction": 0.00818330960664982,
+      "target_reach_fraction": 1.0,
+      "maximum_voltage_v": 4.186772172775077,
+      "maximum_temperature_c": 34.88272459751704,
+      "guard_exceedance_count": 0,
+      "empty_interval_count": 0,
+      "maximum_current_step_a": 2.0000000000000004,
+      "speedup": 72.20850411681988
+    }
+  ],
+  "checks": {
+    "current_nrmse_below_1_percent": true,
+    "charge_time_gap_below_2_percent": true,
+    "target_reach_100_percent": true,
+    "voltage_safe": true,
+    "temperature_safe": true,
+    "slew_safe": true,
+    "zero_guard_exceedance": true,
+    "zero_empty_interval": true,
+    "speedup_above_100": false,
+    "trajectory_count_240": true,
+    "current_bounds_zero_violation": true,
+    "zero_prediction_infeasible": true,
+    "zero_solver_failure": true,
+    "zero_sustained_oscillation": true
+  },
+  "failed_checks": [
+    "speedup_above_100"
+  ],
+  "success": false,
+  "diagnosis": {
+    "policy_accuracy_failed": false,
+    "multitemperature_safety_failed": false,
+    "only_strict_failure_is_end_to_end_speedup": true,
+    "shared_supervisor_dominates_ann_runtime": true
+  },
+  "decision": {
+    "level4_authorized": false,
+    "level4_entered": false,
+    "ann_retrained": false,
+    "confirmation_used_for_retuning": false,
+    "strict_next_step": "remain_before_level4_and_audit_shared_supervisor_runtime",
+    "thermal_aware_ann_retraining_supported_by_evidence": false
+  }
+}

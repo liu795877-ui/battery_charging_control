@@ -1,0 +1,22 @@
+{
+  "phase": "Phase 7C-R3",
+  "status": "strict_stop_failed",
+  "level4_authorized": false,
+  "level4_entered": false,
+  "ann_retrained": false,
+  "artifacts": {
+    "configs/phase7cr3_independent_confirmation.yaml": "28508db55a5789f6f2af06456be9b5bfaef0e5236b1f41d92f3f83296bd6f039",
+    "src/battery_fast_charge/phase7cr3_config.py": "59f5147037cfb7615b4b7c863cad03aa8a6aaa864fc6a721b8a9fc09580219dd",
+    "src/battery_fast_charge/phase7cr3_runner.py": "ac476c4b11fbcc074d6720e88e17d5aff869f5d939a053b53cc453dcc4441256",
+    "src/battery_fast_charge/phase7cr3_audit.py": "d2746cac11a2209356f6dd392466787d858b08b4240e70e3ca3ab935546918a3",
+    "data/phase7cr3_independent_confirmation/initial_state_freeze.json": "b070ca7a9fa1c815f59f779ea2fa0ea310c98d96a7bc8e305b73d7ebd3d5c9e7",
+    "data/phase7cr3_independent_confirmation/safe_mpc_confirmation_trajectories.csv": "f8aa1c4349e3012250f66042387eb492ee53fbc8430302c93cdcd71f6e7bff06",
+    "data/phase7cr3_independent_confirmation/ann_confirmation_trajectories.csv": "a9b96fd7ec13b93ab2f72538639bf3f69afe690bbb9f73d7f9648a016ebddeb8",
+    "data/phase7cr3_independent_confirmation/ann_seed_metrics.csv": "a5299799ef19cd5fea17d0fb1b7f0acc7c910c3e79306a4493f7389a598f5d54",
+    "data/phase7cr3_independent_confirmation/ann_trajectory_metrics.csv": "2c5dc2db97ff3fe11f33d56a85a8f21ddb5a40dbbedceff1fe74c489ef932554",
+    "outputs/phase7cr3_independent_confirmation/safe_mpc_metrics.json": "594f24398bde701282b5fef0100b62e265c4c0c6ab0a1e2acad2812444a13983",
+    "outputs/phase7cr3_independent_confirmation/ann_metrics.json": "be170c0cdafde663dfa269407e8c1d4396fd7878937b32946ca928c9307ed25a",
+    "outputs/phase7cr3_independent_confirmation/strict_audit.json": "59e42cfe6d90fa1a8dd8209989fa46aa2bc7fefa83cd1c4fbcf6038765f0743e",
+    "outputs/phase7cr3_independent_confirmation/PHASE7C-R3_冻结ANN严格停止报告.md": "49a3666d09decb8497e61e4bce334d1a42f9e7771076ed76b946ccc0334842de"
+  }
+}
