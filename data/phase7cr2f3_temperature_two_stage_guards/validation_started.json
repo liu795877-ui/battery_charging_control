@@ -1,0 +1,9 @@
+{
+  "status": "one_shot_validation_started",
+  "guards_sha256": "d0240f9458221bd1580b83bf13942f67fb14d88b6c1468094d280c03d2750ff8",
+  "internal_state_sha256": {
+    "internal_validation_initial_states_15c.csv": "0a33accfed3e23c5eca1befde65a46ac3a8e83297b12f946ad3cdae484d603f8",
+    "internal_validation_initial_states_25c.csv": "f7cfca67dd7c00e5a11bef1378225de9e8312704a2992183bfa4a2d5941801f0"
+  },
+  "internal_validation_may_not_modify_guards": true
+}

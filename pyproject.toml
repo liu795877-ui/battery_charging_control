@@ -66,6 +66,7 @@ battery-phase7cr2 = "battery_fast_charge.phase7cr2_cli:main"
 battery-phase7cr2f = "battery_fast_charge.phase7cr2f_cli:main"
 battery-phase7cr2f2-audit = "battery_fast_charge.phase7cr2f2_residual_audit_cli:main"
 battery-phase7cr2f2 = "battery_fast_charge.phase7cr2f2_cli:main"
+battery-phase7cr2f3 = "battery_fast_charge.phase7cr2f3_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
