@@ -1,0 +1,98 @@
+study:
+  name: phase7cr3t2_dfn_repeatability
+  phase: Phase 7C-R3T2
+  contract_status: preregistered_before_new_state_generation
+
+sources:
+  phase7cr3_config: configs/phase7cr3_independent_confirmation.yaml
+  phase7cr3t_manifest: outputs/phase7cr3t_supervisor_runtime/freeze_manifest.json
+  phase7cr3t_manifest_sha256: c56105b20486f4d63342a70f4f9e03d13d4c501f33aec872225dbc59dc3d7a3d
+  phase7cr3t_strict_audit: outputs/phase7cr3t_supervisor_runtime/strict_audit.json
+  phase7cr3t_strict_audit_sha256: 80e1454f3898fb728d2bee7386a56d1a8d790f93736bec5ea6f7de81b84127ee
+  phase7cr3_states:
+    15: data/phase7cr3_independent_confirmation/confirmation_initial_states_15c.csv
+    30: data/phase7cr3_independent_confirmation/confirmation_initial_states_30c.csv
+  phase7cr2f_config: configs/phase7cr2f_teacher_selection_voltage_guard.yaml
+  phase7cr2f2_development_states: data/phase7cr2f2_two_stage_voltage_guard/development_initial_states.csv
+  phase7cr2f2_internal_states: data/phase7cr2f2_two_stage_voltage_guard/internal_validation_initial_states.csv
+  legacy_phase7c_states: {15: data/phase7c_multitemperature/initial_states_15c.csv, 30: data/phase7c_multitemperature/initial_states_30c.csv}
+  legacy_phase7cr1_states: data/phase7cr1_thermal_supervisor/development_initial_states.csv
+  legacy_phase7cr2_development_states: data/phase7cr2_temperature_voltage_guards/development_initial_states.csv
+  legacy_phase7cr2_internal_states: data/phase7cr2_temperature_voltage_guards/internal_validation_initial_states.csv
+  legacy_phase7cr2f_development_states: data/phase7cr2f_teacher_selection_voltage_guard/development_initial_states.csv
+  legacy_phase7cr2f_internal_states: data/phase7cr2f_teacher_selection_voltage_guard/internal_validation_initial_states.csv
+  legacy_phase7b1_25c_states: data/phase7b1a_voltage_mismatch/confirmation_initial_states.csv
+
+control_contract:
+  residual_initialization: measured
+  allow_zero_residual_fallback: false
+  initial_measurement_horizon_s: 1.0e-9
+  boot_steps: [0, 1]
+  sample_period_s: 5.0
+  optimized_supervisor_frozen: true
+  ann_retraining_authorized: false
+  safety_contract_change_authorized: false
+  same_state_current_limit_difference_a: 0.0
+  level4_entry_authorized: false
+
+datasets:
+  temperatures_c: [15, 30]
+  maximum_workers: 3
+  maximum_steps: 1800
+  target_soc: 0.7995
+  initial_voltage_margin_v: 0.005
+  initial_residual_extreme_threshold_v: -0.100
+  designs:
+    development:
+      15: {start_index: 15101, seed: 20261201}
+      30: {start_index: 16101, seed: 20261202}
+    confirmation:
+      15: {start_index: 17101, seed: 20261203}
+      30: {start_index: 18101, seed: 20261204}
+  strata:
+    development: {startup_transient_stress: 4, historical_exceedance_neighborhood: 2, general_high_risk: 1, global_coverage: 1}
+    confirmation: {startup_transient_stress: 6, historical_exceedance_neighborhood: 3, general_high_risk: 2, global_coverage: 1}
+  bounds:
+    global_coverage: {soc: [0.45, 0.70], v1_v: [0.0, 0.065], v2_v: [0.0, 0.10], previous_current_a: [0.0, 10.0]}
+    general_high_risk: {soc: [0.54, 0.70], v1_v: [0.035, 0.065], v2_v: [0.040, 0.10], previous_current_a: [6.0, 10.0]}
+    startup_transient_stress: {soc: [0.52, 0.69], v1_v: [0.040, 0.065], v2_v: [0.050, 0.10], previous_current_a: [7.0, 10.0]}
+  neighborhood_half_width: {soc: 0.015, v1_v: 0.008, v2_v: 0.012, previous_current_a: 0.75}
+  historical_centers:
+    15:
+      - {source: data/phase7cr3_independent_confirmation/confirmation_initial_states_15c.csv, trajectory_id: phase7cr3_confirmation_15c_022, evidence: r3t_maximum_repeatability_event}
+      - {source: data/phase7c_multitemperature/initial_states_15c.csv, trajectory_id: phase7c_15c_006, evidence: legacy_15c_boundary}
+    30:
+      - {source: data/phase7c_multitemperature/initial_states_30c.csv, trajectory_id: phase7c_30c_000, evidence: legacy_30c_thermal_boundary}
+      - {source: data/phase7cr1_thermal_supervisor/development_initial_states.csv, trajectory_id: phase7cr1_dev_000, evidence: legacy_30c_thermal_development}
+
+repeatability_contract:
+  development_seed: 101
+  confirmation_seeds: [22, 42, 73, 101, 137]
+  independent_repetitions: [a, b]
+  historical_current_difference_a: 2.475499059073627e-6
+  historical_soc_difference: 8.249783967073654e-9
+  historical_temperature_difference_c: 6.572148439687453e-6
+  current_engineering_margin_a: 5.0e-7
+  soc_engineering_margin: 1.0e-9
+  temperature_engineering_margin_c: 1.0e-6
+  tolerance_formula: max(historical_limit, development_maximum) + engineering_margin
+  confirmation_may_not_modify_tolerances: true
+  expected_development_pair_count: 16
+  expected_confirmation_pair_count: 120
+  minimum_end_to_end_speedup: 100.0
+  frozen_mpc_total_mean_ms: 41.8693065211988
+
+voltage_guard:
+  residual_growth_tolerance_v: 1.0e-12
+
+gates:
+  maximum_voltage_v: 4.200001
+  maximum_average_temperature_c: 35.0
+  minimum_current_a: 0.0
+  maximum_current_a: 10.0
+  maximum_current_step_a: 2.0
+  numerical_tolerance: 1.0e-9
+
+output:
+  data_directory: data/phase7cr3t2_dfn_repeatability
+  result_directory: outputs/phase7cr3t2_dfn_repeatability
