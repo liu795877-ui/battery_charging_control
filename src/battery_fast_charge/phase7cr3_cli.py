@@ -10,7 +10,7 @@ from .phase7cr3_runner import run_phase7cr3
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=("prepare", "safe-mpc"))
+    parser.add_argument("stage", choices=("prepare", "safe-mpc", "frozen-ann"))
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
     root = Path.cwd()
