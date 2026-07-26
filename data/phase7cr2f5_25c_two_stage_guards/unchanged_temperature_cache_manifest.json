@@ -1,0 +1,23 @@
+{
+  "phase": "Phase 7C-R2F5",
+  "purpose": "reuse_exact_unchanged_15c_and_30c_closed_loop_results",
+  "source": "data/phase7cr2f3_temperature_two_stage_guards/combined_validation_trajectories.csv",
+  "source_sha256": "d8428429facea121e25262c730f02dfcc238f0bb5fba52631c79553e03451671",
+  "temperature_guard_contracts": {
+    "15": {
+      "boot_v": 0.0480564686187137,
+      "running_v": 0.0140980376461608
+    },
+    "30": {
+      "boot_v": 0.0376479265035423,
+      "running_v": 0.0218918472128131
+    }
+  },
+  "reused_trajectory_counts": {
+    "15": 72,
+    "30": 176
+  },
+  "reused_total": 248,
+  "25c_reused": false,
+  "new_internal_validation_reused": false
+}
