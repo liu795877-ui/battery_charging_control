@@ -2,6 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import hashlib
+import json
+
+import pandas as pd
+
 from battery_fast_charge.phase7cr3t2_config import load_phase7cr3t2_config
 from battery_fast_charge.phase7cr3t2_runner import verify_frozen_r3t
 
@@ -45,3 +50,44 @@ def test_development_and_confirmation_designs_are_isolated() -> None:
         101,
         137,
     }
+
+
+def test_new_state_files_are_frozen_before_any_rollout() -> None:
+    data_dir = ROOT / CONFIG.section("output")["data_directory"]
+    freeze_path = data_dir / "initial_state_freeze.json"
+    if not freeze_path.exists():
+        return
+    freeze = json.loads(freeze_path.read_text(encoding="utf-8"))
+    assert freeze["status"] == "states_frozen_before_any_rollout"
+    assert freeze["development_confirmation_isolated"] is True
+    assert freeze["development_started"] is False
+    assert freeze["confirmation_started"] is False
+    development = pd.concat(
+        [
+            pd.read_csv(data_dir / f"development_initial_states_{temperature}c.csv")
+            for temperature in (15, 30)
+        ],
+        ignore_index=True,
+    )
+    confirmation = pd.concat(
+        [
+            pd.read_csv(data_dir / f"confirmation_initial_states_{temperature}c.csv")
+            for temperature in (15, 30)
+        ],
+        ignore_index=True,
+    )
+    assert len(development) == 16
+    assert len(confirmation) == 24
+    columns = [
+        "initial_soc",
+        "initial_polarization_1_v",
+        "initial_polarization_2_v",
+        "initial_previous_current_a",
+    ]
+    assert {tuple(row) for row in development[columns].to_numpy()}.isdisjoint(
+        {tuple(row) for row in confirmation[columns].to_numpy()}
+    )
+    for name, record in freeze["files"].items():
+        assert hashlib.sha256((data_dir / name).read_bytes()).hexdigest() == record[
+            "sha256"
+        ]

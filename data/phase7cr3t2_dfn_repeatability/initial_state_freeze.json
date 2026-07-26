@@ -1,0 +1,110 @@
+{
+  "phase": "Phase 7C-R3T2",
+  "status": "states_frozen_before_any_rollout",
+  "development_confirmation_isolated": true,
+  "not_teacher_data": true,
+  "config_sha256": "a128a3e342826f48810d6e4b5f740858a075e513f3c82726d4d4fb8a1017b057",
+  "files": {
+    "development_initial_states_15c.csv": {
+      "sha256": "6c0ea097eba08d2007a6ed44549f3662611e755e82c3950c93fdabea43d868d8",
+      "trajectory_count": 8,
+      "temperature_c": 15,
+      "design_seed": 20261201,
+      "zero_residual_count": 0
+    },
+    "development_initial_states_30c.csv": {
+      "sha256": "bd9669a23d40c6fa37b79f7a4e25fd9a922517842cf2b6f9e4d6126065052e24",
+      "trajectory_count": 8,
+      "temperature_c": 30,
+      "design_seed": 20261202,
+      "zero_residual_count": 0
+    },
+    "confirmation_initial_states_15c.csv": {
+      "sha256": "8d01be519967f7ab1f24a0f77537057902e75ea623b420c4c3c589f42482e21d",
+      "trajectory_count": 12,
+      "temperature_c": 15,
+      "design_seed": 20261203,
+      "zero_residual_count": 0
+    },
+    "confirmation_initial_states_30c.csv": {
+      "sha256": "60db45ceb89afbcea96cdee24c40b8b952dd90b972ea3dc98220bd93bf345052",
+      "trajectory_count": 12,
+      "temperature_c": 30,
+      "design_seed": 20261204,
+      "zero_residual_count": 0
+    }
+  },
+  "r3t_verification": {
+    "manifest_sha256": "c56105b20486f4d63342a70f4f9e03d13d4c501f33aec872225dbc59dc3d7a3d",
+    "strict_audit_sha256": "80e1454f3898fb728d2bee7386a56d1a8d790f93736bec5ea6f7de81b84127ee",
+    "r3t_failed_checks": [
+      "closed_loop_current_exact"
+    ],
+    "same_state_current_limit_difference_a": 0.0,
+    "records": {
+      "configs/phase7cr3t_supervisor_runtime.yaml": {
+        "expected": "fc49593f803ae72ad45da293b06d5d305fea89ce53e234a294a809dfeadb0010",
+        "actual": "fc49593f803ae72ad45da293b06d5d305fea89ce53e234a294a809dfeadb0010",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr3t_config.py": {
+        "expected": "9b9611c873d781bab0969c7494b7dfa14eb76af7bbdb10b498be819df84ccb70",
+        "actual": "9b9611c873d781bab0969c7494b7dfa14eb76af7bbdb10b498be819df84ccb70",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr3t_thermal.py": {
+        "expected": "534e8db07c59869def6e994e35be8d436d27b74c3d3993f6c00e78d3e984eefc",
+        "actual": "534e8db07c59869def6e994e35be8d436d27b74c3d3993f6c00e78d3e984eefc",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr3t_runner.py": {
+        "expected": "9791be5da7e5721c0b0d57a2ad709f8c2c67bfe59e0bd4ea70aecaca09c12d8b",
+        "actual": "9791be5da7e5721c0b0d57a2ad709f8c2c67bfe59e0bd4ea70aecaca09c12d8b",
+        "matched": true
+      },
+      "src/battery_fast_charge/phase7cr3t_audit.py": {
+        "expected": "af1eb4718e249cfc25aa9ed90fe192eef346d1ee2464de670e294a540d8d8c8a",
+        "actual": "af1eb4718e249cfc25aa9ed90fe192eef346d1ee2464de670e294a540d8d8c8a",
+        "matched": true
+      },
+      "outputs/phase7cr3t_supervisor_runtime/equivalence_freeze.json": {
+        "expected": "caa1f8a1b362c566e9cf1b32946f86e831a307b2a3b92ed54da3fdbfc4382109",
+        "actual": "caa1f8a1b362c566e9cf1b32946f86e831a307b2a3b92ed54da3fdbfc4382109",
+        "matched": true
+      },
+      "data/phase7cr3t_supervisor_runtime/optimized_confirmation_trajectories.csv": {
+        "expected": "e524674cfc0aae13081c8d919b6c3d205d172fe51847fb9c41bdcad701031271",
+        "actual": "e524674cfc0aae13081c8d919b6c3d205d172fe51847fb9c41bdcad701031271",
+        "matched": true
+      },
+      "data/phase7cr3t_supervisor_runtime/trajectory_metrics.csv": {
+        "expected": "040135d14f4812bfcf5a3608d2ca99a7456f5d29fd88d5a9c37fd0fac35ecc31",
+        "actual": "040135d14f4812bfcf5a3608d2ca99a7456f5d29fd88d5a9c37fd0fac35ecc31",
+        "matched": true
+      },
+      "data/phase7cr3t_supervisor_runtime/seed_timing_metrics.csv": {
+        "expected": "8e5c20794d41779a6a80307d2ecc2bf63f07c92a8cd5ed5b167943d0e2d8c22f",
+        "actual": "8e5c20794d41779a6a80307d2ecc2bf63f07c92a8cd5ed5b167943d0e2d8c22f",
+        "matched": true
+      },
+      "outputs/phase7cr3t_supervisor_runtime/metrics.json": {
+        "expected": "162d447d0026103f317af75a00c56d572a86ba4575ceac137ed42c9f6f6e5f84",
+        "actual": "162d447d0026103f317af75a00c56d572a86ba4575ceac137ed42c9f6f6e5f84",
+        "matched": true
+      },
+      "outputs/phase7cr3t_supervisor_runtime/strict_audit.json": {
+        "expected": "80e1454f3898fb728d2bee7386a56d1a8d790f93736bec5ea6f7de81b84127ee",
+        "actual": "80e1454f3898fb728d2bee7386a56d1a8d790f93736bec5ea6f7de81b84127ee",
+        "matched": true
+      },
+      "outputs/phase7cr3t_supervisor_runtime/PHASE7C-R3T_严格停止报告.md": {
+        "expected": "c289b628a466bad61628f93c37d0ecaa235e4c56ff602831a7cf205a401622f1",
+        "actual": "c289b628a466bad61628f93c37d0ecaa235e4c56ff602831a7cf205a401622f1",
+        "matched": true
+      }
+    }
+  },
+  "development_started": false,
+  "confirmation_started": false,
+  "level4_entered": false
+}
