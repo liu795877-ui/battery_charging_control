@@ -1,0 +1,30 @@
+{
+  "phase": "Phase 7D-Level 4-3",
+  "status": "states_frozen_before_final_confirmation",
+  "files": {
+    "confirmation_initial_states_15c.csv": {
+      "sha256": "1ca85c4fbf4faa633cf4fe25a3399ddec7fc14429372148d7b28eacb7c0c4377",
+      "trajectory_count": 24,
+      "temperature_c": 15,
+      "design_seed": 20261401,
+      "zero_residual_count": 0
+    },
+    "confirmation_initial_states_30c.csv": {
+      "sha256": "5044e8caa41701414ef48fba0a03717a824f81c05664941d232fb51c32463eed",
+      "trajectory_count": 24,
+      "temperature_c": 30,
+      "design_seed": 20261402,
+      "zero_residual_count": 0
+    }
+  },
+  "excluded_prior_state_count": 184,
+  "prior_states_excluded": true,
+  "parameters_frozen_before_state_generation": true,
+  "config_sha256": "f113857d2251bda7e4413524b78d7be216f2abfbb6b1454fb88897416a6cc885",
+  "runner_sha256": "868fd107ac5f5a6bdefc8d3d9d28cffce18d00835631f8a33744da8b439d9173",
+  "selection_sha256": "827091c6063bed98df1dbf385d77e0fa5384af828533589c7ee35e77b7c93021",
+  "validation_sha256": "2347a0fac2d75bb523d2ae4c2e4ca346bc53c6f284b5e4e2b1111a6547ce39f2",
+  "confirmation_started": false,
+  "confirmation_used_for_retuning": false,
+  "level4_completed": false
+}
