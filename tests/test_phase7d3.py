@@ -65,3 +65,20 @@ def test_level4_final_result_is_strict_if_present() -> None:
         assert payload["failed_checks"] == []
         assert payload["decision"]["level4_completed"] is True
 
+
+def test_level4_final_manifest_hashes_match_if_present() -> None:
+    result_dir = ROOT / CONFIG.section("output")["result_directory"]
+    path = result_dir / "freeze_manifest.json"
+    if not path.exists():
+        return
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    assert manifest["status"] == "strict_passed"
+    assert manifest["level4_completed"] is True
+    assert manifest["confirmation_used_for_retuning"] is False
+    assert manifest["control_runner_unchanged"] is True
+    for relative, expected in manifest["artifacts"].items():
+        artifact = ROOT / relative
+        payload = artifact.read_bytes()
+        if artifact.suffix in {".py", ".yaml", ".md"}:
+            payload = payload.replace(b"\r\n", b"\n")
+        assert hashlib.sha256(payload).hexdigest() == expected
