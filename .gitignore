@@ -64,6 +64,8 @@ data/phase7cr2f5_25c_two_stage_guards/runs/
 data/phase7cr3_independent_confirmation/runs/
 data/phase7cr3t_supervisor_runtime/runs/
 data/phase7cr3t2_dfn_repeatability/runs/
+data/phase7d2_thermal_performance/runs/
+data/phase7d3_final_confirmation/runs/
 outputs/phase7b1b_regression.stdout.log
 outputs/phase7b1b_regression.stderr.log
 outputs/phase7b1b_regression.pid

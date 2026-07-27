@@ -1,0 +1,146 @@
+{
+  "phase": "Phase 7D-Level 4-2",
+  "status": "parameters_frozen_before_internal_validation",
+  "development_seed": 101,
+  "development_candidate_summaries": [
+    {
+      "variant": "baseline",
+      "temperature_guard_c": 0.1,
+      "trajectory_count": 48,
+      "mean_charge_time_s": 1349.5833333333333,
+      "maximum_charge_time_s": 1880.0,
+      "maximum_voltage_v": 4.178479118177957,
+      "maximum_temperature_c": 34.89465242348314,
+      "mean_voltage_intervention_fraction": 0.12062516081660206,
+      "mean_thermal_intervention_fraction": 0.6682201079726117,
+      "maximum_thermal_correction_a": 3.6576538770151927,
+      "end_to_end_speedup": 159.31114532298034,
+      "strictly_safe": true,
+      "checks": {
+        "target_reach_100_percent": true,
+        "voltage_safe": true,
+        "temperature_safe": true,
+        "current_bounds_safe": true,
+        "slew_safe": true,
+        "all_violation_counts_zero": true,
+        "speedup_above_100": true
+      }
+    },
+    {
+      "variant": "thermal_guard_075mc",
+      "temperature_guard_c": 0.075,
+      "trajectory_count": 48,
+      "mean_charge_time_s": 1346.4583333333333,
+      "maximum_charge_time_s": 1875.0,
+      "maximum_voltage_v": 4.178479118178052,
+      "maximum_temperature_c": 34.91928467943262,
+      "mean_voltage_intervention_fraction": 0.12287434643153379,
+      "mean_thermal_intervention_fraction": 0.6660548605952062,
+      "maximum_thermal_correction_a": 3.6427162712317775,
+      "end_to_end_speedup": 159.64887334425177,
+      "strictly_safe": true,
+      "checks": {
+        "target_reach_100_percent": true,
+        "voltage_safe": true,
+        "temperature_safe": true,
+        "current_bounds_safe": true,
+        "slew_safe": true,
+        "all_violation_counts_zero": true,
+        "speedup_above_100": true
+      }
+    },
+    {
+      "variant": "thermal_guard_050mc",
+      "temperature_guard_c": 0.05,
+      "trajectory_count": 48,
+      "mean_charge_time_s": 1343.125,
+      "maximum_charge_time_s": 1870.0,
+      "maximum_voltage_v": 4.178479118177882,
+      "maximum_temperature_c": 34.943869470383504,
+      "mean_voltage_intervention_fraction": 0.12583672072072857,
+      "mean_thermal_intervention_fraction": 0.6636828203369531,
+      "maximum_thermal_correction_a": 3.627204142149001,
+      "end_to_end_speedup": 155.81614134865134,
+      "strictly_safe": true,
+      "checks": {
+        "target_reach_100_percent": true,
+        "voltage_safe": true,
+        "temperature_safe": true,
+        "current_bounds_safe": true,
+        "slew_safe": true,
+        "all_violation_counts_zero": true,
+        "speedup_above_100": true
+      }
+    },
+    {
+      "variant": "thermal_guard_025mc",
+      "temperature_guard_c": 0.025,
+      "trajectory_count": 48,
+      "mean_charge_time_s": 1340.5208333333333,
+      "maximum_charge_time_s": 1865.0,
+      "maximum_voltage_v": 4.178479118178057,
+      "maximum_temperature_c": 34.96848529519565,
+      "mean_voltage_intervention_fraction": 0.12862557439342007,
+      "mean_thermal_intervention_fraction": 0.6613985422386459,
+      "maximum_thermal_correction_a": 3.6116920130662233,
+      "end_to_end_speedup": 158.7883390351865,
+      "strictly_safe": true,
+      "checks": {
+        "target_reach_100_percent": true,
+        "voltage_safe": true,
+        "temperature_safe": true,
+        "current_bounds_safe": true,
+        "slew_safe": true,
+        "all_violation_counts_zero": true,
+        "speedup_above_100": true
+      }
+    }
+  ],
+  "selected_variant": "thermal_guard_025mc",
+  "selected_temperature_guard_c": 0.025,
+  "prediction_horizon_steps": 60,
+  "baseline_30c_mean_charge_time_s": 1349.5833333333333,
+  "selected_30c_mean_charge_time_s": 1340.5208333333333,
+  "development_improvement_fraction": 0.006715035504785428,
+  "minimum_required_improvement_fraction": 0.001,
+  "voltage_guards_unchanged": true,
+  "ann_retrained": false,
+  "success": true,
+  "config_sha256": "4e9c55a50fa30eab0bd5c62ce5414aa866db69e300b311daba177f86c011ac3b",
+  "runner_sha256": "62338515ef9bae4c12f9fcb0a2b7528ebcd6b93807e4f7e2fa479b6717c689ca",
+  "source_verification": {
+    "state_freeze_sha256": "cb0decccd700b0bd72e0cf194a239fd4c26ef4f6f2d0ae0cfead969285fe9e2f",
+    "voltage_guard_sha256": "e39bd4840399c10d38561ce92e3be31992387ec719fc9bbdc7850434eaeb5aa9",
+    "state_hashes": {
+      "development_initial_states_15c.csv": "f06e465769fbec2d9a2511c159cec4ded6568510af957ad70f99017f370a6cca",
+      "development_initial_states_30c.csv": "93891fe16121ffd3b4ac6ce2815a6590c40eed27e9026eeecc03f2d10a0bce85",
+      "internal_validation_initial_states_15c.csv": "3f549ca6162e60a314f63444c7289f83cee76ef773b97666b70e32b0719f41a1",
+      "internal_validation_initial_states_30c.csv": "7387d9936299cb6d8e0cbe0afb7493c5be1c87e4d70baec2c526e41c0c54f7a9"
+    }
+  },
+  "frozen_model_hashes": {
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_22.npz": {
+      "expected": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65",
+      "actual": "1ef506878774b9dbd55229ea66051e817c753d3a5a51992349f4352e330c6c65"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_42.npz": {
+      "expected": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d",
+      "actual": "2d9fa77bf1a0fde34bd920e48db91f63b49ac6f7ed364c8cb50b6d5b5c8d638d"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_73.npz": {
+      "expected": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9",
+      "actual": "f11dc7e1b79319a63842587ce56bb35eab78d89401d5865ddd2b7d1566c17be9"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_101.npz": {
+      "expected": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba",
+      "actual": "b639008c0c15a5312534fceb99de17c392d7925f2715f8c1b76b9bb53c8738ba"
+    },
+    "outputs/phase7a_level3_slew/models/level3_deep_lbfgs_seed_137.npz": {
+      "expected": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0",
+      "actual": "053a58ea7ec0f708e2e2e9bbd6198fdcfb00efa1678c76dc7f136d759c5a93a0"
+    }
+  },
+  "internal_validation_started": false,
+  "internal_validation_used_for_retuning": false,
+  "independent_confirmation_created": false
+}

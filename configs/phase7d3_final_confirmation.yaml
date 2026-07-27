@@ -1,0 +1,92 @@
+phase: Phase 7D-Level 4-3
+title: Independent final confirmation of Level 4 performance optimization
+
+sources:
+  phase7d2_selection: outputs/phase7d2_thermal_performance/selected_parameters.json
+  phase7d2_selection_sha256: 827091c6063bed98df1dbf385d77e0fa5384af828533589c7ee35e77b7c93021
+  phase7d2_internal_validation: outputs/phase7d2_thermal_performance/internal_validation_metrics.json
+  phase7d2_internal_validation_sha256: 2347a0fac2d75bb523d2ae4c2e4ca346bc53c6f284b5e4e2b1111a6547ce39f2
+  phase7cr2f_config: configs/phase7cr2f_teacher_selection_voltage_guard.yaml
+  frozen_voltage_guards: data/phase7cr2f5_25c_two_stage_guards/frozen_25c_two_stage_guards.json
+  frozen_voltage_guards_sha256: e39bd4840399c10d38561ce92e3be31992387ec719fc9bbdc7850434eaeb5aa9
+  state_directory: data/phase7d3_final_confirmation
+  excluded_state_files:
+    - data/phase7d1_performance_optimization/development_initial_states_15c.csv
+    - data/phase7d1_performance_optimization/development_initial_states_30c.csv
+    - data/phase7d1_performance_optimization/internal_validation_initial_states_15c.csv
+    - data/phase7d1_performance_optimization/internal_validation_initial_states_30c.csv
+    - data/phase7cr3t2_dfn_repeatability/development_initial_states_15c.csv
+    - data/phase7cr3t2_dfn_repeatability/development_initial_states_30c.csv
+    - data/phase7cr3t2_dfn_repeatability/confirmation_initial_states_15c.csv
+    - data/phase7cr3t2_dfn_repeatability/confirmation_initial_states_30c.csv
+
+control_contract:
+  residual_initialization: measured
+  allow_zero_residual_fallback: false
+  initial_measurement_horizon_s: 1.0e-9
+  boot_steps: [0, 1]
+  sample_period_s: 5.0
+
+voltage_guard:
+  residual_growth_tolerance_v: 1.0e-12
+  all_temperature_guards_frozen: true
+
+datasets:
+  temperatures_c: [15, 30]
+  maximum_workers: 3
+  maximum_steps: 1800
+  target_soc: 0.7995
+  confirmation_count_per_temperature: 24
+  confirmation_seeds: [22, 42, 73, 101, 137]
+  initial_voltage_margin_v: 0.005
+  initial_residual_extreme_threshold_v: -0.100
+  designs:
+    confirmation:
+      15: {start_index: 25101, seed: 20261401}
+      30: {start_index: 26101, seed: 20261402}
+  strata:
+    confirmation: {startup_transient_stress: 12, historical_exceedance_neighborhood: 6, general_high_risk: 4, global_coverage: 2}
+  bounds:
+    global_coverage: {soc: [0.45, 0.70], v1_v: [0.0, 0.065], v2_v: [0.0, 0.10], previous_current_a: [0.0, 10.0]}
+    general_high_risk: {soc: [0.54, 0.70], v1_v: [0.035, 0.065], v2_v: [0.040, 0.10], previous_current_a: [6.0, 10.0]}
+    startup_transient_stress: {soc: [0.52, 0.69], v1_v: [0.040, 0.065], v2_v: [0.050, 0.10], previous_current_a: [7.0, 10.0]}
+  neighborhood_half_width: {soc: 0.015, v1_v: 0.008, v2_v: 0.012, previous_current_a: 0.75}
+  historical_centers:
+    15:
+      - {source: data/phase7d1_performance_optimization/development_initial_states_15c.csv, trajectory_id: phase7d1_development_15c_000, evidence: level4_development_boundary}
+      - {source: data/phase7cr3t2_dfn_repeatability/confirmation_initial_states_15c.csv, trajectory_id: phase7cr3t2_confirmation_15c_000, evidence: repeatability_boundary}
+    30:
+      - {source: data/phase7d1_performance_optimization/development_initial_states_30c.csv, trajectory_id: phase7d1_development_30c_000, evidence: level4_thermal_boundary}
+      - {source: data/phase7cr3t2_dfn_repeatability/confirmation_initial_states_30c.csv, trajectory_id: phase7cr3t2_confirmation_30c_000, evidence: repeatability_boundary}
+
+thermal_candidates:
+  prediction_horizon_steps: 60
+  prediction_horizon_s: 300.0
+  baseline_temperature_guard_c: 0.100
+  selected_temperature_guard_c: 0.025
+
+confirmation_contract:
+  expected_trajectory_count_per_variant: 240
+  parameters_frozen_before_state_generation: true
+  confirmation_may_not_modify_parameters: true
+  r3_confirmation_used_for_tuning: false
+  ann_retraining_authorized: false
+  minimum_30c_mean_charge_time_improvement_fraction: 0.001
+  overall_mean_charge_time_must_be_noninferior: true
+
+gates:
+  maximum_voltage_v: 4.200001
+  maximum_average_temperature_c: 35.0
+  maximum_current_a: 10.0
+  minimum_current_a: 0.0
+  maximum_current_step_a: 2.0
+  numerical_tolerance: 1.0e-9
+  minimum_target_reach_fraction: 1.0
+  maximum_all_violation_count: 0
+  minimum_end_to_end_speedup: 100.0
+  frozen_mpc_total_mean_ms: 41.8693065211988
+
+output:
+  data_directory: data/phase7d3_final_confirmation
+  result_directory: outputs/phase7d3_final_confirmation
+

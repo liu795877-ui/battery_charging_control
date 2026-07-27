@@ -1,0 +1,20 @@
+{
+  "phase": "Phase 7D-Level 4-3",
+  "status": "strict_passed",
+  "level4_completed": true,
+  "confirmation_used_for_retuning": false,
+  "control_runner_unchanged": true,
+  "artifacts": {
+    "configs/phase7d3_final_confirmation.yaml": "f113857d2251bda7e4413524b78d7be216f2abfbb6b1454fb88897416a6cc885",
+    "src/battery_fast_charge/phase7d3_runner.py": "868fd107ac5f5a6bdefc8d3d9d28cffce18d00835631f8a33744da8b439d9173",
+    "src/battery_fast_charge/phase7d3_finalize.py": "1550de663faaf1371496215a500de071dbd14396e097c12424e00f2020e66678",
+    "data\\phase7d3_final_confirmation\\state_freeze.json": "dc748cb342544a716374e84861899adc8b075ec9713c7729fa3f10ae6455addc",
+    "data\\phase7d3_final_confirmation\\baseline_trajectories.csv": "01c62238629afbe3728a8531cb7db7002415e57c7297261c659f060b6f6b36c8",
+    "data\\phase7d3_final_confirmation\\selected_trajectories.csv": "9ef1bdb60d6b1d232f547bd998695ec51604b135a8826acc6e9ccf4905a4a62b",
+    "data\\phase7d3_final_confirmation\\baseline_trajectory_metrics.csv": "02b6dbdd4a3efabac8c2aa29c3554100a0b4a38e57f583fa2cc731dc46928668",
+    "data\\phase7d3_final_confirmation\\selected_trajectory_metrics.csv": "b3e79f472ed61c6a82a4e9473690fc9503970176a153d964b407034d2534ef22",
+    "data\\phase7d3_final_confirmation\\selected_seed_timing.csv": "8fe5c72c7e1f1c67824e079a68cd590270713e70e562975ca1990589d719e5a9",
+    "outputs\\phase7d3_final_confirmation\\metrics.json": "054c390c81e163af8eded8dbfbacf21d53cc6ec9dc686f3708a2fc12f5674e6b",
+    "outputs\\phase7d3_final_confirmation\\PHASE7D_LEVEL4_中文实验报告.md": "d055a5690ce9893640cfa10cd74818c83be922e9dc446ef8206827ed9b601c53"
+  }
+}

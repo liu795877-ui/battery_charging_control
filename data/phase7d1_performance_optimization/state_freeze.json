@@ -1,0 +1,46 @@
+{
+  "phase": "Phase 7D-Level 4-1",
+  "status": "states_frozen_before_any_level4_1_rollout",
+  "authorization": {
+    "phase7d_metrics_sha256": "87b4dcaf972fc3408f34d17a5ea5b1ca33fff7d27111e31169b9d88c87ec763d",
+    "phase7d_manifest_sha256": "593fcdee8fa1774c95e6cd0c269f2eb2a6e948b45924526fd29fbb23ab850cd1"
+  },
+  "config_sha256": "d80276b007032bbb3ac6d0e656e7ed5e179957ed00f1bbb664d002da1ff81b49",
+  "files": {
+    "development_initial_states_15c.csv": {
+      "sha256": "f06e465769fbec2d9a2511c159cec4ded6568510af957ad70f99017f370a6cca",
+      "trajectory_count": 48,
+      "temperature_c": 15,
+      "design_seed": 20261301,
+      "zero_residual_count": 0
+    },
+    "development_initial_states_30c.csv": {
+      "sha256": "93891fe16121ffd3b4ac6ce2815a6590c40eed27e9026eeecc03f2d10a0bce85",
+      "trajectory_count": 48,
+      "temperature_c": 30,
+      "design_seed": 20261302,
+      "zero_residual_count": 0
+    },
+    "internal_validation_initial_states_15c.csv": {
+      "sha256": "3f549ca6162e60a314f63444c7289f83cee76ef773b97666b70e32b0719f41a1",
+      "trajectory_count": 24,
+      "temperature_c": 15,
+      "design_seed": 20261303,
+      "zero_residual_count": 0
+    },
+    "internal_validation_initial_states_30c.csv": {
+      "sha256": "7387d9936299cb6d8e0cbe0afb7493c5be1c87e4d70baec2c526e41c0c54f7a9",
+      "trajectory_count": 24,
+      "temperature_c": 30,
+      "design_seed": 20261304,
+      "zero_residual_count": 0
+    }
+  },
+  "development_internal_validation_isolated": true,
+  "r3t2_states_excluded": true,
+  "r3_confirmation_used_for_tuning": false,
+  "rollouts_started": false,
+  "optimization_parameters_selected": false,
+  "internal_validation_consumed": false,
+  "independent_confirmation_created": false
+}

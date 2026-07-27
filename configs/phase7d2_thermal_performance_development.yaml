@@ -1,0 +1,71 @@
+phase: Phase 7D-Level 4-2
+title: Frozen-ANN thermal performance development and one-shot validation
+
+sources:
+  phase7d1_state_freeze: data/phase7d1_performance_optimization/state_freeze.json
+  phase7d1_state_freeze_sha256: cb0decccd700b0bd72e0cf194a239fd4c26ef4f6f2d0ae0cfead969285fe9e2f
+  phase7cr2f_config: configs/phase7cr2f_teacher_selection_voltage_guard.yaml
+  frozen_voltage_guards: data/phase7cr2f5_25c_two_stage_guards/frozen_25c_two_stage_guards.json
+  frozen_voltage_guards_sha256: e39bd4840399c10d38561ce92e3be31992387ec719fc9bbdc7850434eaeb5aa9
+  state_directory: data/phase7d1_performance_optimization
+
+control_contract:
+  residual_initialization: measured
+  allow_zero_residual_fallback: false
+  initial_measurement_horizon_s: 1.0e-9
+  boot_steps: [0, 1]
+  sample_period_s: 5.0
+
+voltage_guard:
+  residual_growth_tolerance_v: 1.0e-12
+  all_temperature_guards_frozen: true
+  voltage_guard_change_authorized: false
+
+datasets:
+  temperatures_c: [15, 30]
+  maximum_workers: 3
+  maximum_steps: 1800
+  target_soc: 0.7995
+  development_seed: 101
+  validation_seeds: [22, 42, 73, 101, 137]
+  development_count: 96
+  internal_validation_count: 48
+
+thermal_candidates:
+  prediction_horizon_steps: 60
+  prediction_horizon_s: 300.0
+  baseline_temperature_guard_c: 0.100
+  candidate_temperature_guards_c: [0.075, 0.050, 0.025]
+  only_30c_is_developed: true
+  temperature_model_change_authorized: false
+  horizon_change_authorized: false
+
+selection_contract:
+  safety_first: true
+  selection_temperature_c: 30
+  primary_metric: mean_charge_time_s
+  tie_breakers: [mean_thermal_intervention_fraction, maximum_thermal_correction_a]
+  minimum_30c_mean_charge_time_improvement_fraction: 0.001
+  baseline_must_strictly_pass: true
+  failed_candidate_is_ineligible: true
+  internal_validation_may_not_modify_selection: true
+  internal_validation_is_one_shot: true
+  r3_confirmation_used_for_tuning: false
+  ann_retraining_authorized: false
+
+gates:
+  maximum_voltage_v: 4.200001
+  maximum_average_temperature_c: 35.0
+  maximum_current_a: 10.0
+  minimum_current_a: 0.0
+  maximum_current_step_a: 2.0
+  numerical_tolerance: 1.0e-9
+  minimum_target_reach_fraction: 1.0
+  maximum_all_violation_count: 0
+  minimum_end_to_end_speedup: 100.0
+  frozen_mpc_total_mean_ms: 41.8693065211988
+
+output:
+  data_directory: data/phase7d2_thermal_performance
+  result_directory: outputs/phase7d2_thermal_performance
+

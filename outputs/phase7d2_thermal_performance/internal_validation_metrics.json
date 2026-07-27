@@ -1,0 +1,69 @@
+{
+  "phase": "Phase 7D-Level 4-2 internal validation",
+  "status": "strict_passed",
+  "selected_variant": "thermal_guard_025mc",
+  "selected_temperature_guard_c": 0.025,
+  "baseline_summary": {
+    "variant": "baseline",
+    "temperature_guard_c": 0.1,
+    "trajectory_count": 240,
+    "mean_charge_time_s": 1272.4791666666667,
+    "maximum_charge_time_s": 1790.0,
+    "maximum_voltage_v": 4.187024124279446,
+    "maximum_temperature_c": 34.88858287473266,
+    "mean_voltage_intervention_fraction": 0.30287228299286956,
+    "mean_thermal_intervention_fraction": 0.32841315312937003,
+    "maximum_thermal_correction_a": 3.836901567935403,
+    "end_to_end_speedup": 156.65562508997596,
+    "strictly_safe": true,
+    "checks": {
+      "target_reach_100_percent": true,
+      "voltage_safe": true,
+      "temperature_safe": true,
+      "current_bounds_safe": true,
+      "slew_safe": true,
+      "all_violation_counts_zero": true,
+      "speedup_above_100": true
+    }
+  },
+  "selected_summary": {
+    "variant": "thermal_guard_025mc",
+    "temperature_guard_c": 0.025,
+    "trajectory_count": 240,
+    "mean_charge_time_s": 1267.7916666666667,
+    "maximum_charge_time_s": 1775.0,
+    "maximum_voltage_v": 4.187024124279308,
+    "maximum_temperature_c": 34.96192192521249,
+    "mean_voltage_intervention_fraction": 0.30693729527864255,
+    "mean_thermal_intervention_fraction": 0.32534610365793254,
+    "maximum_thermal_correction_a": 3.790499197679402,
+    "end_to_end_speedup": 156.48261086111063,
+    "strictly_safe": true,
+    "checks": {
+      "target_reach_100_percent": true,
+      "voltage_safe": true,
+      "temperature_safe": true,
+      "current_bounds_safe": true,
+      "slew_safe": true,
+      "all_violation_counts_zero": true,
+      "speedup_above_100": true
+    }
+  },
+  "baseline_30c_mean_charge_time_s": 1345.125,
+  "selected_30c_mean_charge_time_s": 1335.75,
+  "validation_30c_improvement_fraction": 0.006969612489545581,
+  "checks": {
+    "baseline_strictly_safe": true,
+    "selected_strictly_safe": true,
+    "overall_charge_time_noninferior": true,
+    "30c_improvement_meets_contract": true,
+    "all_five_seeds_present": true,
+    "expected_trajectory_count": true
+  },
+  "failed_checks": [],
+  "success": true,
+  "selection_hash": "827091c6063bed98df1dbf385d77e0fa5384af828533589c7ee35e77b7c93021",
+  "internal_validation_used_for_retuning": false,
+  "independent_confirmation_authorized": true,
+  "ann_retrained": false
+}
